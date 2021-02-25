@@ -1,0 +1,243 @@
+.jFiler-theme-default .jFiler-input {
+  position: relative;
+  display: block;
+  width: 100% !important
+}
+
+.table.dataTable td.focus {
+  outline: none !important;
+  outline-offset: -3px;
+  background-color: transparent !important;
+}
+
+.main-body .page-wrapper {
+  padding: 0.8rem !important;
+}
+
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+  /* border-top: 2px solid #2dcee3 !important; */
+  border-top: 2px solid #797777 !important;
+}
+
+.main-body .page-wrapper .page-header {
+  margin-bottom: 15px !important;
+}
+
+.jFiler-input-dragDrop {
+  padding: 5px !important;
+}
+
+.jFiler-input-dragDrop .jFiler-input-icon {
+  font-size: 28px!important;
+}
+
+.jFiler-items-grid .jFiler-item .jFiler-item-container .jFiler-item-thumb {
+  width: 160px !important;
+  height: 110px !important
+}
+
+.image-area {
+  position: relative;
+  /* width: 50%; */
+  margin: 10px;
+  background: #333;
+}
+
+.image-area img {
+  max-width: 100%;
+  height: auto;
+}
+
+.remove-image {
+  cursor: pointer;
+  display: none;
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  border-radius: 10em;
+  padding: 2px 6px 3px;
+  text-decoration: none;
+  font: 700 21px/20px sans-serif;
+  background: #555;
+  border: 3px solid #fff;
+  color: #FFF;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+}
+
+.remove-image:hover {
+  background: #E54E4E;
+  padding: 3px 7px 5px;
+  top: -11px;
+  right: -11px;
+}
+
+.remove-image:active {
+  background: #E54E4E;
+  top: -10px;
+  right: -11px;
+}
+
+a:focus {
+  outline: none !important;
+}
+
+.card .card-block .dropdown-menu>span {
+  padding: 10px 16px;
+  line-height: 1.429;
+}
+
+.page-item.active .page-link {
+  background-color: #7c8088 !important;
+  border-color: #7c8088 !important;
+}
+
+.prod-img:hover .hvr-shrink {
+  opacity: 0.25;
+}
+
+.customModal {
+  max-width: 500px;
+  width: 100%;
+}
+
+.customOverlay {
+  z-index: 2005 !important;
+}
+
+.warehouse-delivery-yellow {
+  background: yellow;
+  height: 25px;
+  width: 25px;
+  border: none;
+  border-radius: 50%;
+}
+
+.warehouse-delivery-blue {
+  background: blue;
+  height: 25px;
+  width: 25px;
+  border: none;
+  border-radius: 50%;
+}
+
+.invoice-print {
+  padding: 0 !important;
+  margin: 0 !important;
+  background: #f2f2f2;
+}
+
+.invoice-print>table>tbody>tr>td>p {
+  padding: 0;
+  margin: 0;
+  font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  color: #666;
+  font-weight: bold;
+}
+
+.invoice_customer_details {
+  padding: 0.5rem;
+}
+
+.invoice_table_border {
+  border: 1px solid #e5e5e5;
+}
+
+.h5-header {
+  padding: 0;
+  margin: 0;
+  font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  color: #bca14a;
+}
+
+.h5-value {
+  padding: 0;
+  margin: 0;
+  font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  color: #808080;
+}
+
+.invoice-print>td>p .product_data {
+  padding: 0;
+  margin: 0;
+  font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  color: #666;
+}
+
+.product_table_header {
+  padding: 0;
+  margin: 0;
+  font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.product_table_shop_header {
+  padding: 0;
+  margin: 0;
+  font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  color: #666;
+}
+
+.product_table_value {
+  padding: 0;
+  margin: 0;
+  font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  color: #666;
+  font-weight: bold;
+}
+
+.invoice-print-span {
+  font-weight: 600;
+  color: #525252;
+}
+
+.invoice_total {
+  padding: 0;
+  margin: 0;
+  font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color: #bca14a;
+}
+
+.invoice_total_value {
+  padding: 0;
+  margin: 0;
+  font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+  font-size: 17px;
+  color: #666;
+}
+
+.invoice_table_header {
+  padding: 0;
+  margin: 0;
+  font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  color: #666;
+  font-weight: bold;
+}
+
+.invoice-footer {
+  font-weight: bold;
+  text-align: center;
+  display: block;
+  font-size: 22px;
+}
+
+.notification-box-height {
+  max-height: 450px !important;
+  overflow: auto !important;
+}
+
+.hide {
+  display: none;
+}

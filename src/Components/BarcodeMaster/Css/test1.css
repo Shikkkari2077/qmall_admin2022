@@ -1,0 +1,23 @@
+/* body 			{} */
+	
+
+@page			{size: 50mm 25mm; margin: 5mm 5mm 5mm 5mm;}
+@page  			{size : landscape;}	
+ 
+@media print {
+    .noprint {
+        visibility: hidden !important;
+        display: none !important
+    }
+	
+@page  			{size : land;}		
+
+.mainDiv		{width: 70mm; height: 25mm; text-align: center;padding-left: 10px;display: block; }
+
+.rowA			{margin-bottom:-0.58rem; /*font-size: 1.5rem; font-weight: bold;*/height:45px;margin-top:-0.19rem ; padding-bottom: 0px;}
+.rowB			{ font-size: .2375rem;}
+.rowC			{font-size: .550rem; }
+.rowD			{font-size: .550rem;}
+.page-divide    {margin-top:15rem;}
+
+}

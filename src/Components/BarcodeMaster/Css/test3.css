@@ -1,0 +1,23 @@
+body 			{}
+	
+
+@page			{size: 50mm 25mm; margin: 5mm 5mm 5mm 5mm;}
+@page  			{size : landscape;}	
+ 
+@media print {
+    .noprint {
+        visibility: hidden !important;
+        display: none !important
+    }
+	
+@page  			{size : landscape;}		
+
+.mainDiv		{width: 70mm; height: 25mm; text-align: center;padding-left: 10px;display: block; }
+
+.rowA			{/*margin-bottom:.3rem; font-size: 1.5rem; font-weight: bold;*/height:70px;}
+.rowB			{ font-size: .8375rem;}
+.rowC			{font-size: .750rem;}
+.rowD			{font-size: .750rem;}
+.page-divide    {margin-top:15rem;}
+
+}

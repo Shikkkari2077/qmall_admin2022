@@ -1,0 +1,66 @@
+@media print {
+    html, body * {
+        visibility: hidden;
+        background: white !important;
+        color: #32323d !important;
+        font-size: 14px !important;
+    }
+    .small_scrpt {
+        font-size: 12px !important;
+    }
+    .fas{
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 700 !important;
+        display: inline !important;
+    }
+    #print_invoice {
+        width: unset;
+        margin-left: unset;
+        padding: unset;
+        font-family: initial;
+        margin-top: 1px;
+        margin-bottom: 1px;
+    }
+    .print-area, .print-area * {
+        visibility: visible;
+        color: #32323d !important;
+    }
+    .print-area table.table.table-striped.table-hover, .print-area * {
+        background: white !important;
+        color: #32323d !important;
+        border-color: #32323d !important;
+        max-width: 100% !important;
+        min-width: 100% !important;
+    }
+    .invoice_logo {
+        width: 115px !important;
+    }
+    .print-area {
+        position: absolute;
+        width: 100%;
+        color: #32323d !important;
+        /* left: 100px; */
+        top: 0px
+    }
+    .row.invoice_total {
+        display: block !important;
+        color: #32323d !important;
+    }
+    .print-area table.table.table-striped.table-hover th {
+        color: #32323d !important;
+        border-color: #32323d !important;
+    }
+    .print-area:last-child {
+        page-break-after: auto;
+        color: #32323d !important;
+    }
+}
+
+.company_logo {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: bolder;
+}
+
+.border-radius {
+    border-radius: 0.25rem;
+}
