@@ -20,7 +20,7 @@ class AddGalleryImages extends React.Component {
     this.setState({ accepted: element });
     var proof_img = [];
     let obj = {};
-    console.log(element.files);
+    //onsole.log(element.files);
     this.setState({ category_image: element.files });
     for (var i = 0; i < element.files.length; i++) {
       var file1 = element.files[i];
@@ -45,7 +45,7 @@ class AddGalleryImages extends React.Component {
         that.saveGalleryMedia(json.data);
       } else {
         that.setState({ gallery_media: [] });
-        console.log(json.error);
+        //console.log(json.error);
       }
     });
   }
@@ -81,8 +81,8 @@ class AddGalleryImages extends React.Component {
       if (json.status === true) {
         Swal.fire("Added !", "Product Media has been Added", "success");
         if(that.props.case =="add")
-         {console.log(json.data[0].ProductId)}
-          //window.location.href = `#/products/stock/${json.data[0].ProductId}/add`;
+         
+          window.location.href = `#/products/stock/${json.data[0].ProductId}/add`;
         else
        {window.location.href = `#/products/add/${that.props.product_id}`;}
         //console.log(this.props.match.params.product_id)

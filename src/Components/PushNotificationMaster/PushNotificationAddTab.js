@@ -20,7 +20,7 @@ class PushNotificationAddTab extends React.Component {
       if (json.status === true) {
         that.setState({ language_data: json.data, language_id: json.data[0].id });
       } else {
-        console.log("languages not found");
+        //console.log("languages not found");
       }
     })
   }

@@ -117,7 +117,7 @@ class ProductAdd extends React.Component {
     this.setState({ accepted: element });
     var proof_img = [];
     let obj = {};
-    console.log(element.files);
+    //console.logogog(element.files);
     this.setState({ product_banner_image: element.files });
     for (var i = 0; i < element.files.length; i++) {
       var file1 = element.files[i];
@@ -219,7 +219,7 @@ class ProductAdd extends React.Component {
         }
       } else {
         // that.setState({ category_data: [] });
-        console.log(json.error);
+        //console.logogog(json.error);
       }
     });
   }

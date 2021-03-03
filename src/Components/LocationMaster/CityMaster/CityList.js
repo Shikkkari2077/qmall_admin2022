@@ -45,7 +45,7 @@ class CityList extends React.Component {
   handleStatusChange = (sid) => {
     var isChecked = $('#cattogBtn_' + sid);
     isChecked.prop("checked", !isChecked.prop("checked"));
-    console.log(isChecked.prop('checked'), !isChecked.prop("checked"));
+    //console.log(isChecked.prop('checked'), !isChecked.prop("checked"));
     if (!isChecked.prop("checked") === true) {
       var status = 'active'
     } else {
@@ -56,7 +56,7 @@ class CityList extends React.Component {
       return element.cityID === sid
     })
     a.status = status;
-    console.log(newArray)
+    //console.log(newArray)
     this.setState({ city_list: newArray })
     Swal.fire("Update Status!", "Status has been updated.", "success");
   }

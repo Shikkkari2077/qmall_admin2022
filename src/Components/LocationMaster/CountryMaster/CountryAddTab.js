@@ -25,7 +25,7 @@ class CountryAddTab extends React.Component {
   componentDidMount() {
     if (this.props.match.params.country_id !== undefined && this.props.match.params.country_id !== null && this.props.match.params.country_id !== 0 && this.props.match.params.country_id !== '') {
             this.setState({ country_id: this.props.match.params.country_id })
-      console.log(this.props.match.params.country_id)
+      //console.log(this.props.match.params.country_id)
     }
     this.getLanguages();
   }

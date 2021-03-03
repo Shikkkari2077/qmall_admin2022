@@ -44,7 +44,7 @@ class GovernorateAdd extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      console.log(json)
+      //console.log(json)
       if (json.status === true) {
         that.setState({
           governorate_data: json.data[0],

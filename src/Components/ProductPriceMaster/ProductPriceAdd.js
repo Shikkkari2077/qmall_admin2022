@@ -150,16 +150,16 @@ class ProductPriceAdd extends React.Component {
     data.append("LanguageId", that.props.language_id);
     data.append("CurrencyId", that.state.CurrencyId);
     // if(that.props.stock_id)
-    // { console.log("props")
+    // { //console.log("props")
       data.append("StockId", that.props.stock_id);
      
     // }
     // else
-    // { console.log("param")
+    // { //console.log("param")
     //   data.append("StockId", that.props.match.params.stock_id);
     //  }
-      console.log(that.state.value, that.state.specialPrice, 
-        that.props.language_id,that.state.CurrencyId,that.props.stock_id)
+      //console.log(that.state.value, that.state.specialPrice, 
+        //that.props.language_id,that.state.CurrencyId,that.props.stock_id)
       //data.append("StockId", that.props.stock_id);
     fetch(Constant.getAPI() + "/product/stock/price/add", {
       method: "post",
@@ -173,7 +173,7 @@ class ProductPriceAdd extends React.Component {
     }).then(function (json) {
       if (json.status === true) {
         Swal.fire("Added !", "Product Price has been Added", "success");
-        console.log(json)
+        //console.log(json)
         //if(that.props.status="add"){
        // window.location.href = `#/products`
       //}

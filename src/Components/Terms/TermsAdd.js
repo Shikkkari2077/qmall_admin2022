@@ -58,8 +58,9 @@ class TermsAdd extends React.Component {
       return response.json();
     }).then(function (json) {
       console.log(json);
+      if(json !== undefined){
       that.setState({ description: json.data.data });
-    })
+    }})
   }
   render() {
     return (

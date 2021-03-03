@@ -25,7 +25,7 @@ class CityAddTab extends React.Component {
       this.props.match.params.city_id !== 0 &&
       this.props.match.params.city_id !== '') {
       this.setState({ city_id: this.props.match.params.city_id })
-      console.log(this.props.match.params.city_id)
+      //console.log(this.props.match.params.city_id)
     }
   }
   handleLanguage = (language_id) => {

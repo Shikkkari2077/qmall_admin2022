@@ -54,7 +54,7 @@ class PushNotificationList extends React.Component {
     });
   }
   getPushNotificationList = () => {
-    console.log("here")
+    //console.log("here")
     var that = this;
     var data = new URLSearchParams();
     this.setState({ isSaving: true });

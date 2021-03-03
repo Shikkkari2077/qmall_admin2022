@@ -45,7 +45,7 @@ class ProductWiseStockAdd extends React.Component {
     this.setState({ accepted: element });
     var proof_img = [];
     let obj = {};
-    console.log(element.files);
+    //console.logog(element.files);
     this.setState({ product_stock_media: element.files });
     for (var i = 0; i < element.files.length; i++) {
       var file1 = element.files[i];
@@ -81,7 +81,7 @@ class ProductWiseStockAdd extends React.Component {
             var attributes = []
             for (var j = 0; j < json.data[i].AttributeValues.length; j++) {
               attributes.push(json.data[i].AttributeValues[j].id)
-              console.log("Selected Attributes : ", attributes)
+              //console.logog("Selected Attributes : ", attributes)
               $("#product_attributes_value_" + json.data[i].AttributeValues[j].id).prop("checked", true)
             }
             that.setState({
@@ -110,7 +110,7 @@ class ProductWiseStockAdd extends React.Component {
     var that = this;
     var data = new URLSearchParams();
     data.append("ProductId", this.props.product_id);
-    console.log(this.props.product_id)
+    //console.logog(this.props.product_id)
     fetch(Constant.getAPI() + "/product/get", {
       method: "post",
       headers: {
@@ -130,7 +130,7 @@ class ProductWiseStockAdd extends React.Component {
         //     }
         //   }
         // }
-         console.log(json.data[0].Attributes)
+         //console.logog(json.data[0].Attributes)
         if (json.data[0].productMedia !== null) {
           that.setState({
             attribute_type_data: json.data[0],
@@ -191,7 +191,7 @@ class ProductWiseStockAdd extends React.Component {
         that.addProductWiseStockData(json.data);
       } else {
         // that.setState({ category_data: [] });
-        console.log(json.error);
+        //console.logog(json.error);
       }
     });
   }
@@ -212,7 +212,7 @@ class ProductWiseStockAdd extends React.Component {
     data.append("ProductId", that.props.product_id);
     data.append("StockId", that.props.stock_id);
     data.append("AttributeValueIds", JSON.stringify(that.state.selected_attributes));
-    console.log(that.state.selected_attributes)
+    //console.logog(that.state.selected_attributes)
     fetch(Constant.getAPI() + "/product/stock/update", {
       method: "post",
       headers: {
@@ -247,7 +247,7 @@ class ProductWiseStockAdd extends React.Component {
   // }
   addProductWiseStockData = (media_id) => {
     var that = this;
-    console.log(media_id)
+    //console.logog(media_id)
     var media_data = [];
     if (media_id !== undefined && media_id !== null && media_id !== [] && media_id.length > 0) {
       for (var media = 0; media < media_id.length; media++) {
@@ -260,21 +260,21 @@ class ProductWiseStockAdd extends React.Component {
     data.append("LanguageId", that.props.language_id);
     data.append("MediaIds", JSON.stringify(media_data));
     data.append("deliveryOptions", that.state.deliveryOptions);
-    // console.log(localStorage.getItem('q8_mall_auth'))
-    console.log(that.state.selected_attributes)
-     //console.log(that.state.deliveryOptions)
-    //console.log(JSON.stringify(media_data))
+    // //console.logog(localStorage.getItem('q8_mall_auth'))
+    //console.logog(that.state.selected_attributes)
+     ////console.logog(that.state.deliveryOptions)
+    ////console.logog(JSON.stringify(media_data))
     //data.append("ProductId", that.props.product_id);
     // if (this.props.product_id !== undefined) {
       data.append("ProductId", that.props.product_id);
-       console.log(this.props.product_id)
+       //console.logog(this.props.product_id)
     // } else {
     //   data.append("ProductId", that.props.match.params.product_id);
-    //   console.log(that.props.match.params.product_id)
+    //   //console.logog(that.props.match.params.product_id)
     // }
    
     data.append("AttributeValueIds",JSON.stringify(that.state.selected_attributes));
-    console.log(that.state.selected_attributes)
+    //console.logog(that.state.selected_attributes)
     fetch(Constant.getAPI() + "/product/stock/add", {
       method: "post",
       headers: {
@@ -287,7 +287,7 @@ class ProductWiseStockAdd extends React.Component {
     }).then(function (json) {
       if (json.status === true) {
         //Swal.fire("Added !", "Product Stock has been added", "success");
-        console.log(json)
+        //console.logog(json)
         //window.location.href = `#/products/stock/${that.props.product_id}`
         //window.location.href = `#/products/price/${json.data.id}/${json.data.ProductId}/add`
         that.addProductPrice(json.data.id,json.data.ProductId)
@@ -370,16 +370,16 @@ class ProductWiseStockAdd extends React.Component {
     data.append("LanguageId", that.props.language_id);
     data.append("CurrencyId", that.state.CurrencyId);
     // if(that.props.stock_id)
-    // { console.log("props")
+    // { //console.logog("props")
       data.append("StockId",id);
      
     // }
     // else
-    // { console.log("param")
+    // { //console.logog("param")
     //   data.append("StockId", that.props.match.params.stock_id);
     //  }
-      console.log(that.state.value, that.state.specialPrice, 
-        that.props.language_id,that.state.CurrencyId,that.props.stock_id)
+      //console.logog(that.state.value, that.state.specialPrice, 
+        //that.props.language_id,that.state.CurrencyId,that.props.stock_id)
       //data.append("StockId", that.props.stock_id);
     fetch(Constant.getAPI() + "/product/stock/price/add", {
       method: "post",
@@ -393,15 +393,15 @@ class ProductWiseStockAdd extends React.Component {
     }).then(function (json) {
       if (json.status === true) {
         Swal.fire("Added !", "Product Stock and  Price has been Added", "success");
-        console.log(json)
+        //console.logog(json)
         //if(that.props.status="add"){
        // window.location.href = `#/products`
       //}
         // else
         // {window.location.href = `#/products/price/${that.props.stock_id}/${that.props.product_id}`}
         // window.location.href = `#/products/add/${pid}`
-        console.log(pid)
-        console.log(json.data)
+        //console.logog(pid)
+        //console.logog(json.data)
          window.location.href = `#/products/stock/${pid}`
 
         that.setState({ isSaving: false })

@@ -10,7 +10,7 @@ class AreaList extends React.Component {
   handleStatusChange = (sid) => {
     var isChecked = $('#area_status_' + sid);
     isChecked.prop("checked", !isChecked.prop("checked"));
-    console.log(isChecked.prop('checked'), !isChecked.prop("checked"));
+    //console.log(isChecked.prop('checked'), !isChecked.prop("checked"));
     if (!isChecked.prop("checked") === true) {
       var status = 'active'
     } else {
@@ -21,7 +21,7 @@ class AreaList extends React.Component {
       return element.areaID === sid
     })
     a.status = status;
-    console.log(newArray)
+    //console.log(newArray)
     this.setState({ area_list: newArray })
     Swal.fire("Update Status!", "Status has been updated.", "success");
   }
@@ -139,7 +139,7 @@ class AreaList extends React.Component {
         filter: true,
         sort: true,
         customBodyRender: (id, tableMeta) => {
-          console.log(tableMeta);
+          //console.log(tableMeta);
           return (
             <div>
               <Link to={"/area/add/" + id}

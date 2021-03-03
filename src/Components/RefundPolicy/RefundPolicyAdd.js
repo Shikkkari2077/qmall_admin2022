@@ -59,7 +59,7 @@ class RefundPolicyAdd extends React.Component {
     }).then(function (response) {
       return response.text();
     }).then(function (json) {
-      console.log(json);
+      //console.log(json);
       that.setState({ description: json });
     })
   }

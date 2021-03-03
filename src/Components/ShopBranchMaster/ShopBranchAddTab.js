@@ -9,7 +9,7 @@ class ShopBranchAddTab extends React.Component {
   componentDidMount() {
     if (this.props.match.params.branch_id !== undefined && this.props.match.params.branch_id !== null && this.props.match.params.branch_id !== 0 && this.props.match.params.branch_id !== '') {
       this.setState({ branch_id: this.props.match.params.branch_id })
-      console.log(this.props.match.params.branch_id)
+      //console.logog(this.props.match.params.branch_id)
     }
     this.getLanguageList()
   }

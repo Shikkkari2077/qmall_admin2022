@@ -14,7 +14,7 @@ class OrderListShop extends React.Component {
     this.setState({
       role:localStorage.getItem("q8_mall_ad_role")
     })
-    console.log(localStorage.getItem("q8_mall_ad_role"))
+    //console.log(localStorage.getItem("q8_mall_ad_role"))
   }
   componentDidMount(){
     //setInterval(this.getOrdersList, 60000)
@@ -24,7 +24,7 @@ class OrderListShop extends React.Component {
     var that = this;
     var data = new URLSearchParams();
     this.setState({ isSaving: true });
-    console.log(localStorage.getItem("q8_mall_auth")  )
+    //console.log(localStorage.getItem("q8_mall_auth")  )
     fetch(Constant.getAPI() + "/product/order/get", {
       method: "post",
       headers: {

@@ -28,7 +28,7 @@ class ProductAdd extends React.Component {
     }
     var data = new URLSearchParams();
     data.append('ProductId',this.state.ProductId);
-    console.log(this.state.ProductId)
+    //console.log(this.state.ProductId)
     data.append('MediaId', media_data);
     // data.append('MediaId', JSON.stringify(media_data));
     fetch(Constant.getAPI() + "/product/media/add", {
@@ -44,14 +44,14 @@ class ProductAdd extends React.Component {
       if (json.status === true) {
         Swal.fire("Added !", "NOW ADD STOCK", "success");
         // if(that.props.case =="add")
-        //  {console.log(json.data[0].ProductId)
+        //  {//console.log(json.data[0].ProductId)
           window.location.href = `#/products/stock/${json.data[0].ProductId}/add`;
       //   else
       //  {window.location.href = `#/products/add/${that.props.product_id}`;}
-        console.log(json.data)
+        //console.log(json.data)
         that.setState({ isSaving: false })
       } else {
-        console.log("gallery")
+        //console.log("gallery")
 
         that.setState({ isSaving: false });
         Swal.fire({
@@ -72,7 +72,7 @@ class ProductAdd extends React.Component {
     this.setState({ acceptedgallery: element });
     var proof_img = [];
     let obj = {};
-    console.log(element.files);
+    //console.log(element.files);
     this.setState({ category_image: element.files });
     for (var i = 0; i < element.files.length; i++) {
       var file1 = element.files[i];
@@ -144,7 +144,7 @@ class ProductAdd extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      console.log(json.data[0])
+      //console.log(json.data[0])
       if (json.status === true) {
         var category = []
         for (var i = 0; i < json.data.length; i++) {
@@ -157,7 +157,7 @@ class ProductAdd extends React.Component {
           }
         }
         that.setState({ category_list: category });
-        console.log(category)
+        //console.log(category)
       } else {
         that.setState({ category_list: [] });
        
@@ -199,7 +199,7 @@ class ProductAdd extends React.Component {
       return response.json();
     }).then(function (json) {
       if (json.status === true) {
-        console.log(json.data)
+        //console.log(json.data)
         that.setState({ attribute_list: json.data });
       } else {
         that.setState({ attribute_list: [] });
@@ -214,7 +214,7 @@ class ProductAdd extends React.Component {
     this.setState({ accepted: element });
     var proof_img = [];
     let obj = {};
-    console.log(element.files);
+    //console.log(element.files);
     this.setState({ product_banner_image: element.files });
     for (var i = 0; i < element.files.length; i++) {
       var file1 = element.files[i];
@@ -249,7 +249,7 @@ class ProductAdd extends React.Component {
           }
         }
         if (json.data[0].productMedia !== null) {
-          console.log(json.data)
+          //console.log(json.data)
           that.setState({
             attribute_type_data: json.data[0],
             product_name: json.data[0].name_en,
@@ -333,7 +333,7 @@ class ProductAdd extends React.Component {
         that.saveGalleryMedia(json.data);
       } else {
         that.setState({ gallery_media: [] });
-        console.log(json.error);
+        //console.log(json.error);
       }
     });
   }
@@ -356,7 +356,7 @@ class ProductAdd extends React.Component {
         }
       } else {
         // that.setState({ category_data: [] });
-        console.log(json.error);
+        //console.log(json.error);
       }
     });
   }
@@ -386,7 +386,7 @@ class ProductAdd extends React.Component {
     data.append("ProductId", that.props.product_id);
     if(that.state.selected_attributes.length != 0)
     {data.append("AttributeIds", JSON.stringify(that.state.selected_attributes));}
-    console.log(that.state.selected_attributes)
+    //console.log(that.state.selected_attributes)
     fetch(Constant.getAPI() + "/product/update", {
       method: "post",
       headers: {
@@ -452,9 +452,9 @@ class ProductAdd extends React.Component {
       return response.json();
     }).then(function (json) {
       if (json.status === true) {
-        console.log("product")
+        //console.log("product")
 
-        console.log(json.result.id)
+        //console.log(json.result.id)
         //Swal.fire("Added !", "Add Product Image", "success");
         const product_id =json.result.id
         that.setState({
@@ -467,7 +467,7 @@ class ProductAdd extends React.Component {
         
 
     } else {
-      console.log("addproduct")
+      //console.log("addproduct")
 
         that.setState({ isSaving: false });
         Swal.fire({
@@ -496,7 +496,7 @@ class ProductAdd extends React.Component {
     var id = event.target.value;
     let arr = this.state.selected_attributes;
     var index = -1;
-    console.log(id)
+    //console.log(id)
     arr.find(function (value, i) {
       if ((parseInt(value, 10) === parseInt(id, 10))) {
         index = i;
@@ -739,7 +739,6 @@ class ProductAdd extends React.Component {
                                      <i className="cr-icon icofont icofont-ui-check txt-primary"></i>
                                     </span>
                                     <span>
-                                      {console.log(attributes)}
                                       {  attributes.name_ar !== "" ?
                                       attributes.name_en + " / " + attributes.name_ar 
                                       :

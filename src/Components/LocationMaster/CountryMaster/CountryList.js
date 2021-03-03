@@ -12,7 +12,7 @@ class CountryList extends React.Component {
   handleStatusChange = (sid) => {
     var isChecked = $('#coutry_status_' + sid);
     isChecked.prop("checked", !isChecked.prop("checked"));
-    console.log(isChecked.prop('checked'), !isChecked.prop("checked"));
+    //console.log(isChecked.prop('checked'), !isChecked.prop("checked"));
     if (!isChecked.prop("checked") === true) {
       this.onActiveCountry(sid)
     } else {
@@ -184,7 +184,7 @@ class CountryList extends React.Component {
         sort: true,
         customBodyRender: (active, tableMeta) => {
           var country_id = tableMeta.rowData[1];
-          console.log(tableMeta);
+          //console.log(tableMeta);
           return <Toggle
             id={"coutry_status_" + country_id}
             checked={active}

@@ -120,7 +120,7 @@ class PaymentMethodAdd extends React.Component {
         }
       } else {
         // that.setState({ payment_method_data: [] });
-        console.log(json.error);
+        //console.logog(json.error);
       }
     });
   }
@@ -205,7 +205,7 @@ class PaymentMethodAdd extends React.Component {
     this.setState({ accepted: element });
     var proof_img = [];
     let obj = {};
-    console.log(element.files);
+    //console.logog(element.files);
     this.setState({ payment_method_image: element.files });
     for (var i = 0; i < element.files.length; i++) {
       var file1 = element.files[i];

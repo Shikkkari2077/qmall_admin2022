@@ -11,8 +11,8 @@ class OrderList extends React.Component {
     
   };
   update=(id)=>{
-    console.log(id)
     //console.log(id)
+    ////console.log(id)
     var that = this;
     var data = new URLSearchParams();
     data.append("clicked", true);
@@ -28,12 +28,12 @@ class OrderList extends React.Component {
       return response.json();
     }).then(function (json) {
       if (json.status === true) {
-        console.log(json)
+        //console.log(json)
         
        // Swal.fire("Update Status!", "Status has been updated.", "success");
         //that.getProductList();
       } else {
-        console.log("fail")
+        //console.log("fail")
         // Swal.fire({
         //   title: "Something went wrong. Try again after some Time.!",
         //   icon: 'error',
@@ -52,7 +52,7 @@ class OrderList extends React.Component {
   }
   handleFetch=(event)=>{
    this.setState({value: event.target.value})
-   console.log(event.target.value)
+   //console.log(event.target.value)
    this.getOrdersList(event.target.value)
   }
   componentWillMount() {
@@ -62,14 +62,14 @@ class OrderList extends React.Component {
     this.setState({
       role:localStorage.getItem("q8_mall_ad_role")
     })
-    console.log(localStorage.getItem("q8_mall_ad_role"))
+    //console.log(localStorage.getItem("q8_mall_ad_role"))
   }
   getOrdersList = (fetchvalue) => {
-    console.log("here")
+    //console.log("here")
     var that = this;
     var data = new URLSearchParams();
     this.setState({ isSaving: true });
-    console.log(localStorage.getItem("q8_mall_auth")  )
+    //console.log(localStorage.getItem("q8_mall_auth")  )
     if(fetchvalue =='daily' ||fetchvalue =='monthly'||fetchvalue =='weekly')
     {
       data.append("fetch",fetchvalue)
@@ -89,7 +89,7 @@ class OrderList extends React.Component {
       })
       .then(function (json) {
         if (json.status === true) {
-          console.log(json.data)
+          //console.log(json.data)
           var orders = [];
           for (var i = 0; i < json.data.length; i++) {
             var order_obj = json.data[i];
@@ -383,8 +383,8 @@ class OrderList extends React.Component {
       download: true,
       selectableRows: "none",
       setRowProps: (row,dataIndex, rowIndex) => {
-        //console.log(row)
-        //console.log(this.state.orders_list)
+        ////console.log(row)
+        ////console.log(this.state.orders_list)
        // this.state.orders_list[this.state.count]
          
 

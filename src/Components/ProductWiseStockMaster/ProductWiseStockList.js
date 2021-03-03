@@ -66,7 +66,7 @@ class ProductWiseStockList extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      console.log(json.data)
+      //console.logog(json.data)
       if (json.status === true) {
         that.setState({ product_list: json.data, isSaving: false });
       } else {

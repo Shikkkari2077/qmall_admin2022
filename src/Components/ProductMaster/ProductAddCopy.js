@@ -132,7 +132,7 @@ class ProductAdd extends React.Component {
       return response.json();
     }).then(function (json) {
       if (json.status === true) {
-        console.log(json.data)
+        //console.log(json.data)
         that.setState({ attribute_list: json.data });
       } else {
         that.setState({ attribute_list: [] });
@@ -154,7 +154,7 @@ class ProductAdd extends React.Component {
     this.setState({ accepted: element });
     var proof_img = [];
     let obj = {};
-    console.log(element.files);
+    //console.log(element.files);
     this.setState({ product_banner_image: element.files });
     for (var i = 0; i < element.files.length; i++) {
       var file1 = element.files[i];
@@ -189,7 +189,7 @@ class ProductAdd extends React.Component {
           }
         }
         if (json.data[0].productMedia !== null) {
-          console.log(json.data)
+          //console.log(json.data)
           that.setState({
             attribute_type_data: json.data[0],
             product_name: json.data[0].name,
@@ -263,7 +263,7 @@ class ProductAdd extends React.Component {
         }
       } else {
         // that.setState({ category_data: [] });
-        console.log(json.error);
+        //console.log(json.error);
       }
     });
   }
@@ -344,12 +344,12 @@ class ProductAdd extends React.Component {
       return response.json();
     }).then(function (json) {
       if (json.status === true) {
-        console.log(json.result.id)
+        //console.log(json.result.id)
         Swal.fire("Added !", "Add Product Image", "success");
         const product_id =json.result.id
         window.location.href = `#/products/gallery/${product_id}`;
 
-        console.log("here")
+        //console.log("here")
         that.setState({ isSaving: false })
         
 
@@ -381,7 +381,7 @@ class ProductAdd extends React.Component {
     var id = event.target.value;
     let arr = this.state.selected_attributes;
     var index = -1;
-    console.log(id)
+    //console.log(id)
     arr.find(function (value, i) {
       if ((parseInt(value, 10) === parseInt(id, 10))) {
         index = i;
@@ -572,7 +572,7 @@ class ProductAdd extends React.Component {
                                      <i className="cr-icon icofont icofont-ui-check txt-primary"></i>
                                     </span>
                                     <span>
-                                      {/* {console.log(attributes)} */}
+                                      {/* {//console.log(attributes)} */}
                                       { 
                                       attributes.name }</span>
                                   </label>

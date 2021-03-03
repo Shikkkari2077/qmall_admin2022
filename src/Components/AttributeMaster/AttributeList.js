@@ -64,7 +64,7 @@ class AttributeList extends React.Component {
       return response.json();
     }).then(function (json) {
       if (json.status === true) {
-        console.log(json.data)
+        //console.log(json.data)
         that.setState({ attribute_list: json.data ,isSaving:false});
       } else {
         that.setState({ attribute_list: [],isSaving:false });

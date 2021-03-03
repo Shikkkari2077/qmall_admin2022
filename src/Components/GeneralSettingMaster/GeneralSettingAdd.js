@@ -55,10 +55,10 @@ class GeneralSettingAdd extends React.Component {
       },
       // body: data
     }).then(function (response) {
-      // console.log("response :: " , response.headers.get("content-type"));
+      // //console.log("response :: " , response.headers.get("content-type"));
       return response.json();
     }).then(function (json) {
-      console.log(json);
+      //console.log(json);
       that.setState({
         facebook: json.facebook,
         whatsapp: json.whatsapp,

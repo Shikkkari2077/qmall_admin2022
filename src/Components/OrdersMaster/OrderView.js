@@ -45,14 +45,14 @@ class OrderView extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      console.log(json.data)
+      //console.log(json.data)
       if (json.status === true) {
         var order_data;
         for (var i = 0; i < json.data.length; i++) {
           if (json.data[i].id === that.props.order_id) {
             order_data = json.data[i];
             var date = new Date(json.data[i].createdAt);
-            //console.log(date.getHours())
+            ////console.log(date.getHours())
             var hours=date.getHours();
             var minutes=date.getMinutes();
             var year = date.getFullYear();
@@ -176,7 +176,7 @@ class OrderView extends React.Component {
   handleChangeInvoiceStatus = (event) => {
     event.preventDefault();
 
-    // console.log("status : " + event.target.value, shop_id);
+    // //console.log("status : " + event.target.value, shop_id);
 
     // return false;
     var that = this;
@@ -212,7 +212,7 @@ class OrderView extends React.Component {
    handleChange = (shop_id, event) => {
     event.preventDefault();
 
-    // console.log("status : " + event.target.value, shop_id);
+    // //console.log("status : " + event.target.value, shop_id);
 
     // return false;
     var that = this;
@@ -698,7 +698,7 @@ class OrderView extends React.Component {
                                       <ul>
                                       {
                                         OrderShops.OrderStocks.map(order=>(
-                                          //console.log(order)
+                                          ////console.log(order)
                                          <li>{order.productNote ?order.productNote:"--"}</li> 
                                         ))
                                       }

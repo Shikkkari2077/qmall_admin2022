@@ -9,7 +9,7 @@ class ProductPriceAddTab extends React.Component {
   componentDidMount() {
     if (this.props.match.params.price_id !== undefined && this.props.match.params.price_id !== null && this.props.match.params.price_id !== 0 && this.props.match.params.price_id !== '') {
       this.setState({ price_id: this.props.match.params.price_id })
-      console.log(this.props.match.params.price_id)
+      //console.log(this.props.match.params.price_id)
     }
     this.getLanguageList()
   }

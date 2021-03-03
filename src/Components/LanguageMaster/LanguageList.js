@@ -104,7 +104,7 @@ class LanguageList extends React.Component {
         filter: true,
         sort: true,
         customBodyRender: (id, tableMeta) => {
-          console.log(tableMeta);
+          //console.log(tableMeta);
           return (
             <div>
               <Link to={"/languages/add/" + id}

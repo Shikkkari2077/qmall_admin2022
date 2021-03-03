@@ -56,13 +56,13 @@ class ProductList extends React.Component {
   //   var data = new URLSearchParams();
   //   this.setState({ isSaving: true });
   //   if (localStorage.getItem('q8_mall_ad_role') === "shop") {
-  //     // console.log(localStorage.getItem('q8_mall_ad_role'))
-  //     // console.log( localStorage.getItem('q8_mall_ad_uid'))
-  //     // console.log(localStorage.getItem('q8_mall_auth'))
+  //     // //console.log(localStorage.getItem('q8_mall_ad_role'))
+  //     // //console.log( localStorage.getItem('q8_mall_ad_uid'))
+  //     // //console.log(localStorage.getItem('q8_mall_auth'))
 
   //     data.append("ShopId", localStorage.getItem('q8_mall_ad_uid'));
   //   }
-  //   console.log( localStorage.getItem('q8_mall_auth'))
+  //   //console.log( localStorage.getItem('q8_mall_auth'))
   //   fetch(Constant.getAPI() + "/product/get", {
   //     method: "post",
   //     headers: {
@@ -73,7 +73,7 @@ class ProductList extends React.Component {
   //   }).then(function (response) {
   //     return response.json();
   //   }).then(function (json) {
-  //     // console.log(json.data[0])
+  //     // //console.log(json.data[0])
 
   //     if (json.status === true) {
   //       var products = []
@@ -114,13 +114,13 @@ class ProductList extends React.Component {
     var data = new URLSearchParams();
     this.setState({ isSaving: true });
     if (localStorage.getItem('q8_mall_ad_role') === "shop") {
-      // console.log(localStorage.getItem('q8_mall_ad_role'))
-      // console.log( localStorage.getItem('q8_mall_ad_uid'))
-      // console.log(localStorage.getItem('q8_mall_auth'))
+      // //console.log(localStorage.getItem('q8_mall_ad_role'))
+      // //console.log( localStorage.getItem('q8_mall_ad_uid'))
+      // //console.log(localStorage.getItem('q8_mall_auth'))
 
       data.append("ShopId", localStorage.getItem('q8_mall_ad_uid'));
     }
-    console.log(localStorage.getItem('q8_mall_auth'))
+    //console.log(localStorage.getItem('q8_mall_auth'))
     fetch(Constant.getAPI() + "/product/get", {
       method: "post",
       headers: {
@@ -131,7 +131,7 @@ class ProductList extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-       console.log(json.data)
+       //console.log(json.data)
 
       if (json.status === true) {
         var products = []
@@ -173,7 +173,7 @@ class ProductList extends React.Component {
   handleIsActiveChange = (sid) => {
     var isChecked = $('#product_isActive_' + sid);
     isChecked.prop("checked", !isChecked.prop("checked"));
-    console.log(isChecked.prop('checked'), !isChecked.prop("checked"));
+    //console.log(isChecked.prop('checked'), !isChecked.prop("checked"));
     if (!isChecked.prop("checked") === true) {
       var status = true
     } else {
@@ -212,7 +212,7 @@ class ProductList extends React.Component {
   handleStatusChange = (sid) => {
     var isChecked = $('#product_status_' + sid);
     isChecked.prop("checked", !isChecked.prop("checked"));
-    console.log(isChecked.prop('checked'), !isChecked.prop("checked"));
+    //console.log(isChecked.prop('checked'), !isChecked.prop("checked"));
     if (!isChecked.prop("checked") === true) {
       var status = true
     } else {
@@ -223,7 +223,7 @@ class ProductList extends React.Component {
     // this.setState({ isSaving: true });
     data.append("status", status);
     data.append("ProductId", sid);
-    console.log(localStorage.getItem('q8_mall_auth'))
+    //console.log(localStorage.getItem('q8_mall_auth'))
     fetch(Constant.getAPI() + "/product/statusChange", {
       method: "post",
       headers: {
@@ -252,7 +252,7 @@ class ProductList extends React.Component {
   handleMediaChange=(sid)=>{
     var isChecked = $('#product_media_' + sid);
     isChecked.prop("checked", !isChecked.prop("checked"));
-    console.log(isChecked.prop("checked"), !isChecked.prop("checked"));
+    //console.log(isChecked.prop("checked"), !isChecked.prop("checked"));
     if (!isChecked.prop("checked") === true) {
       var status = true;
     } else {
@@ -264,7 +264,7 @@ class ProductList extends React.Component {
     
     data.append("mediaStatus", status);
     data.append("ProductId", sid);
-    console.log(status,sid)
+    //console.log(status,sid)
     fetch(Constant.getAPI() + "/product/mediaStatus", {
       method: "post",
       headers: {
@@ -277,7 +277,7 @@ class ProductList extends React.Component {
       
     }).then(function (json) {
       if (json.status === true) {
-        console.log(json)
+        //console.log(json)
         Swal.fire("Update Status!", "Status has been updated.", "success");
         that.getProductList();
       } else {
@@ -295,7 +295,7 @@ class ProductList extends React.Component {
   handleDescriptionChange=(sid)=>{
     var isChecked = $('#product_description_' + sid);
     isChecked.prop("checked", !isChecked.prop("checked"));
-    console.log(isChecked.prop("checked"), !isChecked.prop("checked"));
+    //console.log(isChecked.prop("checked"), !isChecked.prop("checked"));
     if (!isChecked.prop("checked") === true) {
       var status = true;
     } else {
@@ -304,7 +304,7 @@ class ProductList extends React.Component {
     var that = this;
     var data = new URLSearchParams();
     // this.setState({ isSaving: true });
-    console.log(status)
+    //console.log(status)
     data.append("descriptionStatus", status);
     data.append("ProductId", sid);
     fetch(Constant.getAPI() + "/product/descriptionStatus",{
@@ -319,7 +319,7 @@ class ProductList extends React.Component {
       
     }).then(function (json) {
       if (json.status === true) {
-        console.log(json)
+        //console.log(json)
         Swal.fire("Update Status!", "Status has been updated.", "success");
         that.getProductList();
       } else {
@@ -354,7 +354,7 @@ class ProductList extends React.Component {
   //     })
   //     .then(function (json) {
   //       if (json.status === true) {
-  //         console.log(json.data)
+  //         //console.log(json.data)
   //         that.setState({ SubCategory: json.data, isSaving: false });
   //       } else {
   //         that.setState({ SubCategory: [], isSaving: false });
@@ -383,7 +383,15 @@ class ProductList extends React.Component {
              && productMedia !== {} ? productMedia.url : "./assets/images/icon.png"} className="img-fluid img-40" alt="tbl" />)
         }
       }
-    }, {
+    },
+    {
+      name: "id",
+      label: "Product ID",
+      options: {
+        filter: true,
+        sort: true
+      }
+    },  {
       name: "name_en",
       label: "Product Name:English",
       options: {
@@ -458,13 +466,17 @@ class ProductList extends React.Component {
         sort: false,
         customBodyRender: (Attributes, tableMeta) => {
           return <div>
-            {
+            {/* {console.log(Attributes)} */}
+            {      
+
               Attributes !== null && Attributes !== [] && Attributes.length > 0
                 ?
                 <ol>
-                  {
+                  { 
                     Attributes.map(product_attr =>
+                      product_attr.name_en !== "Default Attribute"?
                       <li key={product_attr.id}>{product_attr.name_en}</li>
+                      :null
                     )
                   }
                 </ol>
@@ -553,6 +565,14 @@ class ProductList extends React.Component {
     }, {
       name: "name_en",
       label: "Product Name",
+      options: {
+        filter: true,
+        sort: true
+      }
+    },
+    {
+      name: "id",
+      label: "Product ID",
       options: {
         filter: true,
         sort: true
@@ -648,7 +668,10 @@ class ProductList extends React.Component {
                 <ol>
                   {
                     Attributes.map(product_attr =>
+                      product_attr.name_en !== "Default Attribute"?
+
                       <li key={product_attr.id}>{product_attr.name_en}</li>
+                      :null
                     )
                   }
                 </ol>
@@ -682,7 +705,7 @@ class ProductList extends React.Component {
         sort: false,
         customBodyRender: (status, tableMeta) => {
           return (<div>
-            {/* * {console.log(tableMeta.rowData)} */}
+            {/* * {//console.log(tableMeta.rowData)} */}
           <Toggle
             id={"product_status_" + tableMeta.rowData[12]}
             checked={status === true ? true : false}

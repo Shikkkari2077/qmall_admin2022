@@ -12,7 +12,7 @@ class GovernorateAddTab extends React.Component {
   componentDidMount() {
     if (this.props.match.params.governorate_id !== undefined && this.props.match.params.governorate_id !== null && this.props.match.params.governorate_id !== 0 && this.props.match.params.governorate_id !== '') {
       this.setState({ governorate_id: this.props.match.params.governorate_id })
-      console.log(this.props.match.params.governorate_id)
+      //console.log(this.props.match.params.governorate_id)
     }
     this.getLanguages();
   }

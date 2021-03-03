@@ -62,7 +62,7 @@ class GalleryImageList extends React.Component {
       data.append("ProductId", this.props.product_id);
     } else {
       data.append("ProductId", this.props.match.params.product_id);
-      console.log(this.props.match.params.product_id)
+      //console.log(this.props.match.params.product_id)
     }
     fetch(Constant.getAPI() + "/product/get", {
       method: "post",

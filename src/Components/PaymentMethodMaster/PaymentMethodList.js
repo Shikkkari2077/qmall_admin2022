@@ -10,7 +10,7 @@ class PaymentMethodList extends React.Component {
   handleStatusChange = (sid) => {
     var isChecked = $('#tyre_payment_method_' + sid);
     isChecked.prop("checked", !isChecked.prop("checked"));
-    console.log(isChecked.prop('checked'), !isChecked.prop("checked"));
+    //console.log(isChecked.prop('checked'), !isChecked.prop("checked"));
     if (!isChecked.prop("checked") === true) {
       var status = 'active'
     } else {
@@ -21,7 +21,7 @@ class PaymentMethodList extends React.Component {
       return element.id === sid
     })
     a.status = status;
-    console.log(newArray)
+    //console.log(newArray)
     this.setState({ tyre_payment_method_list: newArray })
     Swal.fire("Update Status!", "Status has been updated.", "success");
   }

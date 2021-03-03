@@ -164,7 +164,6 @@ class ProductPriceList extends React.Component {
                    className="btn btn-sm btn-inverse waves-effect waves-light f-right d-inline-block md-trigger" data-modal="modal-13"> 
                   <i className="icofont icofont-plus m-r-5"></i> Add Product Price </Link> */}
                   <div>
-                    {console.log(this.props.match.params.stock_id,this.props.match.params.product_id)}
                   </div>
                 </div>
                 <div className="col-lg-5">

@@ -12,7 +12,7 @@ class ProductWiseStockAddTab extends React.Component {
        && this.props.match.params.product_id !== 0 
        && this.props.match.params.product_id !== '') {
       this.setState({ product_id: this.props.match.params.product_id })
-      console.log(this.props.match.params.product_id)
+      //console.logog(this.props.match.params.product_id)
     }
     this.getLanguageList()
   }

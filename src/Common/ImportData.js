@@ -8,13 +8,21 @@ import MUIDataTable from "mui-datatables";
 import Constant from '../Constant'
 
 
-import qmallsheet from "../Formats/qmall-sheet.xlsx"
+//import qmallsheet from "../Formats/qmall-sheet.xlsx"
+import qmallsheet from "../Formats/SampleSheet.xlsx"
+
 
 
 class ImportData extends React.Component {
+  state={
+
+  }
   constructor(props) {
     super(props);
     this.state = {
+      errorArray:[],
+      error:{},
+      Sheetmessage:"",
       hideOld: false,
       checkedItems: new Map(),
       check: false,
@@ -31,61 +39,46 @@ class ImportData extends React.Component {
     };
   }
   productToUpload(file){
+    const that=this;
    const formData = new FormData();
           formData.append("sheet", file);
-        console.log(file)
+        //console.log(file)
 
         fetch(Constant.getAPI() + "/product/upload-sheet", {
           method:"post",
           headers: {
+            "Authorization": localStorage.getItem('q8_mall_auth')
             },
           body:formData
           }).then(function (response) {
             return response.json();
           })
           .then(function (json) {
-            console.log(json)
+            //console.log(json)
              if (json.sucess == true) {
-               console.log(json)
                Swal.fire({
-                title:"Sheet Imported!",
-                icon: 'success',
-                text: "",
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Ok"
-
-               }).then(function() {
-                window.location.href = "#/products";
-            })
-           
-             }
-             else{
-               Swal.fire({
-                title: json.error,
-                icon: 'error',
-                text: "",
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Ok"
-
-               }).then(function() {
-                window.location.reload();
-            })
-               
-             }
-             
-          })
-          .catch((err) => {
-            const errMsg = err.message;
-            console.log(err)
-            this.onError();
-          });
+                 title:json.message,
+                 
+               })
+               //console.log(json.errors)
+               that.setState({
+                 errorArray:json.errors,
+                 show:true,
+                 Sheetmessage:json.message
+                 
+               })
+          }
+         })
+        //  .catch((err) => {
+        //     const errMsg = err.message;
+        //     //console.log(err)
+        //     this.onError();
+        //   });
   }
 
   componentDidMount() {
-    // console.log(this.props.match);
-    // console.log(this.props.match.params.import_name);
+    // //console.log(this.props.match);
+    // //console.log(this.props.match.params.import_name);
     this.setState({
       importname: this.props.match.params.import_name,
     });
@@ -103,8 +96,8 @@ class ImportData extends React.Component {
   };
 
   componentWillReceiveProps(nextProps){
-    console.log('nodata',nextProps.sellerProductimported)
-    console.log(nextProps.invalidata)
+    //console.log('nodata',nextProps.sellerProductimported)
+    //console.log(nextProps.invalidata)
     if(nextProps.invalidata !==null || nextProps.invalidata!==[] || nextProps.invalidata!==undefined){
       this.setState({
         show:true
@@ -115,35 +108,35 @@ class ImportData extends React.Component {
     })
   }
   
-  exportCSV() {
-    var csvRow = [];
-    var A = [
-      [
-        "Row Number",
-        "SKU",
-        "Seller Id",
-      ],
-    ];
-    var re = this.props.invalidata;
-    for (var item = 0; item < re.length; item++) {
-        A.push([
-          re[item].rowNumber,
-          re[item].SKU,
-          re[item].SellerId,
-        ]); 
-    }
-    console.log(A);
-    let csvContent = "data:text/csv;charset=utf-8,";
-    A.forEach(function (rowArray) {
-      let row = rowArray.join(",");
-      csvContent += row + "\r\n";
-    });
-    var a = document.createElement("a");
-    a.href = "data:attachment/csv" + csvContent;
-    a.download = "Invalid products.csv";
-    document.body.appendChild(a);
-    a.click();
-  }
+  // exportCSV() {
+  //   var csvRow = [];
+  //   var A = [
+  //     [
+  //       "Row Number",
+  //       "SKU",
+  //       "Seller Id",
+  //     ],
+  //   ];
+  //   var re = this.props.invalidata;
+  //   for (var item = 0; item < re.length; item++) {
+  //       A.push([
+  //         re[item].rowNumber,
+  //         re[item].SKU,
+  //         re[item].SellerId,
+  //       ]); 
+  //   }
+  //   //console.log(A);
+  //   let csvContent = "data:text/csv;charset=utf-8,";
+  //   A.forEach(function (rowArray) {
+  //     let row = rowArray.join(",");
+  //     csvContent += row + "\r\n";
+  //   });
+  //   var a = document.createElement("a");
+  //   a.href = "data:attachment/csv" + csvContent;
+  //   a.download = "Invalid products.csv";
+  //   document.body.appendChild(a);
+  //   a.click();
+  // }
   onSaveData = (e) => {
     this.setState({
       laoding:true
@@ -171,7 +164,7 @@ class ImportData extends React.Component {
     this.setState({
       fileToUpload: fileToUpload,
     });
-    console.log(fileToUpload);
+    //console.log(fileToUpload);
   };
 
   openModel = () => {
@@ -210,52 +203,42 @@ class ImportData extends React.Component {
       hidedownload: !this.state.hidedownload,
       checkedItems: prevState.checkedItems.set(item, isChecked),
     }));
-    console.log(this.state.checkedItems);
+    //console.log(this.state.checkedItems);
     let newArray = this.props.categoryData.data.filter((d) => {
-      // console.log(d)
+      // //console.log(d)
       let searchValue = d.id;
       return searchValue.indexOf(item) !== -1;
     });
-    console.log(newArray);
+    //console.log(newArray);
     this.setState({
       downdata: [...this.state.downdata, newArray],
     });
-    console.log(this.state.downdata);
+    //console.log(this.state.downdata);
   };
    
   render() {
     const columns = [
       {
-        name: "rowNumber",
+        name: "row",
         label: "Row Number",
         options: {
           filter: true,
           sort: true,
+          customBodyRender:(row)=>{
+            return (row+2)
+
+          }
         },
       },
       {
-        name: "SKU",
-       label: "SKU",
+        name: "message",
+       label: "Error Message",
        options: {
         filter: true,
         sort: true
       },
     },
-      {
-        name: "SellerId",
-        label: "Seller ID",
-        options: {
-          filter: true,
-          sort: true,
-          customBodyRender: (SellerId, tableMeta) => {
-            return SellerId ? SellerId : "";
-          },
-        },
-      },
-      
-     
-     
-    ];
+  ];
    
     const options = {
       filter: false,
@@ -265,51 +248,51 @@ class ImportData extends React.Component {
       search: false,
       print: false,
       download: false,
-      fixedHeader: true,
-      serverSide: true,
-      onTableChange: (action, tableState) => {
-        console.log(action, tableState);
-        switch (action) {
-          case "changePage":
-            this.changePage(tableState.page);
-            break;
-          default:
-        }
-      },
-      selectableRows: "none",
-      textLabels: {
-        body: {
-          noMatch: this.state.laoding ? (
-            <div
-              style={{
-                textAlign: "center",
-                display: "flex",
-                color: "red",
-                width: "1024px",
-                justifyContent: "center",
-              }}
-            >
-              Loading data..!
-            </div>
-          ) : (
-            <div
-              style={{
-                textAlign: "center",
-                display: "flex",
-                color: "red",
-                width: "1024px",
-                justifyContent: "center",
-              }}
-            >
-              <p style={{ textAlign: "center" }}>
-              Sorry, No Data Found
-              </p>
-            </div>
-          ),
-          toolTip: "Sort",
-          columnHeaderTooltip: (column) => `Sort for ${column.label}`,
-        },
-      },
+      //fixedHeader: true,
+     // serverSide: true,
+      // onTableChange: (action, tableState) => {
+      //   //console.log(action, tableState);
+      //   switch (action) {
+      //     case "changePage":
+      //       this.changePage(tableState.page);
+      //       break;
+      //     default:
+      //   }
+      // },
+      selectableRows: false,
+      // textLabels: {
+      //   body: {
+      //     noMatch: this.state.showLabel ? (
+      //       <div
+      //         style={{
+      //           textAlign: "center",
+      //           display: "flex",
+      //           color: "red",
+      //           width: "1024px",
+      //           justifyContent: "center",
+      //         }}
+      //       >
+      //         Loading data..!
+      //       </div>
+      //     ) : (
+      //       <div
+      //         style={{
+      //           textAlign: "center",
+      //           display: "flex",
+      //           color: "red",
+      //           width: "1024px",
+      //           justifyContent: "center",
+      //         }}
+      //       >
+      //         <p style={{ textAlign: "center" }}>
+      //         Sorry, No Data Found
+      //         </p>
+      //       </div>
+      //     ),
+      //     toolTip: "Sort",
+      //     columnHeaderTooltip: (column) => `Sort for ${column.label}`,
+      //   },
+      // },
     };
     return (
       <div className="pcoded-inner-content">
@@ -409,150 +392,7 @@ class ImportData extends React.Component {
                         )}
                         
                         
-                        {/* {this.state.importname === "product" ? (
-                          <a
-                            href={productMasterCatalouge}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            download
-                          >
-                            <button
-                              target="_blank"
-                              className="btn mr-2 color-info p-2"
-                            >
-                              <i className="icofont icofont-file-alt"></i>{" "}
-                              Sample Excel
-                            </button>
-                          </a>
-                        ) : (
-                          ""
-                        )}
-                        {this.state.importname === "sellerproduct" ? (
-                          <a
-                            href={sellerproduct}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            download
-                          >
-                            <button
-                              target="_blank"
-                              className="btn mr-2 color-info p-2"
-                            >
-                              <i className="icofont icofont-file-alt"></i>{" "}
-                              Sample Excel
-                            </button>
-                          </a>
-                        ) : (
-                          ""
-                        )}
-                        {this.state.importname === "seller" ? (
-                          <a
-                            href={AddSellerInfo}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            download
-                          >
-                            <button
-                              target="_blank"
-                              className="btn mr-2 color-info p-2"
-                            >
-                              <i className="icofont icofont-file-alt"></i>{" "}
-                              Sample Excel
-                            </button>
-                          </a>
-                        ) : (
-                          ""
-                        )}
-                        {this.state.importname === "pincode" ? (
-                          <a
-                            href={locationPincodeMasterSheet}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            download
-                          >
-                            <button
-                              target="_blank"
-                              className="btn mr-2 color-info p-2"
-                            >
-                              <i className="icofont icofont-file-alt"></i>{" "}
-                              Sample Excel
-                            </button>
-                          </a>
-                        ) : (
-                          ""
-                        )}
-                        {this.state.importname === "top-deals" ? (
-                          <a
-                            href={topDeals}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            download
-                          >
-                            <button
-                              target="_blank"
-                              className="btn mr-2 color-info p-2"
-                            >
-                              <i className="icofont icofont-file-alt"></i>{" "}
-                              Sample Excel
-                            </button>
-                          </a>
-                        ) : (
-                          ""
-                        )}
-                        {this.state.importname === "home-categories" ? (
-                          <a
-                            href={homeCategory}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            download
-                          >
-                            <button
-                              target="_blank"
-                              className="btn mr-2 color-info p-2"
-                            >
-                              <i className="icofont icofont-file-alt"></i>{" "}
-                              Sample Excel
-                            </button>
-                          </a>
-                        ) : (
-                          ""
-                        )}
-                        {this.state.importname === "banner" ? (
-                          <a
-                            href={banner}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            download
-                          >
-                            <button
-                              target="_blank"
-                              className="btn mr-2 color-info p-2"
-                            >
-                              <i className="icofont icofont-file-alt"></i>{" "}
-                              Sample Excel
-                            </button>
-                          </a>
-                        ) : (
-                          ""
-                        )}
-                        {this.state.importname === "newArrival" ? (
-                          <a
-                            href={arrivals}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            download
-                          >
-                            <button
-                              target="_blank"
-                              className="btn mr-2 color-info p-2"
-                            >
-                              <i className="icofont icofont-file-alt"></i>{" "}
-                              Sample Excel
-                            </button>
-                          </a>
-                        ) : (
-                          ""
-                        )} */}
+                       
                       </div>
                     </div>
                   </div>
@@ -565,7 +405,7 @@ class ImportData extends React.Component {
                   <div className="col-sm-12">
                     <div className="card">
                       <div className="card-block">
-                      <button
+                      {/* <button
                             className="f-right bg-white b-none"
                             data-modal="modal-13"
                             onClick={() => {
@@ -580,7 +420,20 @@ class ImportData extends React.Component {
                                   }}
                                 ></i>
                              
-                            </button>
+                            </button> */}
+                            {/* {//console.log(this.state.errorArray  )} */}
+                            <div className="col-lg-12">
+                  <div className="page-header-breadcrumb">
+                    <ul className="breadcrumb-title">
+                      <li className="breadcrumb-item">
+                        <Link to="/">
+                          <i className="feather icon-home"></i>{" "}
+                        </Link>
+                      </li>
+                      <li className="breadcrumb-item active">Import Data</li>
+                    </ul>
+                  </div>
+                </div>
                         <div className="dt-responsive table-responsive">
                             <MUIDataTable
                               title={
@@ -588,12 +441,12 @@ class ImportData extends React.Component {
                                   <h4>Invalid List</h4>
                                 </div>
                               }
-                              className="table-responsive"
-                                data={this.props.invalidata}
+                             // className="table-responsive"
+                              data={this.state.errorArray}
                               columns={columns}
                               options={options}
                             />
-                          {this.props.error === false ? this.onError() : null}
+                          {/* {this.props.error === false ? this.onError() : null} */}
                         </div>
                       </div>
                     </div>

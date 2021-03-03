@@ -35,7 +35,7 @@ class ShopAdminDashboard extends React.Component {
           totalProductPending: json.data.totalProductPending
         });
       } else {
-        console.log(json);
+        //console.log(json);
       }
     });
   }

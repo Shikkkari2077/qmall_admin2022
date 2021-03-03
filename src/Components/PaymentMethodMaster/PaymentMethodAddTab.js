@@ -9,7 +9,7 @@ class PaymentMethodAddTab extends React.Component {
   componentDidMount() {
     if (this.props.match.params.payment_method_id !== undefined && this.props.match.params.payment_method_id !== null && this.props.match.params.payment_method_id !== 0 && this.props.match.params.payment_method_id !== '') {
       this.setState({ payment_method_id: this.props.match.params.payment_method_id })
-      console.log(this.props.match.params.payment_method_id)
+      //console.logog(this.props.match.params.payment_method_id)
     }
     this.getLanguageList()
   }

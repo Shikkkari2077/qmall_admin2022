@@ -47,7 +47,7 @@ class LanguageAdd extends React.Component {
         that.setState({ lanugage_data: json.data[0], language_name: json.data[0].name, description: json.data[0].description, isSaving: false });
       } else {
         that.setState({ isSaving: false });
-        console.log(json);
+        //console.log(json);
       }
     });
   }
@@ -134,7 +134,7 @@ class LanguageAdd extends React.Component {
   handleStatusChange = (sid) => {
     var isChecked = $('#language_direction');
     isChecked.prop("checked", !isChecked.prop("checked"));
-    console.log(isChecked.prop('checked'), !isChecked.prop("checked"));
+    //console.log(isChecked.prop('checked'), !isChecked.prop("checked"));
     if (!isChecked.prop("checked") === true) {
       var status = true
     } else {

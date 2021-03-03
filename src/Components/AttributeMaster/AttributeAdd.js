@@ -44,7 +44,7 @@ class AttributeAdd extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      console.log(json.data)
+      //console.log(json.data)
       if (json.status === true) {
         that.setState({ attribute_type_list: json.data });
       } else {
@@ -67,7 +67,7 @@ class AttributeAdd extends React.Component {
     this.setState({ accepted: element });
     var proof_img = [];
     let obj = {};
-    console.log(element.files);
+    //console.log(element.files);
     this.setState({ user_Image: element.files });
     for (var i = 0; i < element.files.length; i++) {
       var file1 = element.files[i];
@@ -170,9 +170,9 @@ class AttributeAdd extends React.Component {
 
     data.append("AttributeTypeId", that.state.AttributeTypeId);
     //data.append("LanguageId", that.props.language_id);
-    console.log( that.state.attribute_name)
-     console.log(that.state.AttributeTypeId)
-      console.log(that.props.language_id)
+    //console.log( that.state.attribute_name)
+     //console.log(that.state.AttributeTypeId)
+      //console.log(that.props.language_id)
     fetch(Constant.getAPI() + "/attribute/add", {
       method: "post",
       headers: {
@@ -185,8 +185,8 @@ class AttributeAdd extends React.Component {
     }).then(function (json) {
       if (json.status === true) {
         Swal.fire("Added !", "Attribute has been Added", "success");
-        console.log(json.result.id,that.props.attribute_type_id)
-        console.log(json)
+        //console.log(json.result.id,that.props.attribute_type_id)
+        //console.log(json)
         window.location.href = `#/attributes-values/${that.props.attribute_type_id}/${json.result.id}/add`
         that.setState({ isSaving: false })
       } else {
