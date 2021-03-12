@@ -128,42 +128,77 @@ class ProductAdd extends React.Component {
   };
   getCategoryList = () => {
     var that = this;
+    this.setState({ isSaving: true });
     var data = new URLSearchParams();
-    if (localStorage.getItem('q8_mall_ad_role') === "shop") {
-      data.append("ShopId", localStorage.getItem('q8_mall_ad_uid'))
-    }
-    //data.append("LanguageId", that.props.language_id);
-    fetch(Constant.getAPI() + "/category/get", {
+  fetch(Constant.getAPI() + "/shop/section/get", {
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Authorization: localStorage.getItem("q8_mall_auth"),
 
       },
-      body: data
-    }).then(function (response) {
-      return response.json();
-    }).then(function (json) {
-      //console.log(json.data[0])
-      if (json.status === true) {
-        var category = []
-        for (var i = 0; i < json.data.length; i++) {
-          if (json.data[i].child !== null && json.data[i].child !== [] && json.data[i].child.length > 0) {
-            for (var j = 0; j < json.data[i].child.length; j++) {
-              category.push(json.data[i].child[j]);
-            }
-            // } else {
-            //   category.push(json.data[i]);
-          }
+
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (json) {
+        console.log(json)
+
+        if (json.success === true) {
+          that.setState({ category_list: json.data, isSaving: false });
+        } else {
+          that.setState({ category_list: [], isSaving: false });
+
+          Swal.fire({
+            title: "Something went wrong. Try again after some Time.!",
+            icon: "error",
+            text: "",
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ok",
+          });
         }
-        that.setState({ category_list: category });
-        //console.log(category)
-      } else {
-        that.setState({ category_list: [] });
+      });
+  };
+  // getCategoryList = () => {
+  //   var that = this;
+  //   var data = new URLSearchParams();
+  //   if (localStorage.getItem('q8_mall_ad_role') === "shop") {
+  //     data.append("ShopId", localStorage.getItem('q8_mall_ad_uid'))
+  //   }
+  //   //data.append("LanguageId", that.props.language_id);
+  //   fetch(Constant.getAPI() + "/category/get", {
+  //     method: "post",
+  //     headers: {
+  //       "Content-Type": "application/x-www-form-urlencoded",
+  //       Authorization: localStorage.getItem("q8_mall_auth"),
+
+  //     },
+  //     body: data
+  //   }).then(function (response) {
+  //     return response.json();
+  //   }).then(function (json) {
+  //     //console.log(json.data[0])
+  //     if (json.status === true) {
+  //       var category = []
+  //       for (var i = 0; i < json.data.length; i++) {
+  //         if (json.data[i].child !== null && json.data[i].child !== [] && json.data[i].child.length > 0) {
+  //           for (var j = 0; j < json.data[i].child.length; j++) {
+  //             category.push(json.data[i].child[j]);
+  //           }
+  //           // } else {
+  //           //   category.push(json.data[i]);
+  //         }
+  //       }
+  //       that.setState({ category_list: category });
+  //       //console.log(category)
+  //     } else {
+  //       that.setState({ category_list: [] });
        
-      }
-    });
-  }
+  //     }
+  //   });
+  // }
   getShopList = () => {
     var that = this;
     var data = new URLSearchParams();
@@ -240,6 +275,7 @@ class ProductAdd extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
+      console.log(json.data)
       if (json.status === true) {
         var selected_attributes = []
         if (json.data[0].Attributes !== null && json.data[0].Attributes !== [] && json.data[0].Attributes.length > 0) {
@@ -249,7 +285,6 @@ class ProductAdd extends React.Component {
           }
         }
         if (json.data[0].productMedia !== null) {
-          //console.log(json.data)
           that.setState({
             attribute_type_data: json.data[0],
             product_name: json.data[0].name_en,
@@ -265,7 +300,7 @@ class ProductAdd extends React.Component {
             attribute_unit: json.data[0].unit,
             attribute_value: json.data[0].value,
             image: json.data[0].productMedia.url,
-            CategoryId: json.data[0].CategoryId,
+            SectionId: json.data[0].Section.id,
             MediaId: json.data[0].MediaId,
             selected_attributes: selected_attributes
           });
@@ -283,7 +318,7 @@ class ProductAdd extends React.Component {
             refund_policy: json.data[0].refundPolicy_en,
             attribute_unit: json.data[0].unit,
             attribute_value: json.data[0].value,
-            CategoryId: json.data[0].CategoryId,
+            SectionId: json.data[0].Section.id,
             MediaId: json.data[0].MediaId,
             selected_attributes: selected_attributes
           });
@@ -364,7 +399,7 @@ class ProductAdd extends React.Component {
     var that = this;
     var data = new URLSearchParams();
     this.setState({ isSaving: true });
-    if (that.state.CategoryId === undefined || that.state.CategoryId === null || that.state.CategoryId === "" || that.state.CategoryId === "0") {
+    if (that.state.SectionId === undefined || that.state.SectionId === null || that.state.SectionId === "" || that.state.SectionId === "0") {
       Swal.fire("Warning !", "Please Select Product Section First. !", "warning");
       that.setState({ isSaving: false });
       return false;
@@ -381,7 +416,7 @@ class ProductAdd extends React.Component {
 
     data.append("LanguageId", that.props.language_id);
     data.append("MediaId", media_id);
-    data.append("CategoryId", that.state.CategoryId);
+    data.append("SectionId", that.state.SectionId);
     // data.append("ShopId", that.state.ShopId);
     data.append("ProductId", that.props.product_id);
     if(that.state.selected_attributes.length != 0)
@@ -416,10 +451,11 @@ class ProductAdd extends React.Component {
 
   };
   addCategory = (media_id) => {
+    console.log(this.setState.SectionId)
     var that = this;
     var data = new URLSearchParams();
     this.setState({ isSaving: true });
-    if (that.state.CategoryId === undefined || that.state.CategoryId === null || that.state.CategoryId === "" || that.state.CategoryId === "0") {
+    if (that.state.SectionId === undefined || that.state.SectionId === null || that.state.SectionId === "" || that.state.SectionId === "0") {
       Swal.fire("Warning !", "Please Select Product Section First. !", "warning");
       that.setState({ isSaving: false });
       return false;
@@ -436,7 +472,7 @@ class ProductAdd extends React.Component {
     data.append("refundPolicy_ar", that.state.refund_policy_ar);
 
     data.append("MediaId", media_id);
-    data.append("CategoryId", that.state.CategoryId);
+    data.append("SectionId", that.state.SectionId);
     // data.append("ShopId", that.state.ShopId);
     data.append("LanguageId", that.props.language_id);
     data.append("AttributeIds", JSON.stringify(that.state.selected_attributes));
@@ -588,7 +624,7 @@ class ProductAdd extends React.Component {
               <div className="form-group row">
                 <label className="col-sm-3 col-form-label">Section</label>
                 <div className="col-sm-9">
-                  <select name="CategoryId" className="form-control" value={this.state.CategoryId} onChange={this.handleChange}>
+                  <select name="SectionId" className="form-control" value={this.state.SectionId} onChange={this.handleChange}>
                     <option value="0">Select Product Section</option>
                     {
                       this.state.category_list !== undefined && this.state.category_list !== null && this.state.category_list !== [] && this.state.category_list.length > 0

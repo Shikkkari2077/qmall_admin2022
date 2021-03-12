@@ -26,6 +26,7 @@ class ShopList extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
+      console.log(json)
       if (json.status === true) {
         that.setState({ users_data: json.data, isSaving: false });
       } else {
@@ -133,7 +134,30 @@ class ShopList extends React.Component {
         filter: true,
         sort: true
       }
-    }, {
+    },
+    {
+      name: "Categories",
+      label: "Shop Categories",
+      options: {
+        filter: false,
+        sort: false,
+        customBodyRender: (Categories, tableMeta) => {
+          return <div>
+            {
+              Categories !== null && Categories !== undefined
+                ?
+                Categories.map(cat=>(
+                     <li>{cat.name_en+"/"+cat.name_ar}</li> 
+                  ))
+               
+                :
+                null
+            }
+          </div >
+        }
+      }
+    },
+      {
       name: "openTime",
       label: "Shop Open Time",
       options: {
@@ -155,10 +179,10 @@ class ShopList extends React.Component {
         sort: true,
         customBodyRender: (active, tableMeta) => {
           return <Toggle
-            id={"shop_active_status_" + tableMeta.rowData[9]}
+            id={"shop_active_status_" + tableMeta.rowData[10]}
             checked={active === true ? true : false}
             value={active}
-            onChange={this.handleActiveChange.bind(this, tableMeta.rowData[9])}
+            onChange={this.handleActiveChange.bind(this, tableMeta.rowData[10])}
           />
         }
       }

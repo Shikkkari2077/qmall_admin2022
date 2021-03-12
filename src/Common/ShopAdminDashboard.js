@@ -212,6 +212,22 @@ class ShopAdminDashboard extends React.Component {
                   </Link>
                 </div>
                 <div className="col-xl-3 col-md-6">
+                  <Link to={"/section"}>
+                    <div className="card card-border-primary">
+                      <div className="card-block">
+                        <div className="row align-items-center">
+                          <div className="col-8">
+                            <h6 className="text-amazon m-b-0">Section List</h6>
+                          </div>
+                          <div className="col-4 text-right">
+                            <i className="feather icon-slack f-28"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+                <div className="col-xl-3 col-md-6">
                   <Link to={"/profile"}>
                     <div className="card card-border-primary">
                       <div className="card-block">

@@ -133,6 +133,7 @@ class CategoryList extends React.Component {
   };
   componentWillMount() {
     this.getCategoryList();
+    console.log(localStorage.getItem("q8_mall_auth"))
   }
   render() {
     const columns = [

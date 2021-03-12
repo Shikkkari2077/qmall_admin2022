@@ -9,7 +9,7 @@ import Constant from '../Constant'
 
 
 //import qmallsheet from "../Formats/qmall-sheet.xlsx"
-import qmallsheet from "../Formats/SampleSheet.xlsx"
+import qmallsheet from "../Formats/ProductSheet.xlsx"
 
 
 

@@ -35,8 +35,7 @@ class Login extends React.Component {
           localStorage.setItem("q8_mall_ad_uid", json.data.id)
           localStorage.setItem("q8_mall_ad_email", json.data.email)
           localStorage.setItem("q8_mall_ad_role", that.state.role)
-          
-        } else {
+          } else {
           localStorage.setItem("q8_mall_ad_name", json.name)
           localStorage.setItem("q8_mall_ad_uid", json.id)
           localStorage.setItem("q8_mall_ad_email", json.email)

@@ -85,6 +85,8 @@ import BarcodePrint1 from './Components/BarcodeMaster/Css/BarcodePrint1.js';
 import BarcodePrint2 from './Components/BarcodeMaster/Css/BarcodePrint2.js';
 import BarcodePrint3 from './Components/BarcodeMaster/Css/BarcodePrint3.js';
 import BarcodePrint4 from './Components/BarcodeMaster/Css/BarcodePrint4.js';
+import SectionList from './Components/SectionMaster/SectionList.js';
+import SectionAddTab from './Components/SectionMaster/SectionAddTab.js';
 class Routes extends Component {
 
   render() {
@@ -128,6 +130,10 @@ class Routes extends Component {
 
               <Route exact path={"/category"} component={CategoryList} />
               <Route exact path={"/category/add/:category_id?"} component={CategoryAddTab} />
+
+              <Route exact path={"/section"} component={SectionList} />
+              <Route exact path={"/section/add/:secton_id?"} component={SectionAddTab} />
+
 
               {/* <Route exact path={"/notifications"} component={PushNotificationList} /> */}
               <Route exact path={"/notifications"} component={PushNotificationAddTab} />

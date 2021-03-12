@@ -131,7 +131,7 @@ class ProductList extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-       //console.log(json.data)
+       console.log(json.data)
 
       if (json.status === true) {
         var products = []
@@ -414,51 +414,53 @@ class ProductList extends React.Component {
       }
     },
     {
-      name: "Category",
-      label: "Product Category",
+      name: "Section",
+      label: "Product Section",
       options: {
         filter: false,
         sort: false,
-        customBodyRender: (Category, tableMeta) => {
+        customBodyRender: (Section, tableMeta) => {
           return <div>
             {
-              Category !== undefined && Category !== null 
-              && Category.parent !== undefined && Category.parent !== null
-              
+              Section !== null && Section !== undefined
                 ?
-                Category.parent.name !== undefined && 
-                 Category.parent.name !== null && Category.parent.name !== '0'
-                ?
-                 Category.parent.name_en
-                :""
+                <div>{Section.name_en 
+                }<br/>{Section.name_ar
+                }
+                  </div>
                 :
-                "-"
+                null
             }
           </div >
         }
       }
     },
-    
+    // {
+    //   name: "Category",
+    //   label: "Product Sub Category",
+    //   options: {
+    //     filter: false,
+    //     sort: false,
+    //     customBodyRender: (Category, tableMeta) => {
+    //       return <div>
+    //         {
+    //           Category !== undefined && Category !== null 
+    //           && Category.parent !== undefined && Category.parent !== null
+              
+    //             ?
+    //             Category.parent.name !== undefined 
+    //             &&  Category.parent.name !== null && Category.parent.name !== '0'
+    //             ?<div>
+    //              {Category.parent.name_en} <br/>{Category.parent.name_ar}
+    //              </div> 
+    //             :""
+    //             :null
+    //         }
+    //       </div >
+    //     }
+    //   }
+    // },
     {
-      name: "Category",
-      label: "Product Subcategory",
-      options: {
-        filter: true,
-        sort: true,
-        customBodyRender: (Category, tableMeta) => {
-          return <div>
-            
-            {
-              Category !== null
-                ?
-                Category.name_en
-                :
-                "-"
-            }
-          </div >
-        }
-      }
-    },{
       name: "Attributes",
       label: "Product Attributes",
       options: {
@@ -563,6 +565,13 @@ class ProductList extends React.Component {
         }
       }
     }, {
+      name: "id",
+      label: "Product ID",
+      options: {
+        filter: true,
+        sort: true
+      }
+    },  {
       name: "name_en",
       label: "Product Name",
       options: {
@@ -571,13 +580,6 @@ class ProductList extends React.Component {
       }
     },
     {
-      name: "id",
-      label: "Product ID",
-      options: {
-        filter: true,
-        sort: true
-      }
-    },  {
       name: "name_ar",
       label: "Product Name:Arabic",
       options: {
@@ -610,50 +612,55 @@ class ProductList extends React.Component {
         // }
       }
     },
-     {
-      name: "Category",
-      label: "Product Category",
+    
+    {
+      name: "Section",
+      label: "Product Section",
       options: {
         filter: false,
         sort: false,
-        customBodyRender: (Category, tableMeta) => {
+        customBodyRender: (Section, tableMeta) => {
           return <div>
             {
-              Category !== undefined && Category !== null 
-              && Category.parent !== undefined && Category.parent !== null
-              
+              Section !== null && Section !== undefined
                 ?
-                Category.parent.name !== undefined 
-                &&  Category.parent.name !== null && Category.parent.name !== '0'
-                ?
-                 Category.parent.name_en
-                :""
+                <div>{Section.name_en 
+                }<br/>{Section.name_ar
+                }
+                  </div>
                 :
-                "-"
+                null
             }
           </div >
         }
       }
     },
-    {
-      name: "Category",
-      label: "Product SubCategory",
-      options: {
-        filter: false,
-        sort: false,
-        customBodyRender: (Category, tableMeta) => {
-          return <div>
-            {
-              Category !== null
-                ?
-                Category.name_en
-                :
-                "-"
-            }
-          </div >
-        }
-      }
-    }, {
+    // {
+    //   name: "Category",
+    //   label: "Product Sub Category",
+    //   options: {
+    //     filter: false,
+    //     sort: false,
+    //     customBodyRender: (Category, tableMeta) => {
+    //       return <div>
+    //         {
+    //           Category !== undefined && Category !== null 
+    //           && Category.parent !== undefined && Category.parent !== null
+              
+    //             ?
+    //             Category.parent.name !== undefined 
+    //             &&  Category.parent.name !== null && Category.parent.name !== '0'
+    //             ?<div>
+    //              {Category.parent.name_en} <br/>{Category.parent.name_ar}
+    //              </div> 
+    //             :""
+    //             :null
+    //         }
+    //       </div >
+    //     }
+    //   }
+    // },
+     {
       name: "Attributes",
       label: "Product Attributes",
       options: {
@@ -676,7 +683,7 @@ class ProductList extends React.Component {
                   }
                 </ol>
                 :
-                "-"
+                null
             }
           </div >
         }

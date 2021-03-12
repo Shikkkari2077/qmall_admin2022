@@ -7,7 +7,7 @@ class SideNavBar extends React.Component {
     return (
       <nav className="pcoded-navbar noprint" id="admin_menu">
         <div className="pcoded-inner-navbar main-menu">
-
+             {console.log(localStorage.getItem("q8_mall_auth"))}
           <ul className="pcoded-item pcoded-left-item">
             <li className="">
               <Link to="/">
@@ -42,6 +42,12 @@ class SideNavBar extends React.Component {
               <Link to="/orders">
                 <span className="pcoded-micon"><i className="icofont icofont-cart-alt"></i></span>
                 <span className="pcoded-mtext">Orders</span>
+              </Link>
+            </li>
+            <li className="">
+              <Link to="/section">
+                <span className="pcoded-micon"><i className="feather icon-slack f-17"></i></span>
+                <span className="pcoded-mtext">Shops Section</span>
               </Link>
             </li>
           </ul>
