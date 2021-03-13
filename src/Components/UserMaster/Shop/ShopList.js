@@ -26,7 +26,7 @@ class ShopList extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      console.log(json)
+      //console.log(json)
       if (json.status === true) {
         that.setState({ users_data: json.data, isSaving: false });
       } else {
@@ -45,7 +45,7 @@ class ShopList extends React.Component {
   handleActiveChange = (sid) => {
     var isChecked = $('#shop_active_status_' + sid);
     isChecked.prop("checked", !isChecked.prop("checked"));
-    console.log(isChecked.prop('checked'), !isChecked.prop("checked"));
+    c//onsole.log(isChecked.prop('checked'), !isChecked.prop("checked"));
     if (!isChecked.prop("checked") === true) {
       var status = true
     } else {

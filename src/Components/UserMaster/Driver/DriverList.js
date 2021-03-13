@@ -19,7 +19,7 @@ class DriverList extends React.Component {
   handleStatusChange = (sid) => {
     var isChecked = $('#cattogBtn_' + sid);
     isChecked.prop("checked", !isChecked.prop("checked"));
-    console.log(isChecked.prop('checked'), !isChecked.prop("checked"));
+    //console.log(isChecked.prop('checked'), !isChecked.prop("checked"));
     if (!isChecked.prop("checked") === true) {
       var status = 'active'
     } else {
@@ -30,7 +30,7 @@ class DriverList extends React.Component {
       return element.id === sid
     })
     a.status = status;
-    console.log(newArray)
+    //console.log(newArray)
     this.setState({ Driver_list: newArray })
     Swal.fire("Update Status!", "Status has been updated.", "success");
   }

@@ -115,7 +115,7 @@ class DriverAdd extends React.Component {
     this.setState({ accepted: element });
     var proof_img = [];
     let obj = {};
-    console.log(element.files);
+    //console.log(element.files);
     this.setState({ driver_Image: element.files });
     for (var i = 0; i < element.files.length; i++) {
       var file1 = element.files[i];
@@ -145,7 +145,7 @@ class DriverAdd extends React.Component {
         }
       } else {
         that.setState({ category_data: [] });
-        console.log(json.error);
+        //console.log(json.error);
       }
     });
   }

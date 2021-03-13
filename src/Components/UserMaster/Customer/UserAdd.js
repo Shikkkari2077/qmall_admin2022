@@ -55,7 +55,7 @@ class UserAdd extends React.Component {
     var a = this.state.Customer_list.find((element) => {
       return element.CustomerID === this.props.user_id;
     })
-    console.log(a)
+    //console.log(a)
     this.setState({
       sellers_data: a,
       first_name: a.CustomerName,
@@ -100,7 +100,7 @@ class UserAdd extends React.Component {
     this.setState({ accepted: element });
     var proof_img = [];
     let obj = {};
-    console.log(element.files);
+    //console.log(element.files);
     this.setState({ user_Image: element.files });
     for (var i = 0; i < element.files.length; i++) {
       var file1 = element.files[i];

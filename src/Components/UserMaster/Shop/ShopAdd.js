@@ -54,7 +54,7 @@ class ShopAdd extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      console.log(json.data)
+      //console.log(json.data)
       if (json.status === true) {
         for (var i = 0; i < json.data.length; i++) {
           if (json.data[i].id === that.props.shop_id) {
@@ -333,7 +333,7 @@ class ShopAdd extends React.Component {
     this.setState({ accepted: element });
     var proof_img = [];
     let obj = {};
-    console.log(element.files);
+    //console.log(element.files);
     this.setState({ user_Image: element.files });
     for (var i = 0; i < element.files.length; i++) {
       var file1 = element.files[i];
@@ -363,7 +363,7 @@ class ShopAdd extends React.Component {
         }
       } else {
         // that.setState({ category_data: [] });
-        console.log(json.error);
+        //console.log(json.error);
       }
     });
   }

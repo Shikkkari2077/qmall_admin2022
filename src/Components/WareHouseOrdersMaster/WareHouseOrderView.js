@@ -19,7 +19,7 @@ class WareHouseOrderView extends React.Component {
       this.props.match.params.order_id !== 0 &&
       this.props.match.params.order_id !== '') {
       this.setState({ order_id: this.props.match.params.order_id })
-      console.log(this.props.match.params.order_id)
+      //console.log(this.props.match.params.order_id)
     }
     this.getDeliveryTypeList();
     this.getOrdersList();

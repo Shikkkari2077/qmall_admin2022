@@ -15,9 +15,7 @@ class SectionAddTab extends React.Component {
       this.props.match.params.secton_id !== ""
     ) {
       this.setState({ secton_id: this.props.match.params.secton_id });
-      console.log(this.props.match.params.secton_id);
     }
-    console.log("aadtab")
   }
   getLanguageList = () => {
     var that = this;
@@ -129,7 +127,6 @@ class SectionAddTab extends React.Component {
                     </ul> */}
 
                     <div className="tab-content tabs">
-                      {console.log("sectionAdd")}
                       <div
                         className="tab-pane  active"
                         id={"tyre_category_" + this.state.language_id}

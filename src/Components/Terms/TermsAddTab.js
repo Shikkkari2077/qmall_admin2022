@@ -25,7 +25,7 @@ class TermsAddTab extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      console.log(json)
+      //console.log(json)
       if (json.status === true) {
         that.setState({ language_data: json.data, language_id: json.data[0].id });
       }

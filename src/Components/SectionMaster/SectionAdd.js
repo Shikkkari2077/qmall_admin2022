@@ -21,7 +21,7 @@ class SectionAdd extends React.Component {
    // console.log([event.target.name],event.target.value )
   };
   getCategoryDetails = () => {
-    console.log("called")
+    //console.log("called")
     var that = this;
     var data = new URLSearchParams();
     this.setState({ isLoading: true });
@@ -40,7 +40,7 @@ class SectionAdd extends React.Component {
         return response.json();
       })
       .then(function (json) {
-        console.log(json)
+        //console.log(json)
         if(json !== undefined){
             that.setState({
               section_name: json.name_en,
@@ -75,7 +75,7 @@ class SectionAdd extends React.Component {
           that.setState({ category_list: json.data, isLoading: false });
         } else {
           that.setState({ isLoading: false, category_list: [] });
-          console.log(json);
+          //console.log(json);
         }
       });
   };
@@ -147,7 +147,6 @@ class SectionAdd extends React.Component {
           }
         } else {
           // that.setState({ category_data: [] });
-          console.log(json.error);
         }
       });
   };
@@ -201,10 +200,10 @@ class SectionAdd extends React.Component {
     data.append("name_ar", that.state.section_name_ar);
 
     data.append("priority", that.state.priority);
-    console.log( that.state.categoryId)
+    //console.log( that.state.categoryId)
     // data.append("LanguageId", that.props.language_id);
     data.append("MediaId", media_id);
-    console.log(data)
+    //console.log(data)
     // console.log(that.props.language_id)
     fetch(Constant.getAPI() + "/shop/section/add", {
       method: "post",
@@ -218,7 +217,6 @@ class SectionAdd extends React.Component {
         return response.json();
       })
       .then(function (json) {
-        console.log(json)
 
         if (json.status === true) {
           Swal.fire("Added !", "Section has been Added", "success");
@@ -244,7 +242,6 @@ class SectionAdd extends React.Component {
     this.setState({ accepted: element });
     var proof_img = [];
     let obj = {};
-    console.log(element.files);
     this.setState({ category_image: element.files });
     for (var i = 0; i < element.files.length; i++) {
       var file1 = element.files[i];

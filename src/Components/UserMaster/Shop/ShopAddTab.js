@@ -20,7 +20,7 @@ class ShopAddTab extends React.Component {
       if (json.status === true) {
         that.setState({ language_data: json.data, language_id: json.data[0].id });
       } else {
-        console.log("languages not found");
+        //console.log("languages not found");
       }
     })
   }
@@ -28,11 +28,11 @@ class ShopAddTab extends React.Component {
     this.getLanguages();
     if (this.props.match.params.shop_id !== undefined && this.props.match.params.shop_id !== null && this.props.match.params.shop_id !== 0 && this.props.match.params.shop_id !== '') {
       this.setState({ shop_id: this.props.match.params.shop_id })
-      console.log(this.props.match.params.shop_id)
+      //console.log(this.props.match.params.shop_id)
     }
     if (localStorage.getItem('q8_mall_ad_role') === "shop") {
       this.setState({ shop_id: localStorage.getItem('q8_mall_ad_uid') })
-      console.log(this.props.match.params.shop_id)
+      //console.log(this.props.match.params.shop_id)
     }
   }
   handleLanguage = (language_id) => {

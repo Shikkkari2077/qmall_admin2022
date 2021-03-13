@@ -12,7 +12,7 @@ class SectionList extends React.Component {
 
 
   deleteAttributeValue = (id) => {
-    console.log(id)
+    //console.log(id)
     Swal.fire({
       title: "Are you sure?",
       text: "You will not be able to recover this !",
@@ -56,7 +56,6 @@ class SectionList extends React.Component {
   handleStatusChange = (sid) => {
     var isChecked = $("#category_status_" + sid);
     isChecked.prop("checked", !isChecked.prop("checked"));
-    console.log(isChecked.prop("checked"), !isChecked.prop("checked"));
     if (!isChecked.prop("checked") === true) {
       var status = true;
     } else {
@@ -67,7 +66,7 @@ class SectionList extends React.Component {
     // this.setState({ isSaving: true });
     data.append("status", status);
     data.append("SectionId", sid);
-    console.log(sid)
+
     fetch(Constant.getAPI() + "/shop/section/update", {
       method: "post",
       headers: {
@@ -163,7 +162,6 @@ class SectionList extends React.Component {
         return response.json();
       })
       .then(function (json) {
-        console.log(json)
 
         if (json.success === true) {
           that.setState({ category_data: json.data, isSaving: false });
@@ -205,7 +203,7 @@ class SectionList extends React.Component {
         return response.json();
       })
       .then(function (json) {
-        console.log(json)
+        // console.log(json)
 
         if (json.success === true) {
           that.setState({ category_data: json.data, isSaving: false });
@@ -224,7 +222,6 @@ class SectionList extends React.Component {
       });
   };
   componentWillMount() {
-    console.log(localStorage.getItem('q8_mall_ad_role'))
     if(localStorage.getItem('q8_mall_ad_role')=='admin'){
       this.getCategoryListAdmin();
 
@@ -233,7 +230,6 @@ class SectionList extends React.Component {
       this.getCategoryList();
 
     }
-    console.log(localStorage.getItem("q8_mall_auth"))
   }
   render() {
     const columns = [
