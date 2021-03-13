@@ -186,29 +186,29 @@ class CategoryList extends React.Component {
           sort: true,
         },
       },
-      {
-        name: "child",
-        label: "Child Category",
-        options: {
-          filter: true,
-          sort: true,
-          customBodyRender: (child, tableMeta) => {
-            return (
-              <div>
-                {child !== null && child !== [] && child.length > 0 ? (
-                  <ol>
-                    {child.map((child_category) => (
-                      <li key={child_category.id}>{child_category.name}</li>
-                    ))}
-                  </ol>
-                ) : (
-                  "-"
-                )}
-              </div>
-            );
-          },
-        },
-      },
+      // {
+      //   name: "child",
+      //   label: "Child Category",
+      //   options: {
+      //     filter: true,
+      //     sort: true,
+      //     customBodyRender: (child, tableMeta) => {
+      //       return (
+      //         <div>
+      //           {child !== null && child !== [] && child.length > 0 ? (
+      //             <ol>
+      //               {child.map((child_category) => (
+      //                 <li key={child_category.id}>{child_category.name}</li>
+      //               ))}
+      //             </ol>
+      //           ) : (
+      //             "-"
+      //           )}
+      //         </div>
+      //       );
+      //     },
+      //   },
+      // },
       {
         name: "status",
         label: "Status",
@@ -314,29 +314,29 @@ class CategoryList extends React.Component {
           sort: true,
         },
       },
-      {
-        name: "child",
-        label: "Child Category",
-        options: {
-          filter: true,
-          sort: true,
-          customBodyRender: (child, tableMeta) => {
-            return (
-              <div>
-                {child !== null && child !== [] && child.length > 0 ? (
-                  <ol>
-                    {child.map((child_category) => (
-                      <li key={child_category.id}>{child_category.name}</li>
-                    ))}
-                  </ol>
-                ) : (
-                  "-"
-                )}
-              </div>
-            );
-          },
-        },
-      },
+      // {
+      //   name: "child",
+      //   label: "Child Category",
+      //   options: {
+      //     filter: true,
+      //     sort: true,
+      //     customBodyRender: (child, tableMeta) => {
+      //       return (
+      //         <div>
+      //           {child !== null && child !== [] && child.length > 0 ? (
+      //             <ol>
+      //               {child.map((child_category) => (
+      //                 <li key={child_category.id}>{child_category.name}</li>
+      //               ))}
+      //             </ol>
+      //           ) : (
+      //             "-"
+      //           )}
+      //         </div>
+      //       );
+      //     },
+      //   },
+      // },
     ];
     const options = {
       filterType: "dropdown",
@@ -353,119 +353,119 @@ class CategoryList extends React.Component {
           columnHeaderTooltip: (column) => `Sort for ${column.label}`,
         },
       },
-      expandableRows: true,
-      expandableRowsOnClick: true,
-      isRowExpandable: (dataIndex, expandedRows) => {
-        // Prevent expand/collapse of any row if there are 4 rows expanded already (but allow those already expanded to be collapsed)
-        if (
-          expandedRows.data.length > this.state.category_data.length &&
-          expandedRows.data.filter((d) => d.dataIndex === dataIndex).length ===
-            0
-        )
-          return false;
-        return true;
-      },
-      // rowsExpanded: [0, 1],
-      renderExpandableRow: (rowData, rowMeta) => {
-        const colSpan = rowData.length + 1;
-        console.log("colSpan : ", colSpan);
-        var expanDetails = {};
-        for (var i = 0; i < this.state.category_data.length; i++) {
-          if (this.state.category_data[i].name_en === rowData[1]) {
-            expanDetails = this.state.category_data[i];
-          }
-        }
+      // expandableRows: true,
+      // expandableRowsOnClick: true,
+      // isRowExpandable: (dataIndex, expandedRows) => {
+      //   // Prevent expand/collapse of any row if there are 4 rows expanded already (but allow those already expanded to be collapsed)
+      //   if (
+      //     expandedRows.data.length > this.state.category_data.length &&
+      //     expandedRows.data.filter((d) => d.dataIndex === dataIndex).length ===
+      //       0
+      //   )
+      //     return false;
+      //   return true;
+      // },
+      // // rowsExpanded: [0, 1],
+      // renderExpandableRow: (rowData, rowMeta) => {
+      //   const colSpan = rowData.length + 1;
+      //   console.log("colSpan : ", colSpan);
+      //   var expanDetails = {};
+      //   for (var i = 0; i < this.state.category_data.length; i++) {
+      //     if (this.state.category_data[i].name_en === rowData[1]) {
+      //       expanDetails = this.state.category_data[i];
+      //     }
+      //   }
 
-        console.log(expanDetails);
-        // return false;
-        return (
-          <tr>
-            <td colSpan={colSpan}>
-              <div className="table-responsive p-3">
-                <table className="table table-bordered table-hover m-0">
-                  <thead>
-                    <tr>
-                      <th>Category Image</th>
-                      <th>Category Name : English</th>
-                      <th>Category Name : Arabic</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {expanDetails.child !== undefined &&
-                    expanDetails.child !== null &&
-                    expanDetails.child !== [] &&
-                    expanDetails.child.length > 0 ? (
-                      expanDetails.child.map((child_cat) => (
-                        <tr>
-                          <td>
-                            {child_cat.Medium !== undefined &&
-                            child_cat.Medium !== null &&
-                            child_cat.Medium !== {} ? (
-                              <img
-                                src={
-                                  child_cat.Medium.url !== undefined &&
-                                  child_cat.Medium.url !== null &&
-                                  child_cat.Medium.url !== ""
-                                    ? child_cat.Medium.url
-                                    : "./assets/images/icon.png"
-                                }
-                                alt=""
-                                className="img-40"
-                              />
-                            ) : (
-                              <img
-                                src="./assets/images/icon.png"
-                                alt=""
-                                className="img-40"
-                              />
-                            )}
-                          </td>
-                          <td>{child_cat.name_en}</td>
-                          <td>{child_cat.name_ar}</td>
-                          <td>
-                            <Link
-                              to={"/category/add/" + child_cat.id}
-                              className="m-r-15 text-muted"
-                              data-toggle="tooltip"
-                              data-placement="top"
-                              title=""
-                              data-original-title="Edit"
-                            >
-                              <i className="f-20 icofont icofont-ui-edit text-custom"></i>
-                            </Link>
-                            <span
-                              onClick={this.deleteCategory.bind(
-                                this,
-                                child_cat.id
-                              )}
-                              className="m-r-15 text-muted"
-                              data-toggle="tooltip"
-                              data-placement="top"
-                              title=""
-                              data-original-title="Delete"
-                            >
-                              <i className="f-20 icofont icofont-delete-alt text-danger"></i>{" "}
-                            </span>
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan={2} className="text-center">
-                          No Child Category .!
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </td>
-          </tr>
-        );
-      },
-      onRowsExpand: (curExpanded, allExpanded) =>
-        console.log(curExpanded, allExpanded),
+      //   console.log(expanDetails);
+      //   // return false;
+      //   return (
+      //     <tr>
+      //       <td colSpan={colSpan}>
+      //         <div className="table-responsive p-3">
+      //           <table className="table table-bordered table-hover m-0">
+      //             <thead>
+      //               <tr>
+      //                 <th>Category Image</th>
+      //                 <th>Category Name : English</th>
+      //                 <th>Category Name : Arabic</th>
+      //                 <th>Action</th>
+      //               </tr>
+      //             </thead>
+      //             <tbody>
+      //               {expanDetails.child !== undefined &&
+      //               expanDetails.child !== null &&
+      //               expanDetails.child !== [] &&
+      //               expanDetails.child.length > 0 ? (
+      //                 expanDetails.child.map((child_cat) => (
+      //                   <tr>
+      //                     <td>
+      //                       {child_cat.Medium !== undefined &&
+      //                       child_cat.Medium !== null &&
+      //                       child_cat.Medium !== {} ? (
+      //                         <img
+      //                           src={
+      //                             child_cat.Medium.url !== undefined &&
+      //                             child_cat.Medium.url !== null &&
+      //                             child_cat.Medium.url !== ""
+      //                               ? child_cat.Medium.url
+      //                               : "./assets/images/icon.png"
+      //                           }
+      //                           alt=""
+      //                           className="img-40"
+      //                         />
+      //                       ) : (
+      //                         <img
+      //                           src="./assets/images/icon.png"
+      //                           alt=""
+      //                           className="img-40"
+      //                         />
+      //                       )}
+      //                     </td>
+      //                     <td>{child_cat.name_en}</td>
+      //                     <td>{child_cat.name_ar}</td>
+      //                     <td>
+      //                       <Link
+      //                         to={"/category/add/" + child_cat.id}
+      //                         className="m-r-15 text-muted"
+      //                         data-toggle="tooltip"
+      //                         data-placement="top"
+      //                         title=""
+      //                         data-original-title="Edit"
+      //                       >
+      //                         <i className="f-20 icofont icofont-ui-edit text-custom"></i>
+      //                       </Link>
+      //                       <span
+      //                         onClick={this.deleteCategory.bind(
+      //                           this,
+      //                           child_cat.id
+      //                         )}
+      //                         className="m-r-15 text-muted"
+      //                         data-toggle="tooltip"
+      //                         data-placement="top"
+      //                         title=""
+      //                         data-original-title="Delete"
+      //                       >
+      //                         <i className="f-20 icofont icofont-delete-alt text-danger"></i>{" "}
+      //                       </span>
+      //                     </td>
+      //                   </tr>
+      //                 ))
+      //               ) : (
+      //                 <tr>
+      //                   <td colSpan={2} className="text-center">
+      //                     No Child Category .!
+      //                   </td>
+      //                 </tr>
+      //               )}
+      //             </tbody>
+      //           </table>
+      //         </div>
+      //       </td>
+      //     </tr>
+      //   );
+      // },
+      // onRowsExpand: (curExpanded, allExpanded) =>
+      //   console.log(curExpanded, allExpanded),
     };
     return (
       <div className="pcoded-inner-content">
