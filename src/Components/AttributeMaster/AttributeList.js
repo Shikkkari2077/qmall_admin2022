@@ -130,6 +130,14 @@ class AttributeList extends React.Component {
         sort: true,
         customBodyRender: (id, tableMeta) => {
           return <div>
+              <Link to={"/attribute-values/"+this.props.match.params.attribute_type_id+"/"+ id}
+              className="m-r-15 text-muted"
+              data-toggle="tooltip"
+              data-placement="top" title=""
+              data-original-title="Edit">
+              <i className="f-20 icofont icofont-plus text-instagram"></i>
+            </Link>
+            {localStorage.getItem("q8_mall_ad_role")=='admin'? <>
             <Link to={"/attributes/"+this.props.match.params.attribute_type_id+"/add/" + id}
               className="m-r-15 text-muted"
               data-toggle="tooltip"
@@ -137,13 +145,7 @@ class AttributeList extends React.Component {
               data-original-title="Edit">
               <i className="f-20 icofont icofont-ui-edit text-custom"></i>
             </Link>
-            <Link to={"/attribute-values/"+this.props.match.params.attribute_type_id+"/"+ id}
-              className="m-r-15 text-muted"
-              data-toggle="tooltip"
-              data-placement="top" title=""
-              data-original-title="Edit">
-              <i className="f-20 icofont icofont-plus text-instagram"></i>
-            </Link>
+          
             
             <span onClick={this.deleteAttribute.bind(this, id)}
               className="m-r-15 text-muted"
@@ -151,7 +153,7 @@ class AttributeList extends React.Component {
               data-placement="top"
               title=""
               data-original-title="Delete">
-              <i className="f-20 icofont icofont-delete-alt text-danger"></i>  </span>
+              <i className="f-20 icofont icofont-delete-alt text-danger"></i>  </span>  </>         :null}
           </div>
         }
 
@@ -186,7 +188,10 @@ class AttributeList extends React.Component {
                       <h4>Attribute List</h4>
                     </div>
                   </div>
-                  <Link to={"/attributes/"+this.props.match.params.attribute_type_id+"/add"} className="btn btn-sm btn-inverse waves-effect waves-light f-right d-inline-block md-trigger" data-modal="modal-13"> <i className="icofont icofont-plus m-r-5"></i> Add Attribute </Link>
+                  {localStorage.getItem("q8_mall_ad_role")=='admin'? <>
+                  <Link to={"/attributes/"+this.props.match.params.attribute_type_id+"/add"}
+                   className="btn btn-sm btn-inverse waves-effect waves-light f-right d-inline-block md-trigger"
+                    data-modal="modal-13"> <i className="icofont icofont-plus m-r-5"></i> Add Attribute </Link>   </>         :null}
                 </div>
                 <div className="col-lg-4">
                   <div className="page-header-breadcrumb">

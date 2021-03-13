@@ -122,10 +122,12 @@ class AttributeValueList extends React.Component {
       name: "id",
       label: "Action",
       options: {
+        display:localStorage.getItem("q8_mall_ad_role")=='admin'?true:false,
         filter: true,
         sort: true,
         customBodyRender: (id, tableMeta) => {
-          return <div>
+          return <div>            {localStorage.getItem("q8_mall_ad_role")=='admin'? <>
+
             <Link to={"/attributes-values/"+this.props.match.params.attribute_type_id+"/"+ this.props.match.params.attribute_id+"/add/" + id}
               className="m-r-15 text-muted"
               data-toggle="tooltip"
@@ -140,6 +142,7 @@ class AttributeValueList extends React.Component {
               title=""
               data-original-title="Delete">
               <i className="f-20 icofont icofont-delete-alt text-danger"></i>  </span>
+              </>         :null}
           </div>
         }
 
@@ -174,7 +177,12 @@ class AttributeValueList extends React.Component {
                       <h4>Attribute Value List</h4>
                     </div>
                   </div>
-                  <Link to={"/attributes-values/"+this.props.match.params.attribute_type_id+"/"+ this.props.match.params.attribute_id+"/add"} className="btn btn-sm btn-inverse waves-effect waves-light f-right d-inline-block md-trigger" data-modal="modal-13"> <i className="icofont icofont-plus m-r-5"></i> Add Attribute Value </Link>
+                  {localStorage.getItem("q8_mall_ad_role")=='admin'? <>
+                  <Link to={"/attributes-values/"+this.props.match.params.attribute_type_id+"/"+ this.props.match.params.attribute_id+"/add"} 
+                  className="btn btn-sm btn-inverse waves-effect waves-light f-right d-inline-block md-trigger" data-modal="modal-13">
+                     <i className="icofont icofont-plus m-r-5"></i> Add Attribute Value
+                      </Link>
+                      </>         :null}
                 </div>
                 <div className="col-lg-4">
                   <div className="page-header-breadcrumb">

@@ -134,13 +134,7 @@ class AttributeTypeList extends React.Component {
         sort: true,
         customBodyRender: (id, tableMeta) => {
           return <div>
-            <Link to={"/attribute-types/add/" + id}
-              className="m-r-15 text-muted"
-              data-toggle="tooltip"
-              data-placement="top" title=""
-              data-original-title="Edit">
-              <i className="f-20 icofont icofont-ui-edit text-custom"></i>
-            </Link>
+           
             <Link to={"/attributes/" + id}
               className="m-r-15 text-muted"
               data-toggle="tooltip"
@@ -148,13 +142,22 @@ class AttributeTypeList extends React.Component {
               data-original-title="Edit">
               <i className="f-20 icofont icofont-plus text-instagram"></i>
             </Link>
+            {localStorage.getItem("q8_mall_ad_role")=='admin'? <>
+            <Link to={"/attribute-types/add/" + id}
+              className="m-r-15 text-muted"
+              data-toggle="tooltip"
+              data-placement="top" title=""
+              data-original-title="Edit">
+              <i className="f-20 icofont icofont-ui-edit text-custom"></i>
+            </Link>
             <span onClick={this.deleteAttributeType.bind(this, id)}
               className="m-r-15 text-muted"
               data-toggle="tooltip"
               data-placement="top"
               title=""
               data-original-title="Delete">
-              <i className="f-20 icofont icofont-delete-alt text-danger"></i>  </span>
+              <i className="f-20 icofont icofont-delete-alt text-danger"></i>  </span>   </>         :null}
+
           </div>
         }
 
@@ -189,7 +192,11 @@ class AttributeTypeList extends React.Component {
                       <h4>Attribute Type List</h4>
                     </div>
                   </div>
-                  <Link to="/attribute-types/add" className="btn btn-sm btn-inverse waves-effect waves-light f-right d-inline-block md-trigger" data-modal="modal-13"> <i className="icofont icofont-plus m-r-5"></i> Add Attribute Type </Link>
+                  {localStorage.getItem("q8_mall_ad_role")=='admin'? <>
+
+                  <Link to="/attribute-types/add"
+                   className="btn btn-sm btn-inverse waves-effect waves-light f-right d-inline-block md-trigger"
+                    data-modal="modal-13"> <i className="icofont icofont-plus m-r-5"></i> Add Attribute Type </Link> </>         :null}
                 </div>
                 <div className="col-lg-4">
                   <div className="page-header-breadcrumb">
