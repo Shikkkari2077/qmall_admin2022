@@ -139,17 +139,47 @@ class SectionList extends React.Component {
       }
     });
   };
+  getCategoryListAdmin2(id){
+    var that = this;
+    this.setState({ isSaving: true });
+    var data = new URLSearchParams();
+    data.append("ShopId",id)
+   fetch(Constant.getAPI() + "/shop/section/get", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: localStorage.getItem("q8_mall_auth"),
+
+      },
+   body:data,
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (json) {
+
+        if (json.success === true) {
+          that.setState({ category_data: json.data, isSaving: false });
+        } else {
+          that.setState({ category_data: [], isSaving: false });
+
+          Swal.fire({
+            title: "Something went wrong. Try again after some Time.!",
+            icon: "error",
+            text: "",
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ok",
+          });
+        }
+      });
+
+  }
   getCategoryListAdmin(){
     var that = this;
     this.setState({ isSaving: true });
     var data = new URLSearchParams();
-    // if (localStorage.getItem("q8_mall_ad_role") === "shop") {
-    //   data.append("ShopId", localStorage.getItem("q8_mall_ad_uid"));
-    // }
-    // console.log(localStorage.getItem("q8_mall_ad_uid"), localStorage.getItem("q8_mall_auth"))
-
-
-    fetch(Constant.getAPI() + "/shop/section/get-all", {
+   fetch(Constant.getAPI() + "/shop/section/get-all", {
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -203,7 +233,7 @@ class SectionList extends React.Component {
         return response.json();
       })
       .then(function (json) {
-        // console.log(json)
+         console.log(json)
 
         if (json.success === true) {
           that.setState({ category_data: json.data, isSaving: false });
@@ -221,11 +251,22 @@ class SectionList extends React.Component {
         }
       });
   };
-  componentWillMount() {
+  componentDidMount() {
     if(localStorage.getItem('q8_mall_ad_role')=='admin'){
-      this.getCategoryListAdmin();
 
+   if( this.props.match.params.shop_id !== undefined &&
+      this.props.match.params.shop_id !== null &&
+      this.props.match.params.shop_id !== 0 &&
+      this.props.match.params.shop_id !== "")
+    {
+      this.getCategoryListAdmin2(this.props.match.params.shop_id );
+     console.log("hello", this.props.match.params.shop_id)
     }
+    else{
+      this.getCategoryListAdmin();
+    }
+    
+  }
     else{
       this.getCategoryList();
 

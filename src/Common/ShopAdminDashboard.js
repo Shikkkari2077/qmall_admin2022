@@ -244,7 +244,7 @@ class ShopAdminDashboard extends React.Component {
                     </div>
                   </Link>
                 </div>
-                <div className="col-xl-3 col-md-6">
+                {/* <div className="col-xl-3 col-md-6">
                   <Link to={"/profile"}>
                     <div className="card card-border-primary">
                       <div className="card-block">
@@ -259,7 +259,7 @@ class ShopAdminDashboard extends React.Component {
                       </div>
                     </div>
                   </Link>
-                </div>
+                </div> */}
 
               </div>
             </div>

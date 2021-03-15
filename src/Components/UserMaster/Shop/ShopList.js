@@ -45,7 +45,7 @@ class ShopList extends React.Component {
   handleActiveChange = (sid) => {
     var isChecked = $('#shop_active_status_' + sid);
     isChecked.prop("checked", !isChecked.prop("checked"));
-    c//onsole.log(isChecked.prop('checked'), !isChecked.prop("checked"));
+    //console.log(isChecked.prop('checked'), !isChecked.prop("checked"));
     if (!isChecked.prop("checked") === true) {
       var status = true
     } else {
@@ -227,13 +227,7 @@ class ShopList extends React.Component {
               data-original-title="Edit">
               <i className="f-20 icofont icofont-building-alt text-purple"></i>
             </Link>
-            {/* <Link to={"/delivery-charges/" + id}
-              className="m-r-15 text-muted"
-              data-toggle="tooltip"
-              data-placement="top" title=""
-              data-original-title="Add Delivery Charges">
-              <i className="f-20 icofont icofont-shopping-cart text-primary"></i>
-            </Link> */}
+          
             <Link
               to={"/shop/products/" + id}
               className="m-r-15 text-muted"
@@ -243,6 +237,12 @@ class ShopList extends React.Component {
               data-original-title="View Shop Products ">
               <i className="f-22 icofont icofont-eye text-dark"></i>
             </Link>
+            <Link to={"/section/" + id}
+              className="m-r-15 text-muted"
+              data-toggle="tooltip"
+              data-placement="top" title=""
+              data-original-title="Add Delivery Charges">
+          <i className="feather icon-slack f-22"></i>            </Link>
           </div>)
         }
 

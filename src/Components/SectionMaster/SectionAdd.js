@@ -45,7 +45,7 @@ class SectionAdd extends React.Component {
             that.setState({
               section_name: json.name_en,
               section_name_ar: json.name_ar,
-               image:json.Medium.url,
+              image:json.Medium.url,
               priority: json.priority,
               isLoading: false,
             });
@@ -92,40 +92,40 @@ class SectionAdd extends React.Component {
       }
     }
   };
-  // getShopDetails = () => {
-  //   console.log("shopDetails")
-  //   var that = this;
-  //   var data = new URLSearchParams();
-  //   // this.setState({ isSaving: true });
-  //   data.append("ShopId", localStorage.getItem("q8_mall_ad_uid"));
-  //   // data.append("LanguageId", that.props.language_id);
-  //   fetch(Constant.getAPI() + "/shop/get", {
-  //     method: "post",
-  //     headers: {
-  //       "Content-Type": "application/x-www-form-urlencoded",
-  //       // "Authorization": localStorage.getItem('q8_mall_auth')
-  //     },
-  //     body: data
-  //   }).then(function (response) {
-  //     return response.json();
-  //   }).then(function (json) {
-  //     console.log(json.data)
-  //     if (json.status === true) {
+  getShopDetails = () => {
+    console.log("shopDetails")
+    var that = this;
+    var data = new URLSearchParams();
+    // this.setState({ isSaving: true });
+    data.append("ShopId", localStorage.getItem("q8_mall_ad_uid"));
+    // data.append("LanguageId", that.props.language_id);
+    fetch(Constant.getAPI() + "/shop/get", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        // "Authorization": localStorage.getItem('q8_mall_auth')
+      },
+      body: data
+    }).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      console.log(json.data)
+      if (json.status === true) {
 
-  //       var categories = json.data[0].Categories
-  //       console.log(json.data[0].Categories)
-  //       that.setState({
+        var categories = json.data[0].Categories
+        console.log(json.data[0].Categories)
+        that.setState({
              
-  //       selected_category: categories,
+        selected_category: categories,
                
-  //             });
-  //       console.log(categories)
+              });
+        console.log(categories)
 
     
-  //     }
+      }
      
-  //   })
-  // }
+    })
+  }
   uploadMedia = () => {
     var that = this;
     var form = $("#categoryImage")[0];
@@ -194,13 +194,24 @@ class SectionAdd extends React.Component {
   addCategory = (media_id) => {
     var that = this;
     var data = new URLSearchParams();
-    
+    if(this.state.categoryId == undefined || this.state.categoryId == '' || this.state.categoryId == null){
+    Swal.fire({
+      title: "Select Category First",
+      icon: "error",
+      text: "",
+
+    })
+    this.setState({
+      isSaving:false,
+    })
+  }
+    else{
    
     data.append("name_en", that.state.section_name);
     data.append("name_ar", that.state.section_name_ar);
-
     data.append("priority", that.state.priority);
-    //console.log( that.state.categoryId)
+    console.log( that.state.categoryId)
+    data.append("categoryId",this.state.categoryId)
     // data.append("LanguageId", that.props.language_id);
     data.append("MediaId", media_id);
     //console.log(data)
@@ -234,6 +245,8 @@ class SectionAdd extends React.Component {
           });
         }
       });
+
+    }
   };
   handleImageUpload = (event) => {
     document.getElementById("category_image_label").innerHTML = "";
@@ -252,14 +265,15 @@ class SectionAdd extends React.Component {
       $("#category_image_label").append(img);
     }
   };
-  // componentWillMount(){
-  //   if(this.props.secton_id){
-  //     this.getCategoryDetails()
-  //         }
-  //   console.log(this.props.secton_id)
+  componentWillMount(){
+    if(this.props.secton_id){
+      this.getCategoryDetails()
+          }
+          this.getShopDetails();
+    console.log(this.props.secton_id)
 
 
-  // }
+  }
   componentDidMount() {
     
     this.loadScript(
@@ -319,7 +333,7 @@ class SectionAdd extends React.Component {
                   </div>
                 </div>
               </div>
-              {/* <div className="col-md-6">
+              <div className="col-md-6">
                 <div className="form-group row">
                   <label className="col-sm-3 col-form-label">
                     Category
@@ -347,7 +361,7 @@ class SectionAdd extends React.Component {
                     </select>
                   </div>
                 </div>
-              </div> */}
+              </div>
               <div className="col-md-6">
                 <div className="form-group row">
                   <label className="col-sm-3 col-form-label">Priority</label>

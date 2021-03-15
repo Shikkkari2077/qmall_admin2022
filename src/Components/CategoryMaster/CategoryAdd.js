@@ -175,15 +175,15 @@ class CategoryAdd extends React.Component {
     data.append("name_ar", that.state.category_name_ar);
 
     data.append("priority", that.state.priority);
-    if (
-      that.state.categoryId !== undefined &&
-      that.state.categoryId !== null &&
-      that.state.categoryId !== "0"
-    ) {
-      data.append("ParentId", that.state.categoryId);
-    } else {
-      data.append("deleteParent", true);
-    }
+    // if (
+    //   that.state.categoryId !== undefined &&
+    //   that.state.categoryId !== null &&
+    //   that.state.categoryId !== "0"
+    // ) {
+    //   data.append("ParentId", that.state.categoryId);
+    // } else {
+    //   data.append("deleteParent", true);
+    // }
     //data.append("LanguageId", that.props.language_id);
     data.append("CategoryId", that.props.category_id);
     data.append("MediaId", media_id);
@@ -358,7 +358,7 @@ class CategoryAdd extends React.Component {
                   </div>
                 </div>
               </div>
-              <div className="col-md-6">
+              {/* <div className="col-md-6">
                 <div className="form-group row">
                   <label className="col-sm-3 col-form-label">
                     Parent Category
@@ -385,7 +385,7 @@ class CategoryAdd extends React.Component {
                     </select>
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className="col-md-6">
                 <div className="form-group row">
                   <label className="col-sm-3 col-form-label">Priority</label>
