@@ -159,6 +159,7 @@ class SectionAdd extends React.Component {
 
     data.append("priority", that.state.priority);
     data.append("SectionId", that.props.secton_id);
+    data.append("CategoryId",this.state.categoryId)
 
     //data.append("LanguageId", that.props.language_id);
     data.append("MediaId", media_id);
@@ -211,7 +212,7 @@ class SectionAdd extends React.Component {
     data.append("name_ar", that.state.section_name_ar);
     data.append("priority", that.state.priority);
     console.log( that.state.categoryId)
-    data.append("categoryId",this.state.categoryId)
+    data.append("CategoryId",this.state.categoryId)
     // data.append("LanguageId", that.props.language_id);
     data.append("MediaId", media_id);
     //console.log(data)

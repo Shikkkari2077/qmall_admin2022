@@ -104,7 +104,7 @@ class OrderListShop extends React.Component {
       },
       {
         name: "User.userName",
-        label: "User Name",
+        label: "Customer Name",
         options: {
           filter: true,
           sort: true,

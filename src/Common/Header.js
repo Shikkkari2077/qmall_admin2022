@@ -5,19 +5,58 @@ import { format, render, Cancel, register } from 'timeago.js';
 
 
 class Header extends React.Component {
+  state={
+
+  }
   componentWillMount(){
     clearInterval(this.interval);
+    if(localStorage.getItem('q8_mall_ad_role')=='shop'){
+    this.getShopDetails()}
 
+  }
+  getShopDetails = () => {
+    console.log("shopDetails")
+    var that = this;
+    var data = new URLSearchParams();
+    // this.setState({ isSaving: true });
+    data.append("ShopId", localStorage.getItem("q8_mall_ad_uid"));
+    // data.append("LanguageId", that.props.language_id);
+    fetch(Constant.getAPI() + "/shop/get", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        // "Authorization": localStorage.getItem('q8_mall_auth')
+      },
+      body: data
+    }).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      console.log(json.data)
+      if (json.status === true) {
+    console.log(json.data[0])
+    if(json.data[0].Medium !== null){
+    var image=json.data[0].Medium.url
+    
+
+     that.setState({image});
+       }
+    if(json.data[0].name !== null && json.data[0].name !== undefined ){
+    var name=json.data[0].name
+    that.setState({name});
+    }
+
+
+    }})
   }
   componentDidMount() {
     var that = this;
     
     setInterval(this.getPushNotificationList, 9000)
 
-    that.getPushNotificationList();
-    setTimeout(function () {
-      that.getPushNotificationList();
-    }, 5 * 60 * 1000)
+    // that.getPushNotificationList();
+    // setTimeout(function () {
+    //   that.getPushNotificationList();
+    // }, 5 * 60 * 1000)
 
     if (!("Notification" in window)) {
       alert("This browser does not support desktop notification");
@@ -133,9 +172,10 @@ class Header extends React.Component {
                   <li class="header-notification">
                     <div class="dropdown-primary dropdown">
                       <div class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="feather icon-bell"></i>
+                        {/* <div style={{width:"200px", height:"200px"}}> */}
+                        <i class="feather icon-bell f-24"  ></i></div>
                         <span class="badge bg-c-pink">{this.state.notification_list.length}</span>
-                      </div>
+                      {/* </div> */}
                       <ul class="show-notification notification-view dropdown-menu notification-box-height" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
                         <li>
                           <h6>Notifications</h6>
@@ -151,7 +191,7 @@ class Header extends React.Component {
                               <li key={notification.id}>
                                 <Link to={'/orders/view/' + notification.OrderId}>
                                   <div class="media">
-                                    <img class="d-flex align-self-center img-radius" src="./assets/images/icon.png" alt="" />
+                                    <img class="d-flex align-self-center img-radius " src="./assets/images/icon.png" alt="" style={{}} />
                                     <div class="media-body">
                                       <h5 class="notification-user">{notification.title}</h5>
                                       <p class="notification-msg">{notification.text}</p>
@@ -182,8 +222,10 @@ class Header extends React.Component {
                   </Link>
                   : */}
               <li className="user-profile header-notification">
-                <img src="./assets/images/user.png" className="img-radius" alt="User-Profile-Image" />
-                <span>{localStorage.getItem("q8_mall_ad_name")}</span>
+                <img src={this.state.image !== null && 
+                  this.state.image !== undefined &&
+                  this.state.image !== ''?this.state.image: "./assets/images/user.png"} className="img-radius" alt="User-Profile-Image" />
+                <span>{localStorage.getItem("q8_mall_ad_name") }</span>
               </li>
               {/* } */}
               <li>

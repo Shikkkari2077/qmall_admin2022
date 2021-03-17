@@ -520,7 +520,7 @@ class SectionList extends React.Component {
         body: {
           noMatch: this.state.isSaving
             ? "Loading data..!"
-            : "Sorry, No Category Found",
+            : "Sorry, No Section Found",
           toolTip: "Sort",
           columnHeaderTooltip: (column) => `Sort for ${column.label}`,
         },

@@ -42,6 +42,51 @@ class ShopList extends React.Component {
       }
     })
   }
+  deleteCategory = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You will not be able to recover this !",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, keep it",
+    }).then((result) => {
+      if (result.value) {
+        var that = this;
+        var data = new URLSearchParams();
+        // this.setState({ isSaving: true });
+        data.append("ShopId", id);
+        fetch(Constant.getAPI() + "/shop/delete", {
+          method: "post",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Authorization: localStorage.getItem("q8_mall_auth"),
+          },
+          body: data,
+        })
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (json) {
+            if (json.status === true) {
+              Swal.fire("Deleted!", " Shop deleted.", "success");
+              that.getCategoryList();
+            } else {
+              Swal.fire({
+                title: "Something went wrong. Try again after some Time.!",
+                icon: "error",
+                text: "",
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      }
+    });
+  };
+
+  
   handleActiveChange = (sid) => {
     var isChecked = $('#shop_active_status_' + sid);
     isChecked.prop("checked", !isChecked.prop("checked"));
@@ -237,12 +282,22 @@ class ShopList extends React.Component {
               data-original-title="View Shop Products ">
               <i className="f-22 icofont icofont-eye text-dark"></i>
             </Link>
-            <Link to={"/section/" + id}
+            <Link to={"/section/shop/" + id}
               className="m-r-15 text-muted"
               data-toggle="tooltip"
               data-placement="top" title=""
               data-original-title="Add Delivery Charges">
-          <i className="feather icon-slack f-22"></i>            </Link>
+          <i className="feather icon-slack f-22"></i></Link>
+          {/* <span
+                  onClick={this.deleteCategory.bind(this, id)}
+                  className="m-r-15 text-muted"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title=""
+                  data-original-title="Delete"
+                >
+                  <i className="f-20 icofont icofont-delete-alt text-danger"></i>{" "}
+                </span> */}
           </div>)
         }
 

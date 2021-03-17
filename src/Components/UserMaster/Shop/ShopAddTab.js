@@ -106,8 +106,12 @@ class ShopAddTab extends React.Component {
                         ) : ""}
                     </ul>
                     <div className="tab-content tabs">
-                      <div className="tab-pane  active"
-                        id={"add_dealer_" + this.state.language_id} role="tabpanel" aria-labelledby="">
+                      {console.log("again")}
+                      <div
+                       className="tab-pane  active"
+                        id={"add_dealer_" + this.state.language_id} 
+                        role="tabpanel" 
+                        aria-labelledby="">
                         {
                           this.state.shop_id !== undefined &&
                             this.state.shop_id !== null &&

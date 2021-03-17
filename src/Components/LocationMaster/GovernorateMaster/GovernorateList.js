@@ -87,6 +87,7 @@ class GovernorateList extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
+      console.log(json.data)
       if (json.status === true) {
         that.setState({ governorate_data: json.data, isSaving: false });
       } else {
@@ -115,7 +116,12 @@ class GovernorateList extends React.Component {
       label: "Governorate Name : Arabic",
       options: {
         filter: true,
-        sort: true
+        sort: true,
+        customBodyRender:(name_ar)=>{
+          return(
+            name_ar !== "undefined" ?name_ar:""
+          )
+        }
       }
     }, {
       name: "countryId",

@@ -89,9 +89,9 @@ class DriverList extends React.Component {
                 <div className="card">
                   <div className="card-header">
                     <h5>Driver List</h5>
-                    {/* <Link to="/driver/add"
+                    <Link to="/driver/add"
                       className="btn btn-sm btn-inverse waves-effect waves-light f-right d-inline-block md-trigger" data-modal="modal-13"> <i className="icofont icofont-plus m-r-5"></i> Add Driver
-                       </Link> */}
+                       </Link>
                   </div>
                   <div className="card-block">
                     <div className="dt-responsive table-responsive">

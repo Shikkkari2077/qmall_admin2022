@@ -130,8 +130,10 @@ class Routes extends Component {
 
               <Route exact path={"/category"} component={CategoryList} />
               <Route exact path={"/category/add/:category_id?"} component={CategoryAddTab} />
+              
+              <Route exact path={"/section"} component={SectionList} />
+              <Route exact path={"/section/shop/:shop_id"} component={SectionList} />
 
-              <Route exact path={"/section/:shop_id?"} component={SectionList} />
               <Route exact path={"/section/add/:secton_id?"} component={SectionAddTab} />
 
 

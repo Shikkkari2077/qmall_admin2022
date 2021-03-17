@@ -300,10 +300,15 @@ class ProductAdd extends React.Component {
             attribute_unit: json.data[0].unit,
             attribute_value: json.data[0].value,
             image: json.data[0].productMedia.url,
-            SectionId: json.data[0].Section.id,
             MediaId: json.data[0].MediaId,
             selected_attributes: selected_attributes
           });
+          if(json.data[0].Section !== null && json.data[0].Section !== undefined){
+            that.setState({
+              SectionId: json.data[0].Section.id,
+
+            })
+          }
         } else {
           that.setState({
             attribute_type_data: json.data[0],
@@ -318,10 +323,15 @@ class ProductAdd extends React.Component {
             refund_policy: json.data[0].refundPolicy_en,
             attribute_unit: json.data[0].unit,
             attribute_value: json.data[0].value,
-            SectionId: json.data[0].Section.id,
             MediaId: json.data[0].MediaId,
             selected_attributes: selected_attributes
           });
+          if(json.data[0].Section !== null && json.data[0].Section !== undefined ){
+            that.setState({
+              SectionId: json.data[0].Section.id,
+
+            })
+          }
         }
       } else {
         that.setState({ attribute_type_data: {} });
@@ -451,6 +461,7 @@ class ProductAdd extends React.Component {
 
   };
   addCategory = (media_id) => {
+    console.log(this.state.selected_attributes)
     console.log(this.setState.SectionId)
     var that = this;
     var data = new URLSearchParams();
@@ -552,6 +563,27 @@ class ProductAdd extends React.Component {
       <div className="">
         <div className="card-body">
           <div className="row">
+          <div className="col-md-6">
+              <div className="form-group row">
+                <label className="col-sm-3 col-form-label">Product Id</label>
+                <div className="col-sm-9">
+                <label className="col-sm-12 col-form-label">{this.props.product_id}</label>
+
+              
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="form-group row">
+                <label className="col-sm-3 col-form-label"></label>
+                <div className="col-sm-9">
+                <label className="col-sm-12 col-form-label">{}</label>
+
+              
+                </div>
+              </div>
+            </div>
+
             <div className="col-md-6">
               <div className="form-group row">
                 <label className="col-sm-3 col-form-label">Name (English)</label>

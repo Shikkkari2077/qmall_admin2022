@@ -177,12 +177,10 @@ class AttributeValueList extends React.Component {
                       <h4>Attribute Value List</h4>
                     </div>
                   </div>
-                  {localStorage.getItem("q8_mall_ad_role")=='admin'? <>
                   <Link to={"/attributes-values/"+this.props.match.params.attribute_type_id+"/"+ this.props.match.params.attribute_id+"/add"} 
                   className="btn btn-sm btn-inverse waves-effect waves-light f-right d-inline-block md-trigger" data-modal="modal-13">
                      <i className="icofont icofont-plus m-r-5"></i> Add Attribute Value
                       </Link>
-                      </>         :null}
                 </div>
                 <div className="col-lg-4">
                   <div className="page-header-breadcrumb">

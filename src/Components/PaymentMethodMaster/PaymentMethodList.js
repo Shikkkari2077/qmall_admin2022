@@ -82,6 +82,7 @@ class PaymentMethodList extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
+      console.log(json.data)
       if (json.status === true) {
         that.setState({ payment_method_data: json.data, isSaving: false });
       } else {
