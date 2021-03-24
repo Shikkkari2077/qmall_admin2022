@@ -36,7 +36,7 @@ class Header extends React.Component {
     console.log(json.data[0])
     if(json.data[0].Medium !== null){
     var image=json.data[0].Medium.url
-    
+    localStorage.setItem("companylogo",image)
 
      that.setState({image});
        }

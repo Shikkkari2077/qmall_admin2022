@@ -70,7 +70,7 @@ class ShopList extends React.Component {
           .then(function (json) {
             if (json.status === true) {
               Swal.fire("Deleted!", " Shop deleted.", "success");
-              that.getCategoryList();
+              window.location.reload()
             } else {
               Swal.fire({
                 title: "Something went wrong. Try again after some Time.!",
@@ -288,7 +288,7 @@ class ShopList extends React.Component {
               data-placement="top" title=""
               data-original-title="Add Delivery Charges">
           <i className="feather icon-slack f-22"></i></Link>
-          {/* <span
+          <span
                   onClick={this.deleteCategory.bind(this, id)}
                   className="m-r-15 text-muted"
                   data-toggle="tooltip"
@@ -297,7 +297,7 @@ class ShopList extends React.Component {
                   data-original-title="Delete"
                 >
                   <i className="f-20 icofont icofont-delete-alt text-danger"></i>{" "}
-                </span> */}
+                </span>
           </div>)
         }
 

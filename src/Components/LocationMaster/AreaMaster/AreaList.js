@@ -83,7 +83,9 @@ class AreaList extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
+      console.log(json)
       if (json.status === true) {
+        console.log()
         that.setState({ area_data: json.data, isSaving: false });
       } else {
         that.setState({ area_data: [], isSaving: false });

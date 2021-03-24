@@ -380,7 +380,7 @@ class ProductList extends React.Component {
         customBodyRender: (productMedia, tableMeta) => {
           return (<img src={productMedia !== undefined
              && productMedia !== null 
-             && productMedia !== {} ? productMedia.url : "./assets/images/icon.png"} className="img-fluid img-40" alt="tbl" />)
+             && productMedia !== {} ? productMedia.url : localStorage.getItem("companylogo")} className="img-fluid img-40" alt="tbl" />)
         }
       }
     },

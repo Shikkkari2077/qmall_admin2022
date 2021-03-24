@@ -128,7 +128,7 @@ class ProductWiseStockList extends React.Component {
                 <ul>
                   {
                     AttributeValues.map(product_attr =>
-                      <li key={product_attr.id}>{product_attr.name}</li>
+                      <li key={product_attr.id}>{product_attr.name !== 'Default Attribute Value'?product_attr.name:''}</li>
                     )
                   }
                 </ul>

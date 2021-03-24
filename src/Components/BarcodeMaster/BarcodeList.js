@@ -64,8 +64,10 @@ class BarcodeList extends React.Component {
       },
       body: data
     }).then(function (response) {
+
       return response.json();
     }).then(function (json) {
+      console.log(json.data)
       if (json.status === true) {
         that.setState({ barcode_list: json.data, isSaving: false });
       } else {

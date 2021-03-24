@@ -87,6 +87,7 @@ import BarcodePrint3 from './Components/BarcodeMaster/Css/BarcodePrint3.js';
 import BarcodePrint4 from './Components/BarcodeMaster/Css/BarcodePrint4.js';
 import SectionList from './Components/SectionMaster/SectionList.js';
 import SectionAddTab from './Components/SectionMaster/SectionAddTab.js';
+import DeliveryTimeList from './Components/DeliveryTimeMaster/DeliveryTimeList.js';
 class Routes extends Component {
 
   render() {
@@ -210,7 +211,9 @@ class Routes extends Component {
               <Route exact path={"/terms"} component={TermsAddTab} />
               <Route exact path={"/contact-us"} component={ContactUsList} />
               <Route exact path={"/contact-us/settings"} component={GeneralSettingAddTab} />
-              <Route exact path={"/delivery-time"} component={DeliveryTimeAddTab} />
+              <Route exact path={"/delivery-time/add/:delivery_id?"} component={DeliveryTimeAddTab} />
+              <Route exact path={"/delivery-time"} component={DeliveryTimeList} />
+
               <Route
                   exact
                   path={"/importData/:import_name?"}

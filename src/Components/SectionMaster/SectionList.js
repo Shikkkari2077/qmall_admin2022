@@ -297,7 +297,7 @@ class SectionList extends React.Component {
                   />
                 ) : (
                   <img
-                    src="./assets/images/icon.png"
+                    src= {localStorage.getItem("companylogo")}
                     alt=""
                     className="img-40"
                   />
