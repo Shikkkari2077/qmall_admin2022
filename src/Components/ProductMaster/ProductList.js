@@ -131,7 +131,7 @@ class ProductList extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-       //console.log(json.data)
+       console.log(json.data)
 
       if (json.status === true) {
         var products = []
