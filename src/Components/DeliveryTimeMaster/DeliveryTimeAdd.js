@@ -126,7 +126,7 @@ class DeliveryTimeAdd extends React.Component {
         }
       } else {
         that.setState({ isLoading: false, delivery_time_list: [], isDeliveryTimeExist: false, });
-        console.log(json);
+        //console.log(json);
       }
     });
   }

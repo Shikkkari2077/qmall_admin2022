@@ -42,6 +42,9 @@ class ProductAddTab extends React.Component {
       }
     })
   }
+  // componentWillMount(){
+  //   this.handleLanguage(this,'product')
+  // }
   handleLanguage = (language_id) => {
     this.setState({ language_id: language_id })
   }
@@ -95,17 +98,33 @@ class ProductAddTab extends React.Component {
                         ) : ""} */}
                       {
                         this.props.match.params.product_id
-                          ?
+                          ?<>
+                          <li className="nav-item" onClick={this.handleLanguage.bind(this, 'product')}>
+                          <a className={this.state.language_id === 'product' ? "nav-link active" : "nav-link"} 
+                            id='product'
+                            data-toggle="tab"
+                            href={`#products/add/${this.props.match.params.product_id}`}
+                            role="tab"
+                            aria-controls={`products/add/${this.props.match.params.product_id}`} 
+                            aria-selected="true">Product info</a>
+                            
+                        </li>
+                          
                           <li className="nav-item" onClick={this.handleLanguage.bind(this, 'gallery')}>
-                            <a className={this.state.language_id === 'gallery' ? "nav-link active" : "nav-link"} id='gallery'
+                            <a className={this.state.language_id === 'gallery' ? "nav-link active" : "nav-link "} id='gallery'
                               data-toggle="tab"
                               href={"#product_add_gallery"}
                               role="tab"
                               aria-controls={"product_add_gallery"} aria-selected="true">Product Gallery </a>
-                          </li>
+                          </li> &nbsp; &nbsp;
+                          <div style={{color:"red", paddingTop:"20px",fontSize:"14px"}} >
+                          <small> * Save Before Switching Tabs</small>
+                          </div>
+                       </>
                           : null
                       }
                     </ul>
+                  
                     <div className="tab-content tabs">
                       {/* <div className="tab-pane active"
                         id={"product_add_" + this.state.language_id} role="tabpanel" aria-labelledby="">
@@ -124,6 +143,7 @@ class ProductAddTab extends React.Component {
                               goBack={this.props.history.goBack} />
                         }
                       </div> */}
+
                       <div className="tab-pane active"
                         id={"product_add_" + this.state.language_id} role="tabpanel" aria-labelledby="">
                         {
@@ -134,12 +154,12 @@ class ProductAddTab extends React.Component {
                               this.state.product_id !== null &&
                               this.state.product_id !== 0 &&
                               this.state.product_id !== ''
-                              ?
+                              ?<>
                               <ProductAdd 
                                 language_id={this.state.language_id}
                                 goBack={this.props.history.goBack}
                                 product_id={this.state.product_id}/>
-                              :
+                             </> :
                               <ProductAdd
                                 case={"add"}
                                 language_id={this.state.language_id}

@@ -66,7 +66,7 @@ class AttributeValueAdd extends React.Component {
     this.setState({ accepted: element });
     var proof_img = [];
     let obj = {};
-    console.log(element.files);
+    //console.log(element.files);
     this.setState({ user_Image: element.files });
     for (var i = 0; i < element.files.length; i++) {
       var file1 = element.files[i];
@@ -200,7 +200,7 @@ class AttributeValueAdd extends React.Component {
     }).then(function (json) {
       if (json.status === true) {
         Swal.fire("Added !", "Attribute Value has been Added", "success");
-        console.log(json)
+        //console.log(json)
 
         window.location.href = `#/attribute-values/${that.props.attribute_type_id}/${that.props.attribute_id}`
         that.setState({ isSaving: false })

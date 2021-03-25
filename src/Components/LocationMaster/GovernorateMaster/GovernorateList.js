@@ -87,7 +87,6 @@ class GovernorateList extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      console.log(json.data)
       if (json.status === true) {
         that.setState({ governorate_data: json.data, isSaving: false });
       } else {

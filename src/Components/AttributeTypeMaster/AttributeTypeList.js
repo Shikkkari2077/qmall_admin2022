@@ -64,7 +64,7 @@ class AttributeTypeList extends React.Component {
     }).then(function (json) {
       if (json.status === true) {
         that.setState({ attribute_type_list: json.data });
-        console.log(json.data)
+        //console.log(json.data)
       } else {
         that.setState({ attribute_type_list: [] });
         Swal.fire({

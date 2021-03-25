@@ -67,7 +67,7 @@ class BarcodeList extends React.Component {
 
       return response.json();
     }).then(function (json) {
-      console.log(json.data)
+      //console.log(json.data)
       if (json.status === true) {
         that.setState({ barcode_list: json.data, isSaving: false });
       } else {
@@ -96,7 +96,7 @@ class BarcodeList extends React.Component {
       }
       document.getElementById('print-barcode-html').classList.remove('hide');
       for (var i = 0; i < that.state.barcode_list.length; i++) {
-        console.log(that.state.barcode_list[i].barNumber)
+        //console.log(that.state.barcode_list[i].barNumber)
         document.getElementById('barcode_print_' + that.state.barcode_list[i].barNumber).classList.remove('noprint');
       }
       //   // return (<RetailerPrintInvoice />)
@@ -121,7 +121,7 @@ class BarcodeList extends React.Component {
   handleChange = (event) => {
     if(event.target.value.length == 0)
     {this.getBarcodeList() ;
-      console.log("yy")
+      //console.log("yy")
   }
   else{
    this.onSearch(event.target.value)
@@ -200,12 +200,12 @@ class BarcodeList extends React.Component {
     //alert("barNumber : " + barNumber);
     window.onbeforeprint = function (event) {
       //   // alert("beforePrint")
-      console.log(barNumber)
+      ////console.log(barNumber)
       if (localStorage.getItem('q8_mall_ad_role') !== "shop") {
         document.getElementById('admin_menu').classList.remove('pcoded-navbar');
         document.getElementById('admin_content').classList.remove('pcoded-content');
       }
-      console.log('barcode_print_' + barNumber)
+      //console.log('barcode_print_' + barNumber)
 
       document.getElementById('print-barcode-html').classList.remove('hide');
       document.getElementById('barcode_print_' + barNumber).classList.remove('noprint');
@@ -221,7 +221,7 @@ class BarcodeList extends React.Component {
         document.getElementById('admin_content').classList.add('pcoded-content');
       }
       document.getElementById('print-barcode-html').classList.add('hide');
-      console.log('barcode_print_' + barNumber)
+      //console.log('barcode_print_' + barNumber)
       document.getElementById('barcode_print_' + barNumber).classList.add('noprint');
       document.title = "QMall";
       // document.title = 'barcode_print_' + barNumber;

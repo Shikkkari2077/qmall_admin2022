@@ -24,9 +24,9 @@ class ShopAdd extends React.Component {
   // }
 
   componentDidUpdate(prevProps) {
-    console.log(prevProps)
+    //console.log(prevProps)
     if (this.props.language_id !== undefined) {
-      console.log("Called")
+      //console.log("Called")
       this.getCategoryList();
 
       if (prevProps.shop_id !== this.props.shop_id) {
@@ -51,7 +51,7 @@ class ShopAdd extends React.Component {
     this.setState({ [event.target.name]: event.target.value });
   };
   getShopDetails = () => {
-    console.log("shop called")
+    //console.log("shop called")
     var that = this;
     var data = new URLSearchParams();
     // this.setState({ isSaving: true });
@@ -67,7 +67,7 @@ class ShopAdd extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      console.log(json.data)
+      //console.log(json.data)
       if (json.status === true) {
         for (var i = 0; i < json.data.length; i++) {
           if (json.data[i].id === that.props.shop_id) {
@@ -275,7 +275,7 @@ class ShopAdd extends React.Component {
     // data.append("deliveryCharges", that.state.deliveryCharges);
     // data.append("approxDeliveryTime", that.state.approxDeliveryTime);
     data.append("status", that.state.status);
-    console.log(this.state.qmallCommission)
+    //console.log(this.state.qmallCommission)
     if (that.state.qmallCommission !== undefined && that.state.qmallCommission !== null && that.state.qmallCommission !== "") {
       data.append("qmallCommission", that.state.qmallCommission);
     } else {

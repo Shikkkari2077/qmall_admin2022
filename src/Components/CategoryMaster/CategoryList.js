@@ -12,7 +12,7 @@ class CategoryList extends React.Component {
   handleStatusChange = (sid) => {
     var isChecked = $("#category_status_" + sid);
     isChecked.prop("checked", !isChecked.prop("checked"));
-    console.log(isChecked.prop("checked"), !isChecked.prop("checked"));
+    //console.log(isChecked.prop("checked"), !isChecked.prop("checked"));
     if (!isChecked.prop("checked") === true) {
       var status = true;
     } else {
@@ -23,7 +23,7 @@ class CategoryList extends React.Component {
     // this.setState({ isSaving: true });
     data.append("status", status);
     data.append("CategoryId", sid);
-    console.log(sid)
+    //console.log(sid)
     fetch(Constant.getAPI() + "/category/statusChange", {
       method: "post",
       headers: {
@@ -38,7 +38,7 @@ class CategoryList extends React.Component {
       .then(function (json) {
         if (json.status === true) {
           Swal.fire("Update Status!", "Status has been updated.", "success");
-          console.log(json)
+          ////console.log(json)
           that.getCategoryList();
         } else {
           Swal.fire({
@@ -116,7 +116,7 @@ class CategoryList extends React.Component {
       })
       .then(function (json) {
         if (json.status === true) {
-          console.log(json.data)
+          //console.log(json.data)
           that.setState({ category_data: json.data, isSaving: false });
         } else {
           that.setState({ category_data: [], isSaving: false });
@@ -133,7 +133,7 @@ class CategoryList extends React.Component {
   };
   componentWillMount() {
     this.getCategoryList();
-    console.log(localStorage.getItem("q8_mall_auth"))
+    //console.log(localStorage.getItem("q8_mall_auth"))
   }
   render() {
     const columns = [

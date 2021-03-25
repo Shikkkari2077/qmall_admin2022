@@ -80,7 +80,7 @@ class CouponWiseShopModal extends React.Component {
   }
   removeShopFromCoupon = (shop_id) => {
 
-    console.log(shop_id);
+    //console.log(shop_id);
     // return false;
     var that = this;
     var data = new URLSearchParams();

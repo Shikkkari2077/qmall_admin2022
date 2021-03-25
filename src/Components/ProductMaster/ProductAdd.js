@@ -118,14 +118,45 @@ class ProductAdd extends React.Component {
           this.getProductDetails();
         }
         this.getAttributeList();
-        this.getCategoryList();
+        if(localStorage.getItem("q8_mall_ad_role")=='shop'){
+        this.getCategoryList();}
         this.getShopList();
+      
       }
     }
   }
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
+ getCategoryListAdmin2(id){
+    var that = this;
+    this.setState({ isSaving: true });
+    var data = new URLSearchParams();
+    data.append("ShopId",id)
+   fetch(Constant.getAPI() + "/shop/section/get", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: localStorage.getItem("q8_mall_auth"),
+
+      },
+   body:data,
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (json) {
+
+        if (json.success === true) {
+          that.setState({ category_list: json.data, isSaving: false });
+        } else {
+          that.setState({ category_list: [], isSaving: false });
+
+         
+        }
+      });
+
+  }
   getCategoryList = () => {
     var that = this;
     this.setState({ isSaving: true });
@@ -143,21 +174,21 @@ class ProductAdd extends React.Component {
         return response.json();
       })
       .then(function (json) {
-        console.log(json)
+        //console.log(json)
 
         if (json.success === true) {
           that.setState({ category_list: json.data, isSaving: false });
         } else {
           that.setState({ category_list: [], isSaving: false });
 
-          Swal.fire({
-            title: "Something went wrong. Try again after some Time.!",
-            icon: "error",
-            text: "",
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Ok",
-          });
+          // Swal.fire({
+          //   title: "Something went wrong. Try again after some Time.!",
+          //   icon: "error",
+          //   text: "",
+          //   confirmButtonColor: "#3085d6",
+          //   cancelButtonColor: "#d33",
+          //   confirmButtonText: "Ok",
+          // });
         }
       });
   };
@@ -221,6 +252,7 @@ class ProductAdd extends React.Component {
     });
   }
   getAttributeList = () => {
+    console.log("attribute")
     var that = this;
     var data = new URLSearchParams();
     data.append("LanguageId", that.props.language_id);
@@ -275,7 +307,8 @@ class ProductAdd extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      console.log(json.data)
+      //console.log(json.data)
+
       if (json.status === true) {
         var selected_attributes = []
         if (json.data[0].Attributes !== null && json.data[0].Attributes !== [] && json.data[0].Attributes.length > 0) {
@@ -296,7 +329,7 @@ class ProductAdd extends React.Component {
 
             refund_policy: json.data[0].refundPolicy_en,
             refund_policy_ar: json.data[0].refundPolicy_ar,
-
+            Product_unique_id:json.data[0].unique_identifier,
             attribute_unit: json.data[0].unit,
             attribute_value: json.data[0].value,
             image: json.data[0].productMedia.url,
@@ -309,11 +342,16 @@ class ProductAdd extends React.Component {
 
             })
           }
+          if(localStorage.getItem('q8_mall_ad_role') =='admin'){
+            that.getCategoryListAdmin2(json.data[0].ShopId)
+            //console.log(json.data[0].ShopId)
+          }
         } else {
           that.setState({
             attribute_type_data: json.data[0],
             product_name: json.data[0].name_en,
             product_name_ar: json.data[0].name_ar,
+            Product_unique_id:json.data[0].unique_identifier,
 
             priority: json.data[0].priority,
             description: json.data[0].description_en,
@@ -332,17 +370,14 @@ class ProductAdd extends React.Component {
 
             })
           }
+          if(localStorage.getItem('q8_mall_ad_role') =='admin'){
+            that.getCategoryListAdmin2(json.data[0].ShopId)
+            //console.log(json.data[0].ShopId)
+          }
         }
       } else {
         that.setState({ attribute_type_data: {} });
-        // Swal.fire({
-        //   title: "Something went wrong. Try again after some Time.!",
-        //   icon: 'error',
-        //   text: "",
-        //   confirmButtonColor: "#3085d6",
-        //   cancelButtonColor: "#d33",
-        //   confirmButtonText: "Ok"
-        // })
+    
       }
     });
   }
@@ -351,8 +386,7 @@ class ProductAdd extends React.Component {
     that.setState({ isSaving: true });
     if (that.state.accepted) {
       {that.uploadMedia();}
-      //   if(that.state.acceptedgallery){
-      // that.uploadGalleryMedia();}}
+
     
     } else {
       if (that.props.product_id !== undefined) {
@@ -416,6 +450,7 @@ class ProductAdd extends React.Component {
     }
     data.append("name_en", that.state.product_name);
     data.append("name_ar", that.state.product_name_ar);
+    data.append("unique_identifier", that.state.Product_unique_id);
 
     data.append("priority", that.state.priority);
     data.append("description_en", that.state.description);
@@ -461,8 +496,8 @@ class ProductAdd extends React.Component {
 
   };
   addCategory = (media_id) => {
-    console.log(this.state.selected_attributes)
-    console.log(this.setState.SectionId)
+    //console.log(this.state.selected_attributes)
+    //console.log(this.setState.SectionId)
     var that = this;
     var data = new URLSearchParams();
     this.setState({ isSaving: true });
@@ -486,6 +521,8 @@ class ProductAdd extends React.Component {
     data.append("SectionId", that.state.SectionId);
     // data.append("ShopId", that.state.ShopId);
     data.append("LanguageId", that.props.language_id);
+    data.append("unique_identifier", that.state.Product_unique_id);
+
     data.append("AttributeIds", JSON.stringify(that.state.selected_attributes));
     fetch(Constant.getAPI() + "/product/add", {
       method: "post",
@@ -567,22 +604,28 @@ class ProductAdd extends React.Component {
               <div className="form-group row">
                 <label className="col-sm-3 col-form-label">Product Id</label>
                 <div className="col-sm-9">
-                <label className="col-sm-12 col-form-label">{this.props.product_id}</label>
+                <input
+                    type="text"
+                    className="form-control"
+                    name="Product_unique_id"
+                    id="Product_unique_id"
+                    placeholder="Priduct Id"
+                    onChange={this.handleChange}
+                    value={this.state.Product_unique_id}
+                  />
 
-              
-                </div>
+               </div>
               </div>
             </div>
             <div className="col-md-6">
               <div className="form-group row">
                 <label className="col-sm-3 col-form-label"></label>
-                <div className="col-sm-9">
-                <label className="col-sm-12 col-form-label">{}</label>
-
-              
-                </div>
+               
+                
+                
               </div>
             </div>
+            
 
             <div className="col-md-6">
               <div className="form-group row">
@@ -794,6 +837,7 @@ class ProductAdd extends React.Component {
                           this.state.attribute_list !== [] &&
                           this.state.attribute_list.length > 0 ? (
                             this.state.attribute_list.map(attributes =>(
+                              attributes.name_en !=="Default Attribute"?
                               // attributes.AttributeTypeId !== null ?
                               <div className=" col-sm-4" key={attributes.id}>
                                 <div className="checkbox-fade fade-in-primary">
@@ -815,7 +859,7 @@ class ProductAdd extends React.Component {
                                   </label>
                                 </div>
                               </div>
-                              // :""
+                               :null
 
                           ))) : ""
                       }

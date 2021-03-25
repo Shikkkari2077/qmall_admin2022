@@ -88,8 +88,8 @@ class OrderList extends React.Component {
         return response.json();
       })
       .then(function (json) {
+
         if (json.status === true) {
-          //console.log(json.data)
           var orders = [];
           for (var i = 0; i < json.data.length; i++) {
             var order_obj = json.data[i];

@@ -93,7 +93,7 @@ class SectionAdd extends React.Component {
     }
   };
   getShopDetails = () => {
-    console.log("shopDetails")
+    //console.log("shopDetails")
     var that = this;
     var data = new URLSearchParams();
     // this.setState({ isSaving: true });
@@ -109,17 +109,17 @@ class SectionAdd extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      console.log(json.data)
+      //console.log(json.data)
       if (json.status === true) {
 
         var categories = json.data[0].Categories
-        console.log(json.data[0].Categories)
+        //console.log(json.data[0].Categories)
         that.setState({
              
         selected_category: categories,
                
               });
-        console.log(categories)
+        //console.log(categories)
 
     
       }
@@ -211,7 +211,7 @@ class SectionAdd extends React.Component {
     data.append("name_en", that.state.section_name);
     data.append("name_ar", that.state.section_name_ar);
     data.append("priority", that.state.priority);
-    console.log( that.state.categoryId)
+    //console.log( that.state.categoryId)
     data.append("CategoryId",this.state.categoryId)
     // data.append("LanguageId", that.props.language_id);
     data.append("MediaId", media_id);

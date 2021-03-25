@@ -45,7 +45,7 @@ class OrderView extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      //console.log(json.data)
+      console.log(json.data)
       if (json.status === true) {
         var order_data;
         for (var i = 0; i < json.data.length; i++) {

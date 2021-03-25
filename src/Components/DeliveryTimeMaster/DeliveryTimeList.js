@@ -67,14 +67,14 @@ class DeliveryTimeList extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      console.log(json.data)
+      //console.log(json.data)
       if (json.status === true) {
           that.setState({ delivery_time_list: json.data});
         
       }
        else {
         that.setState({ isLoading: false, delivery_time_list: [], isDeliveryTimeExist: false, });
-        console.log(json);
+        //console.log(json);
       }
     });
   }

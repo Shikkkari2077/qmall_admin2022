@@ -54,15 +54,15 @@ class BarcodePrint4 extends React.Component {
   }
   componentWillMount() {
     this.getBarcodeList();
-    console.log(this.props.match.params.barnumber)
-    console.log(this.props.match.params.css)
+    //console.log(this.props.match.params.barnumber)
+    ////console.log(this.props.match.params.css)
     
   
-    console.log()
+    ////console.log()
   }
   componentDidUpdate(prevState) {
     var that = this;
-    console.log(prevState)
+    //console.log(prevState)
    // if (prevState.isOrderData !== this.state.isOrderData && this.state.isOrderData !== false) {
       setTimeout(function () { that.onPrint() }, 200);
     //}

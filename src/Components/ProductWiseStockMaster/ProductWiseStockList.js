@@ -66,7 +66,7 @@ class ProductWiseStockList extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      //console.logog(json.data)
+      //console.log(json)
       if (json.status === true) {
         that.setState({ product_list: json.data, isSaving: false });
       } else {
@@ -114,7 +114,24 @@ class ProductWiseStockList extends React.Component {
         filter: true,
         sort: true
       }
-    }, {
+    }, 
+    {
+      name: "barNumber",
+      label: "Bar Code",
+      options: {
+        filter: true,
+        sort: true
+      }
+    },
+    // {
+    //   name: "variantId",
+    //   label: "Varient Id",
+    //   options: {
+    //     filter: true,
+    //     sort: true
+    //   }
+    // },
+    {
       name: "AttributeValues",
       label: "Product Attribute Values",
       options: {

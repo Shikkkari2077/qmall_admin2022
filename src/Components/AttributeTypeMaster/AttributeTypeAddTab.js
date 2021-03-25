@@ -9,7 +9,7 @@ class AttributeTypeAddTab extends React.Component {
   componentDidMount() {
     if (this.props.match.params.attribute_type_id !== undefined && this.props.match.params.attribute_type_id !== null && this.props.match.params.attribute_type_id !== 0 && this.props.match.params.attribute_type_id !== '') {
       this.setState({ attribute_type_id: this.props.match.params.attribute_type_id })
-      console.log(this.props.match.params.attribute_type_id)
+      //console.log(this.props.match.params.attribute_type_id)
     }
     this.getLanguageList()
   }

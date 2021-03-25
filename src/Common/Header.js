@@ -15,7 +15,7 @@ class Header extends React.Component {
 
   }
   getShopDetails = () => {
-    console.log("shopDetails")
+    //console.log("shopDetails")
     var that = this;
     var data = new URLSearchParams();
     // this.setState({ isSaving: true });
@@ -31,9 +31,9 @@ class Header extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      console.log(json.data)
+      //console.log(json.data)
       if (json.status === true) {
-    console.log(json.data[0])
+    ////console.log(json.data[0])
     if(json.data[0].Medium !== null){
     var image=json.data[0].Medium.url
     localStorage.setItem("companylogo",image)
@@ -101,7 +101,7 @@ class Header extends React.Component {
     }
   }
   getPushNotificationList = () => {
-    console.log("here")
+    //console.log("here")
     var that = this;
     var data = new URLSearchParams();
     this.setState({ isLoading: true });
@@ -135,7 +135,7 @@ class Header extends React.Component {
         localStorage.setItem('q8_mall_notify', JSON.stringify(notify_arr));
         that.setState({ notification_list: json.result })
       } else {
-        console.log(json);
+        //console.log(json);
       }
     });
   }

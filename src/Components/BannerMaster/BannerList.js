@@ -10,7 +10,7 @@ class BannerList extends React.Component {
   handleStatusChange = (sid) => {
     var isChecked = $('#banner_' + sid);
     isChecked.prop("checked", !isChecked.prop("checked"));
-    console.log(isChecked.prop('checked'), !isChecked.prop("checked"));
+    //console.log(isChecked.prop('checked'), !isChecked.prop("checked"));
     if (!isChecked.prop("checked") === true) {
       var status = 'active'
     } else {
@@ -21,7 +21,7 @@ class BannerList extends React.Component {
       return element.id === sid
     })
     a.status = status;
-    console.log(newArray)
+    //console.log(newArray)
     this.setState({ banner_list: newArray })
     Swal.fire("Update Status!", "Status has been updated.", "success");
   }
@@ -85,7 +85,7 @@ class BannerList extends React.Component {
     }).then(function (json) {
       if (json.status === true) {
         that.setState({ banner_data: json.data, isSaving: false });
-        console.log(json.data)
+        //console.log(json.data)
       } else {
         that.setState({ banner_data: [], isSaving: false });
         Swal.fire({
@@ -111,7 +111,7 @@ class BannerList extends React.Component {
       data.append("ShopId", localStorage.getItem('q8_mall_ad_uid'));
     }
     data.append("Productid",id);
-    console.log(id)
+    //console.log(id)
     fetch(Constant.getAPI() + "/product/get", {
       method: "post",
       headers: {
@@ -125,7 +125,7 @@ class BannerList extends React.Component {
       
     }).then(function (json) {
       if (json.status === true) {
-        console.log(json.data)
+        //console.log(json.data)
         var products = []
         for (var i = 0; i < json.data.length; i++) {
           var obj = json.data[i];
@@ -145,7 +145,7 @@ class BannerList extends React.Component {
           products.push(obj);
         }
         that.setState({ product_list: products, isSaving: false });
-        console.log(products)
+        //console.log(products)
         // that.setState({ product_list: json.data, isSaving: false });
       } else {
         that.setState({ product_list: [], isSaving: false });

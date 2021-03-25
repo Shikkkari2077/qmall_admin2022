@@ -70,7 +70,7 @@ class AttributeTypeAdd extends React.Component {
     this.setState({ accepted: element });
     var proof_img = [];
     let obj = {};
-    console.log(element.files);
+    //console.log(element.files);
     this.setState({ user_Image: element.files });
     for (var i = 0; i < element.files.length; i++) {
       var file1 = element.files[i];
@@ -153,7 +153,7 @@ class AttributeTypeAdd extends React.Component {
       if (json.status === true) {
         Swal.fire("Added !", "Add Attribute", "success");
         // window.location.href = "#/attribute-types"
-        console.log(json.result)
+        //console.log(json.result)
         window.location.href = `#/attributes/${json.result.id}/add`
 
         that.setState({ isSaving: false })

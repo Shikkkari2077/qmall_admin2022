@@ -75,6 +75,7 @@ class ProductWiseStockAdd extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
+      console.log(json.data)
       if (json.status === true) {
         for (var i = 0; i < json.data.length; i++) {
           if (json.data[i].id === that.props.stock_id) {
@@ -88,7 +89,12 @@ class ProductWiseStockAdd extends React.Component {
               product_stock_list: json.data[i],
               count: json.data[i].count,
               selected_attributes: attributes,
-              isSaving: false
+              isSaving: false,
+              barNumber:json.data[i].barNumber,
+              value:json.data[i].Prices[0].value,
+              specialPrice:json.data[i].Prices[0].specialPrice,
+              CurrencyId:json.data[i].Prices[0].CurrencyId,
+              
             });
 
           }
@@ -121,6 +127,7 @@ class ProductWiseStockAdd extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
+      console.log(json.data)
       if (json.status === true && json.data[0].productMedia!== undefined) {
         var attribute_list = []
         // if (json.data[0].Attributes !== null && json.data[0].Attributes !== [] && json.data[0].Attributes.length > 0) {
@@ -138,7 +145,7 @@ class ProductWiseStockAdd extends React.Component {
             attribute_unit: json.data[0].unit,
             attribute_value: json.data[0].value,
             CategoryId: json.data[0].CategoryId,
-            attribute_list: json.data[0].Attributes
+            attribute_list: json.data[0].Attributes,
           });
         } else {
           that.setState({
@@ -207,12 +214,12 @@ class ProductWiseStockAdd extends React.Component {
     this.setState({ isSaving: true });
     data.append("count", that.state.count);
     data.append("LanguageId", that.props.language_id);
-    data.append("barNumber", that.state.product_stock_list.barNumber);
+    data.append("barNumber", that.state.barNumber);
     data.append("deliveryOptions", that.state.product_stock_list.deliveryOptions);
     data.append("ProductId", that.props.product_id);
     data.append("StockId", that.props.stock_id);
     data.append("AttributeValueIds", JSON.stringify(that.state.selected_attributes));
-    //console.logog(that.state.selected_attributes)
+    //console.log(that.state.product_stock_list.barNumber)
     fetch(Constant.getAPI() + "/product/stock/update", {
       method: "post",
       headers: {
@@ -267,6 +274,8 @@ class ProductWiseStockAdd extends React.Component {
     //data.append("ProductId", that.props.product_id);
     // if (this.props.product_id !== undefined) {
       data.append("ProductId", that.props.product_id);
+      data.append("barNumber", that.state.barNumber);
+
        //console.logog(this.props.product_id)
     // } else {
     //   data.append("ProductId", that.props.match.params.product_id);
@@ -369,6 +378,8 @@ class ProductWiseStockAdd extends React.Component {
     data.append("specialPrice", that.state.specialPrice);
     data.append("LanguageId", that.props.language_id);
     data.append("CurrencyId", that.state.CurrencyId);
+    data.append("barNumber", that.state.barNumber);
+
     // if(that.props.stock_id)
     // { //console.logog("props")
       data.append("StockId",id);
@@ -477,6 +488,22 @@ class ProductWiseStockAdd extends React.Component {
                 </div>
               </div>
             </div>
+            <div className="col-md-6">
+              <div className="form-group row">
+                <label className="col-sm-3 col-form-label">Barcode</label>
+                <div className="col-sm-9">
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="barNumber"
+                    id="barNumber"
+                    placeholder="Enter Barcode"
+                    onChange={this.handleChange}
+                    value={this.state.barNumber}
+                  />
+                </div>
+              </div>
+            </div>
             {/* <div className="col-md-6">
               <div className="form-group row">
                 <label className="col-sm-3 col-form-label">Delivery Options</label>
@@ -545,6 +572,7 @@ class ProductWiseStockAdd extends React.Component {
                               <label>{attributes.name}</label>
                             </div>
                             {attributes.AttributeValues.map(attribute_val =>
+                                attribute_val.name !=="Default Attribute Value" ?
                               <div className=" col-sm-3" key={attribute_val.id}>
                                 <div className="checkbox-fade fade-in-primary">
                                   <label>
@@ -556,6 +584,7 @@ class ProductWiseStockAdd extends React.Component {
                                   </label>
                                 </div>
                               </div>
+                              :null
                             )}
                           </div>
                         )

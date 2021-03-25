@@ -37,6 +37,7 @@ class OrderListShop extends React.Component {
         return response.json();
       })
       .then(function (json) {
+
         if (json.status === true) {
           var orders = [];
           for (var i = 0; i < json.data.length; i++) {

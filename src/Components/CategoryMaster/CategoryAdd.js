@@ -62,7 +62,7 @@ class CategoryAdd extends React.Component {
       })
       .then(function (json) {
         if (json.status === true) {
-          console.log(json.data)
+          //console.log(json.data)
           if (json.data[0].parent !== null) {
             that.setState({
               category_data: json.data[0],
@@ -125,7 +125,7 @@ class CategoryAdd extends React.Component {
           that.setState({ category_list: json.data, isLoading: false });
         } else {
           that.setState({ isLoading: false, category_list: [] });
-          console.log(json);
+          //console.log(json);
         }
       });
   };
@@ -163,7 +163,7 @@ class CategoryAdd extends React.Component {
           }
         } else {
           // that.setState({ category_data: [] });
-          console.log(json.error);
+          //console.log(json.error);
         }
       });
   };
@@ -249,11 +249,11 @@ class CategoryAdd extends React.Component {
     ) {
       data.append("ParentId", that.state.categoryId);
     }
-    console.log( that.state.categoryId)
+    //console.log( that.state.categoryId)
     //data.append("LanguageId", that.props.language_id);
     data.append("MediaId", media_id);
-    console.log(data)
-    console.log(that.props.language_id)
+    //console.log(data)
+    //console.log(that.props.language_id)
     fetch(Constant.getAPI() + "/category/add", {
       method: "post",
       headers: {
@@ -267,7 +267,7 @@ class CategoryAdd extends React.Component {
       })
       .then(function (json) {
         if (json.status === true) {
-          console.log(json)
+          //console.log(json)
           Swal.fire("Added !", "category has been Added", "success");
           window.location.href = "#/category";
           that.setState({ isSaving: false });
@@ -291,7 +291,7 @@ class CategoryAdd extends React.Component {
     this.setState({ accepted: element });
     var proof_img = [];
     let obj = {};
-    console.log(element.files);
+    //console.log(element.files);
     this.setState({ category_image: element.files });
     for (var i = 0; i < element.files.length; i++) {
       var file1 = element.files[i];
@@ -377,7 +377,7 @@ class CategoryAdd extends React.Component {
                       this.state.category_list.length > 0
                         ? this.state.category_list.map((brands) => (
                             <option key={brands.id} value={brands.id}>
-                              {console.log(brands.id)}
+                              {//console.log(brands.id)}
                               {brands.name_en + "/" + brands.name_ar}
                             </option>
                           ))

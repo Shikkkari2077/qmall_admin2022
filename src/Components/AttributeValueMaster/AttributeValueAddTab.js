@@ -12,7 +12,7 @@ class AttributeValueAddTab extends React.Component {
       this.props.match.params.attribute_value_id !== 0 && 
       this.props.match.params.attribute_value_id !== '') {
       this.setState({ attribute_value_id: this.props.match.params.attribute_value_id })
-      console.log(this.props.match.params.attribute_value_id)
+      //console.log(this.props.match.params.attribute_value_id)
     }
     this.getLanguageList()
   }

@@ -233,7 +233,7 @@ class SectionList extends React.Component {
         return response.json();
       })
       .then(function (json) {
-         console.log(json)
+         //console.log(json)
 
         if (json.success === true) {
           that.setState({ category_data: json.data, isSaving: false });
@@ -260,7 +260,7 @@ class SectionList extends React.Component {
       this.props.match.params.shop_id !== "")
     {
       this.getCategoryListAdmin2(this.props.match.params.shop_id );
-     console.log("hello", this.props.match.params.shop_id)
+     //console.log("hello", this.props.match.params.shop_id)
     }
     else{
       this.getCategoryListAdmin();

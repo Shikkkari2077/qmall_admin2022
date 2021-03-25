@@ -9,7 +9,7 @@ class DeliveryReasonAddTab extends React.Component {
   componentDidMount() {
     if (this.props.match.params.reason_id !== undefined && this.props.match.params.reason_id !== null && this.props.match.params.reason_id !== 0 && this.props.match.params.reason_id !== '') {
       this.setState({ reason_id: this.props.match.params.reason_id })
-      console.log(this.props.match.params.reason_id)
+      //console.log(this.props.match.params.reason_id)
     }
     this.getLanguageList()
   }

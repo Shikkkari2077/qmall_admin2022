@@ -62,7 +62,7 @@ class AttributeValueList extends React.Component {
       return response.json();
     }).then(function (json) {
       if (json.status === true) {
-        console.log(json.data)
+        //console.log(json.data)
         that.setState({ attribute_value_list: json.data });
       } else {
         that.setState({ attribute_value_list: [] });

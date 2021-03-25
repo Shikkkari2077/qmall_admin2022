@@ -143,7 +143,7 @@ class BannerAdd extends React.Component {
         }
       } else {
         // that.setState({ banner_data: [] });
-        console.log(json.error);
+        //console.log(json.error);
       }
     });
   }
@@ -249,7 +249,7 @@ class BannerAdd extends React.Component {
     this.setState({ accepted: element });
     var proof_img = [];
     let obj = {};
-    console.log(element.files);
+    //console.log(element.files);
     this.setState({ banner_image: element.files });
     for (var i = 0; i < element.files.length; i++) {
       var file1 = element.files[i];

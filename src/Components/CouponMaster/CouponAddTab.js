@@ -20,7 +20,7 @@ class CouponAddTab extends React.Component {
       if (json.status === true) {
         that.setState({ language_data: json.data, language_id: json.data[0].id });
       } else {
-        console.log("languages not found");
+        //console.log("languages not found");
       }
     })
   }
@@ -28,7 +28,7 @@ class CouponAddTab extends React.Component {
     this.getLanguages();
     if (this.props.match.params.coupon_id !== undefined && this.props.match.params.coupon_id !== null && this.props.match.params.coupon_id !== 0 && this.props.match.params.coupon_id !== '') {
       this.setState({ coupon_id: this.props.match.params.coupon_id })
-      console.log(this.props.match.params.coupon_id)
+      //console.log(this.props.match.params.coupon_id)
     }
   }
   handleLanguage = (language_id) => {

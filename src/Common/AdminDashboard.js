@@ -30,7 +30,7 @@ class AdminDashboard extends React.Component {
           shops: json.data.shops
         });
       } else {
-        console.log(json);
+        //console.log(json);
       }
     });
   }
@@ -49,9 +49,9 @@ class AdminDashboard extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      console.log(json)
+      //console.log(json)
       if (json.status === true) {
-        console.log(json.data)
+        //console.log(json.data)
         if(json.data !== undefined){
         that.setState({
          totalCount:json.data.totalCount,
@@ -59,7 +59,7 @@ class AdminDashboard extends React.Component {
          
         });}
       } else {
-        console.log(json);
+        //console.log(json);
       }
     });
   }
