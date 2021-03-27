@@ -135,7 +135,7 @@ class Routes extends Component {
               <Route exact path={"/section"} component={SectionList} />
               <Route exact path={"/section/shop/:shop_id"} component={SectionList} />
 
-              <Route exact path={"/section/add/:secton_id?"} component={SectionAddTab} />
+              <Route exact path={"/section/add/:secton_id/:shop_id?"} component={SectionAddTab} />
 
 
               {/* <Route exact path={"/notifications"} component={PushNotificationList} /> */}

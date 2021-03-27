@@ -192,7 +192,7 @@ class SectionList extends React.Component {
         return response.json();
       })
       .then(function (json) {
-
+       console.log(json.data)
         if (json.success === true) {
           that.setState({ category_data: json.data, isSaving: false });
         } else {
@@ -367,12 +367,12 @@ class SectionList extends React.Component {
         options: {
           filter: true,
           sort: true,
-          display:false,
+          display:true,
           customBodyRender: (id, tableMeta) => {
             return (
               <div>
                 <Link
-                  to={"/section/add/" + id}
+                  to={"/section/add/" + id+"/"+tableMeta.rowData[6]}
                   className="m-r-15 text-muted"
                   data-toggle="tooltip"
                   data-placement="top"
@@ -381,7 +381,7 @@ class SectionList extends React.Component {
                 >
                   <i className="f-20 icofont icofont-ui-edit text-custom"></i>
                 </Link>
-                <span
+                {/* <span
                   onClick={this.deleteCategory.bind(this, id)}
                   className="m-r-15 text-muted"
                   data-toggle="tooltip"
@@ -390,12 +390,23 @@ class SectionList extends React.Component {
                   data-original-title="Delete"
                 >
                   <i className="f-20 icofont icofont-delete-alt text-danger"></i>{" "}
-                </span>
+                </span> */}
               </div>
             );
           },
         },
       },
+      {
+        name: "ShopId",
+        label: "shop id",
+        options: {
+          filter: true,
+          sort: true,
+          display:false,
+        },
+      },
+
+
     ];
     const shop_columns = [
       {

@@ -141,6 +141,8 @@ class SectionAddTab extends React.Component {
                             language_id={this.state.language_id}
                             goBack={this.props.history.goBack}
                             secton_id={this.props.match.params.secton_id}
+                            shop_id={this.props.match.params.shop_id}
+                  
                           />
                         ) : (
                           <SectionAdd

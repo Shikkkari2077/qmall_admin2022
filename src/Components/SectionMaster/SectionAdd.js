@@ -26,7 +26,11 @@ class SectionAdd extends React.Component {
     var data = new URLSearchParams();
     this.setState({ isLoading: true });
     // data.append("ShopId", localStorage.getItem("q8_mall_ad_uid"))
+    if(this.props.shop_id !== undefined)
+    {
+      data.append("ShopId", this.props.shop_id);
 
+    }
     data.append("SectionId", that.props.secton_id);
     fetch(Constant.getAPI() + "/shop/section/get", {
       method: "post",
@@ -40,15 +44,25 @@ class SectionAdd extends React.Component {
         return response.json();
       })
       .then(function (json) {
-        //console.log(json)
+        console.log(json)
         if(json !== undefined){
             that.setState({
               section_name: json.name_en,
               section_name_ar: json.name_ar,
-              image:json.Medium.url,
               priority: json.priority,
+              categoryId: json.CategoryId,
+
               isLoading: false,
             });
+
+          }
+          if(json.Medium !== null && json.Medium !== undefined ){
+            that.setState({
+            
+              image:json.Medium.url,
+             
+            });
+
           }
        } );
   };
@@ -97,7 +111,14 @@ class SectionAdd extends React.Component {
     var that = this;
     var data = new URLSearchParams();
     // this.setState({ isSaving: true });
+    if(this.props.shop_id !== undefined)
+    {
+      data.append("ShopId", this.props.shop_id);
+
+    }
+    else{
     data.append("ShopId", localStorage.getItem("q8_mall_ad_uid"));
+    }
     // data.append("LanguageId", that.props.language_id);
     fetch(Constant.getAPI() + "/shop/get", {
       method: "post",
@@ -109,7 +130,7 @@ class SectionAdd extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      //console.log(json.data)
+      console.log(json.data)
       if (json.status === true) {
 
         var categories = json.data[0].Categories
@@ -162,7 +183,9 @@ class SectionAdd extends React.Component {
     data.append("CategoryId",this.state.categoryId)
 
     //data.append("LanguageId", that.props.language_id);
-    data.append("MediaId", media_id);
+    if(media_id !==undefined){
+    data.append("MediaId", media_id);}
+  
     fetch(Constant.getAPI() + "/shop/section/update", {
       method: "post",
       headers: {

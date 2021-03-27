@@ -16,7 +16,8 @@ class ProductWiseStockAdd extends React.Component {
     this.setState({ description: value });
   };
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.product_id !== this.props.product_id) {
+    console.log(prevProps)
+    if (prevProps.product_id !== this.props.product_id) { 
       this.setState({ product_id: this.props.product_id });
       this.getProductDetails();
     }
@@ -214,8 +215,9 @@ class ProductWiseStockAdd extends React.Component {
     this.setState({ isSaving: true });
     data.append("count", that.state.count);
     data.append("LanguageId", that.props.language_id);
-    data.append("barNumber", that.state.barNumber);
-    data.append("deliveryOptions", that.state.product_stock_list.deliveryOptions);
+    if(this.state.barNumber !== undefined){
+      data.append("barNumber", that.state.barNumber);
+      }    data.append("deliveryOptions", that.state.product_stock_list.deliveryOptions);
     data.append("ProductId", that.props.product_id);
     data.append("StockId", that.props.stock_id);
     data.append("AttributeValueIds", JSON.stringify(that.state.selected_attributes));
@@ -261,12 +263,18 @@ class ProductWiseStockAdd extends React.Component {
         media_data.push(media_id[media].id);
       }
     }
+    var data2={
+      count:that.state.count,
+      ProductId:this.state.product_id,
+      barNumber:this.state.barNumber,
+      AttributeValueIds:JSON.stringify(that.state.selected_attributes)
+    }
     var data = new URLSearchParams();
     this.setState({ isSaving: true });
     data.append("count", that.state.count);
-    data.append("LanguageId", that.props.language_id);
-    data.append("MediaIds", JSON.stringify(media_data));
-    data.append("deliveryOptions", that.state.deliveryOptions);
+    // data.append("LanguageId", that.props.language_id);
+    data.append("MediaIds","");
+    data.append("deliveryOptions","");
     // //console.logog(localStorage.getItem('q8_mall_auth'))
     //console.logog(that.state.selected_attributes)
      ////console.logog(that.state.deliveryOptions)
@@ -274,8 +282,9 @@ class ProductWiseStockAdd extends React.Component {
     //data.append("ProductId", that.props.product_id);
     // if (this.props.product_id !== undefined) {
       data.append("ProductId", that.props.product_id);
-      data.append("barNumber", that.state.barNumber);
-
+      if(this.state.barNumber !== undefined){
+        data.append("barNumber", that.state.barNumber);
+        }
        //console.logog(this.props.product_id)
     // } else {
     //   data.append("ProductId", that.props.match.params.product_id);
@@ -287,18 +296,15 @@ class ProductWiseStockAdd extends React.Component {
     fetch(Constant.getAPI() + "/product/stock/add", {
       method: "post",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type": "application/json",
         "Authorization": localStorage.getItem('q8_mall_auth')
       },
-      body: data
+      body:JSON.stringify(data2),
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
       if (json.status === true) {
-        //Swal.fire("Added !", "Product Stock has been added", "success");
-        //console.logog(json)
-        //window.location.href = `#/products/stock/${that.props.product_id}`
-        //window.location.href = `#/products/price/${json.data.id}/${json.data.ProductId}/add`
+     
         that.addProductPrice(json.data.id,json.data.ProductId)
         that.setState({ isSaving: false })
       } else {
@@ -378,8 +384,9 @@ class ProductWiseStockAdd extends React.Component {
     data.append("specialPrice", that.state.specialPrice);
     data.append("LanguageId", that.props.language_id);
     data.append("CurrencyId", that.state.CurrencyId);
-    data.append("barNumber", that.state.barNumber);
-
+    // if(this.state.barNumber !== undefined){
+    // data.append("barNumber", that.state.barNumber);
+    // }
     // if(that.props.stock_id)
     // { //console.logog("props")
       data.append("StockId",id);
@@ -572,7 +579,7 @@ class ProductWiseStockAdd extends React.Component {
                               <label>{attributes.name}</label>
                             </div>
                             {attributes.AttributeValues.map(attribute_val =>
-                                attribute_val.name !=="Default Attribute Value" ?
+                                // attribute_val.name !=="Default Attribute Value" ?
                               <div className=" col-sm-3" key={attribute_val.id}>
                                 <div className="checkbox-fade fade-in-primary">
                                   <label>
@@ -584,7 +591,7 @@ class ProductWiseStockAdd extends React.Component {
                                   </label>
                                 </div>
                               </div>
-                              :null
+                              // :null
                             )}
                           </div>
                         )

@@ -15,7 +15,7 @@ class ProductAdd extends React.Component {
     priority: 1,
     refund_policy: "",
     refund_policy_ar: "",
-
+    media_id:"",
     selected_attributes: [],
     gallery_media: []
 
@@ -28,7 +28,6 @@ class ProductAdd extends React.Component {
     }
     var data = new URLSearchParams();
     data.append('ProductId',this.state.ProductId);
-    //console.log(this.state.ProductId)
     data.append('MediaId', media_data);
     // data.append('MediaId', JSON.stringify(media_data));
     fetch(Constant.getAPI() + "/product/media/add", {
@@ -54,14 +53,14 @@ class ProductAdd extends React.Component {
         //console.log("gallery")
 
         that.setState({ isSaving: false });
-        Swal.fire({
-          title: "Something went wrong. Try again after some Time.!",
-          icon: 'error',
-          text: "",
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Ok"
-        })
+        // Swal.fire({
+        //   title: "Something went wrong. Try again after some Time.!",
+        //   icon: 'error',
+        //   text: "",
+        //   confirmButtonColor: "#3085d6",
+        //   cancelButtonColor: "#d33",
+        //   confirmButtonText: "Ok"
+        // })
       }
     });
   }
@@ -73,7 +72,7 @@ class ProductAdd extends React.Component {
     var proof_img = [];
     let obj = {};
     //console.log(element.files);
-    this.setState({ category_image: element.files });
+    this.setState({ category_image: element.files, galleryupload:true });
     for (var i = 0; i < element.files.length; i++) {
       var file1 = element.files[i];
       var img = document.createElement("img");
@@ -103,6 +102,10 @@ class ProductAdd extends React.Component {
       if (this.props.product_id !== undefined) {
         // this.setState({ product_id: this.props.product_id });
         this.getProductDetails();
+        this.getAttributeList();
+        if(localStorage.getItem("q8_mall_ad_role")=='shop'){
+        this.getCategoryList();}
+        this.getShopList();
       }
     }
   }
@@ -116,7 +119,9 @@ class ProductAdd extends React.Component {
         if (this.props.product_id !== undefined) {
           // this.setState({ product_id: this.props.product_id });
           this.getProductDetails();
+
         }
+
         this.getAttributeList();
         if(localStorage.getItem("q8_mall_ad_role")=='shop'){
         this.getCategoryList();}
@@ -251,11 +256,14 @@ class ProductAdd extends React.Component {
       }
     });
   }
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
   getAttributeList = () => {
+    
     console.log("attribute")
     var that = this;
     var data = new URLSearchParams();
-    data.append("LanguageId", that.props.language_id);
     fetch(Constant.getAPI() + "/attribute/get", {
       method: "post",
       headers: {
@@ -265,8 +273,9 @@ class ProductAdd extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
+      console.log(json.data)
+
       if (json.status === true) {
-        //console.log(json.data)
         that.setState({ attribute_list: json.data });
       } else {
         that.setState({ attribute_list: [] });
@@ -385,7 +394,7 @@ class ProductAdd extends React.Component {
     var that = this;
     that.setState({ isSaving: true });
     if (that.state.accepted) {
-      {that.uploadMedia();}
+      {that.uploadMedia()}
 
     
     } else {
@@ -409,7 +418,8 @@ class ProductAdd extends React.Component {
       return response.json();
     }).then(function (json) {
       if (json.status === true) {
-        that.saveGalleryMedia(json.data);
+        if(json.data !== undefined){
+        that.saveGalleryMedia(json.data);}
       } else {
         that.setState({ gallery_media: [] });
         //console.log(json.error);
@@ -440,6 +450,7 @@ class ProductAdd extends React.Component {
     });
   }
   updateCategoryData = (media_id) => {
+    console.log(media_id)
     var that = this;
     var data = new URLSearchParams();
     this.setState({ isSaving: true });
@@ -516,8 +527,10 @@ class ProductAdd extends React.Component {
 
     data.append("refundPolicy_en", that.state.refund_policy);
     data.append("refundPolicy_ar", that.state.refund_policy_ar);
-
-    data.append("MediaId", media_id);
+    if(media_id !== undefined)
+    {data.append("MediaId", media_id);}
+    else
+    {data.append("MediaId",[])}
     data.append("SectionId", that.state.SectionId);
     // data.append("ShopId", that.state.ShopId);
     data.append("LanguageId", that.props.language_id);
@@ -536,7 +549,7 @@ class ProductAdd extends React.Component {
       return response.json();
     }).then(function (json) {
       if (json.status === true) {
-        //console.log("product")
+        console.log(json)
 
         //console.log(json.result.id)
         //Swal.fire("Added !", "Add Product Image", "success");
@@ -546,7 +559,15 @@ class ProductAdd extends React.Component {
         })
         //window.location.href = `#/products/gallery/${product_id}`;
        //that.saveGalleryMedia(that.state.media_id,product_id)
+       if(that.state.galleryupload == true ){
         that.uploadGalleryMedia()
+
+      }
+      else{
+        Swal.fire("Added !", "NOW ADD STOCK", "success");
+        window.location.href = `#/products/stock/${json.result.id}/add`;
+
+      }
         that.setState({ isSaving: false })
         
 
@@ -735,7 +756,7 @@ class ProductAdd extends React.Component {
                     <div className="form-group">
 
                       {/* <input onChange={this.handleChange} id="shop_Image" type="text" className="form-control" name="image" /> */}
-                      <input accept="image/*" onChange={this.handleImageUpload}
+                      <input accept="image/*" onChange={this.handleImageUpload.bind(this)}
                        id="product_banner_image" type="file" className="form-control" autoComplete="off" name="media"
                         data-toggle="tooltip" title="Click To Upload Banner Image"
                       />
