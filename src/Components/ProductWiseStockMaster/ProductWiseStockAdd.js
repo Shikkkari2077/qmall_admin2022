@@ -263,18 +263,18 @@ class ProductWiseStockAdd extends React.Component {
         media_data.push(media_id[media].id);
       }
     }
-    var data2={
-      count:that.state.count,
-      ProductId:this.state.product_id,
-      barNumber:this.state.barNumber,
-      AttributeValueIds:JSON.stringify(that.state.selected_attributes)
-    }
+    // var data2={
+    //   count:that.state.count,
+    //   ProductId:this.state.product_id,
+    //   barNumber:this.state.barNumber,
+    //   AttributeValueIds:JSON.stringify(that.state.selected_attributes)
+    // }
     var data = new URLSearchParams();
     this.setState({ isSaving: true });
     data.append("count", that.state.count);
     // data.append("LanguageId", that.props.language_id);
-    data.append("MediaIds","");
-    data.append("deliveryOptions","");
+    data.append("MediaIds",'');
+    data.append("deliveryOptions",'');
     // //console.logog(localStorage.getItem('q8_mall_auth'))
     //console.logog(that.state.selected_attributes)
      ////console.logog(that.state.deliveryOptions)
@@ -296,10 +296,10 @@ class ProductWiseStockAdd extends React.Component {
     fetch(Constant.getAPI() + "/product/stock/add", {
       method: "post",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
         "Authorization": localStorage.getItem('q8_mall_auth')
       },
-      body:JSON.stringify(data2),
+      body:data,
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
@@ -312,7 +312,7 @@ class ProductWiseStockAdd extends React.Component {
         Swal.fire({
           title: "Something went wrong. Try again after some Time.!",
           icon: 'error',
-          text: "",
+          text: " ",
           confirmButtonColor: "#3085d6",
           cancelButtonColor: "#d33",
           confirmButtonText: "Ok"
