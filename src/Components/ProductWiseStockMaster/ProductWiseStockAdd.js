@@ -269,37 +269,35 @@ class ProductWiseStockAdd extends React.Component {
     //   barNumber:this.state.barNumber,
     //   AttributeValueIds:JSON.stringify(that.state.selected_attributes)
     // }
-    var data = new URLSearchParams();
+    var data
+    var bar
+    //  = new URLSearchParams();
     this.setState({ isSaving: true });
-    data.append("count", that.state.count);
-    // data.append("LanguageId", that.props.language_id);
-    data.append("MediaIds",'');
-    data.append("deliveryOptions",'');
-    // //console.logog(localStorage.getItem('q8_mall_auth'))
-    //console.logog(that.state.selected_attributes)
-     ////console.logog(that.state.deliveryOptions)
-    ////console.logog(JSON.stringify(media_data))
-    //data.append("ProductId", that.props.product_id);
-    // if (this.props.product_id !== undefined) {
-      data.append("ProductId", that.props.product_id);
-      if(this.state.barNumber !== undefined){
-        data.append("barNumber", that.state.barNumber);
-        }
-       //console.logog(this.props.product_id)
-    // } else {
-    //   data.append("ProductId", that.props.match.params.product_id);
-    //   //console.logog(that.props.match.params.product_id)
-    // }
-   
-    data.append("AttributeValueIds",JSON.stringify(that.state.selected_attributes));
-    //console.logog(that.state.selected_attributes)
+    // data.append("count", that.state.count);
+    // data.append("MediaIds",'');
+    // data.append("deliveryOptions",'');
+    //    data.append("ProductId", that.props.product_id);
+    //   if(this.state.barNumber !== undefined){
+    //     data.append("barNumber", that.state.barNumber)
+    //      bar =this.state.barNumber
+    //     }
+  
+    
+    // data.append("AttributeValueIds", JSON.stringify(that.state.selected_attributes));
     fetch(Constant.getAPI() + "/product/stock/add", {
       method: "post",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type": "application/json",
         "Authorization": localStorage.getItem('q8_mall_auth')
       },
-      body:data,
+      body:JSON.stringify({
+        count:this.state.count,
+        MediaIds:'',
+        deliveryOptions:"",
+        ProductId:that.props.product_id,
+        barNumber:bar,
+        AttributeValueIds:that.state.selected_attributes
+      }),
     }).then(function (response) {
       return response.json();
     }).then(function (json) {

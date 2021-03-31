@@ -99,7 +99,7 @@ class SectionAdd extends React.Component {
     if (that.state.accepted) {
       that.uploadMedia();
     } else {
-      if (that.props.secton_id !== undefined) {
+      if (that.props.secton_id !== undefined ) {
         that.updateCategoryData(that.state.MediaId);
       } else {
         that.addCategory(that.state.MediaId);
@@ -237,7 +237,11 @@ class SectionAdd extends React.Component {
     //console.log( that.state.categoryId)
     data.append("CategoryId",this.state.categoryId)
     // data.append("LanguageId", that.props.language_id);
-    data.append("MediaId", media_id);
+    if(media_id !== undefined){
+    data.append("MediaId", media_id);}
+    else{
+}
+
     //console.log(data)
     // console.log(that.props.language_id)
     fetch(Constant.getAPI() + "/shop/section/add", {

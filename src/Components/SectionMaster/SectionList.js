@@ -554,7 +554,7 @@ class SectionList extends React.Component {
                     ? */}
                     {  localStorage.getItem('q8_mall_ad_role') == "shop"?<div>
                   <Link
-                    to="/section/add"
+                    to={`/section/add`}
                     className="btn btn-sm btn-inverse waves-effect waves-light f-right d-inline-block md-trigger"
                     data-modal="modal-13"
                   >
