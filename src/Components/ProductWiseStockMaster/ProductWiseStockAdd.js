@@ -86,15 +86,21 @@ class ProductWiseStockAdd extends React.Component {
               //console.logog("Selected Attributes : ", attributes)
               $("#product_attributes_value_" + json.data[i].AttributeValues[j].id).prop("checked", true)
             }
+            if(json.data[i].Prices !== undefined && json.data[i].Prices[0] !== undefined){
+              that.setState({
+                value:json.data[i].Prices[0].value,
+                specialPrice:json.data[i].Prices[0].specialPrice,
+                CurrencyId:json.data[i].Prices[0].CurrencyId,
+
+              })
+            }
             that.setState({
               product_stock_list: json.data[i],
               count: json.data[i].count,
               selected_attributes: attributes,
               isSaving: false,
               barNumber:json.data[i].barNumber,
-              value:json.data[i].Prices[0].value,
-              specialPrice:json.data[i].Prices[0].specialPrice,
-              CurrencyId:json.data[i].Prices[0].CurrencyId,
+             
               
             });
 

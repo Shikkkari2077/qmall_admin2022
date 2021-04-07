@@ -185,8 +185,8 @@ class AttributeValueAdd extends React.Component {
     data.append("name_ar", that.state.attribute_name_ar);
 
     data.append("AttributeId", that.state.AttributeId);
-    data.append("unit", that.state.attribute_unit);
-    data.append("value", that.state.attribute_value);
+    data.append("unit",  that.state.attribute_name);
+    data.append("value", that.state.attribute_name);
     //data.append("LanguageId", that.props.language_id);
     fetch(Constant.getAPI() + "/attribute/value/add", {
       method: "post",
@@ -266,7 +266,7 @@ class AttributeValueAdd extends React.Component {
               </div>
             </div>
 
-            <div className="col-md-6">
+            {/* <div className="col-md-6">
               <div className="form-group row">
                 <label className="col-sm-3 col-form-label">Value</label>
                 <div className="col-sm-9">
@@ -298,7 +298,7 @@ class AttributeValueAdd extends React.Component {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* <div className="col-md-6">
               <div className="form-group row">

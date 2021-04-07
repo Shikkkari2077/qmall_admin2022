@@ -104,21 +104,24 @@ class AttributeValueList extends React.Component {
         filter: true,
         sort: true
       }
-    }, {
-      name: "value",
-      label: "Value",
-      options: {
-        filter: true,
-        sort: true
-      }
-    }, {
-      name: "unit",
-      label: "Unit",
-      options: {
-        filter: true,
-        sort: true
-      }
-    }, {
+    }, 
+    // {
+    //   name: "value",
+    //   label: "Value",
+    //   options: {
+    //     filter: true,
+    //     sort: true
+    //   }
+    // },
+    //  {
+    //   name: "unit",
+    //   label: "Unit",
+    //   options: {
+    //     filter: true,
+    //     sort: true
+    //   }
+    // },
+     {
       name: "id",
       label: "Action",
       options: {

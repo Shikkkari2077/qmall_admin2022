@@ -330,8 +330,8 @@ class SectionList extends React.Component {
           filter: true,
           sort: true,
           customBodyRender:(Shop)=>{
-            return( Shop!==undefined?<div>
-              { Shop.name_en}<br/>
+            return( Shop!==undefined && Shop!==null?<div>
+              { Shop.name}<br/>
               {Shop.name_ar}
             </div>
               :null

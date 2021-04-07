@@ -735,9 +735,11 @@ class OrderView extends React.Component {
                       <th>Total Amount :</th>
                       <td>{parseFloat(this.state.order_details.totalAmount).toFixed(3)} {this.state.order_details.CurrencyId}</td>
                     </tr>
-                    <tr>
+                    <tr>{localStorage.getItem('q8_mall_ad_role')=='admin'?<>
                       <th>Delivery Charges :</th>
                       <td>{parseFloat(this.state.order_details.totalDeliveryCharge).toFixed(3)} {this.state.order_details.CurrencyId}</td>
+                      </>
+                    :null}
                     </tr>
 
                     <tr className="text-info">

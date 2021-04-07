@@ -34,13 +34,13 @@ class Header extends React.Component {
       //console.log(json.data)
       if (json.status === true) {
     ////console.log(json.data[0])
-    if(json.data[0].Medium !== null){
+    if(json.data !== null && json.data !==undefined && json.data[0]!==undefined && json.data[0]!==null ){
     var image=json.data[0].Medium.url
     localStorage.setItem("companylogo",image)
 
      that.setState({image});
        }
-    if(json.data[0].name !== null && json.data[0].name !== undefined ){
+    if( json.data[0]!==undefined &&  json.data[0]!==null && json.data[0].name !== null && json.data[0].name !== undefined ){
     var name=json.data[0].name
     that.setState({name});
     }

@@ -160,9 +160,9 @@ class ProductPriceList extends React.Component {
                       <h4>Product Stock Wise Price List</h4>
                     </div>
                   </div>
-                  {/* <Link to={"/products/price/" + this.props.match.params.stock_id + "/" + this.props.match.params.product_id + "/add"}
+                  <Link to={"/products/price/" + this.props.match.params.stock_id + "/" + this.props.match.params.product_id + "/add"}
                    className="btn btn-sm btn-inverse waves-effect waves-light f-right d-inline-block md-trigger" data-modal="modal-13"> 
-                  <i className="icofont icofont-plus m-r-5"></i> Add Product Price </Link> */}
+                  <i className="icofont icofont-plus m-r-5"></i> Add Product Price </Link>
                   <div>
                   </div>
                 </div>
