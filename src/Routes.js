@@ -88,6 +88,7 @@ import BarcodePrint4 from './Components/BarcodeMaster/Css/BarcodePrint4.js';
 import SectionList from './Components/SectionMaster/SectionList.js';
 import SectionAddTab from './Components/SectionMaster/SectionAddTab.js';
 import DeliveryTimeList from './Components/DeliveryTimeMaster/DeliveryTimeList.js';
+import StockChangePage from './Components/ProductWiseStockMaster/StockChangePage.js';
 class Routes extends Component {
 
   render() {
@@ -170,6 +171,8 @@ class Routes extends Component {
               <Route exact path={"/coupons/add/:coupon_id?"} component={CouponAddTab} />
 
               <Route exact path={"/orders"} component={OrderList} />
+              <Route exact path={"/stockchange"} component={StockChangePage} />
+
               <Route exact path={"/orders/shop"} component={OrderListShop}/>
               <Route exact path={"/orders/view/:order_id"} component={OrderViewTab} />
               <Route exact path={"/orders/view-print/:order_id"} component={OrderViewPrint} />
