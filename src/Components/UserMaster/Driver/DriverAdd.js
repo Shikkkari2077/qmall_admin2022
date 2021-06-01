@@ -8,6 +8,9 @@ class DriverAdd extends React.Component {
   state = {
     status: true,
     Driver_list: [],
+    password:" ",
+    image_url:"",
+
   };
 
   componentWillMount() {
@@ -38,41 +41,50 @@ class DriverAdd extends React.Component {
       },
       body: data
     }).then(function (response) {
+      // console.log(response.json())
       return response.json();
     }).then(function (json) {
+      console.log(json)
       if (json.status === true) {
         for (var i = 0; i < json.data.length; i++) {
           if (json.data[i].id === that.props.driver_id) {
+            var image_url=""
+            if(json.data[i].Medium !==null && json.data[i].Medium !==undefined)
+            {
+              image_url= json.data[i].Medium.url
+            }
             that.setState({
               sellers_data: json.data[i],
               firstName: json.data[i].firstName,
               lastName: json.data[i].lastName,
               userName: json.data[i].userName,
               email: json.data[i].email,
-              mobileNumber: json.data[i].mobileNumber
+              mobileNumber: json.data[i].mobileNumber,
+              image_url
             });
           }
         }
       }
     })
   }
-  adddealer = (media_id) => {
+  addDriver = (media_id) => {
     var that = this;
     var data = new URLSearchParams();
     this.setState({ isSaving: true });
     data.append("email", that.state.email);
-    data.append("name", that.state.userName);
+    data.append("userName", that.state.userName);
     data.append("firstName", that.state.firstName);
     data.append("lastName", that.state.lastName);
     if (media_id !== undefined && media_id !== null) {
-      data.append("image", media_id);
+      data.append("MediaId", media_id);
     } else {
-      data.append("image", "");
+      data.append("MediaId", "");
     }
     data.append("LanguageId", that.props.language_id);
     data.append("mobileNumber", that.state.mobileNumber);
     data.append("password", that.state.password);
-    fetch(Constant.getAPI() + "/driver/update", {
+    
+    fetch(Constant.getAPI() + "/driver/register", {
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -109,13 +121,14 @@ class DriverAdd extends React.Component {
     document.head.append(script);
   }
   handleImageUpload = (event) => {
+    ////console.log(event.target)
     document.getElementById('id_image_section_lable').innerHTML = "";
     let element = $("#driver_Image").get(0);
     $("#id_image_section").empty();
     this.setState({ accepted: element });
     var proof_img = [];
     let obj = {};
-    //console.log(element.files);
+    //////console.log(element.files);
     this.setState({ driver_Image: element.files });
     for (var i = 0; i < element.files.length; i++) {
       var file1 = element.files[i];
@@ -124,28 +137,34 @@ class DriverAdd extends React.Component {
       var filePath = URL.createObjectURL(file1);
       img.src = filePath;
       $("#id_image_section_lable").append(img);
+      ////console.log($("#id_image_section_lable"))
     }
   }
   uploadMedia = () => {
     var that = this;
     var form = $('#driverImage')[0];
+    ////console.log($('#driverImage')[0])
     var data = new FormData(form);
-    data.append('upload_for', 'driver');
-    fetch(Constant.getAPI() + "/mediaUpload", {
-      method: "post",
-      body: data
+    //data.append('media',form);
+    fetch(Constant.getAPI() + "/media/add", {
+      method:"post",
+      body:data
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      if (json.error === "SFD") {
-        if (that.props.shop_id !== undefined) {
+      ////console.log(json.status)
+      if (json.status === true ) {
+        ////console.log("here too")
+        if (that.props.driver_id !== undefined) {
+      
           that.editDriver(json.data[0].id);
         } else {
+          ////console.log("here i am")
           that.addDriver(json.data[0].id);
         }
       } else {
         that.setState({ category_data: [] });
-        //console.log(json.error);
+        ////console.log(json.error);
       }
     });
   }
@@ -169,9 +188,9 @@ class DriverAdd extends React.Component {
     data.append("firstName", that.state.firstName);
     data.append("lastName", that.state.lastName);
     if (media_id !== undefined && media_id !== null) {
-      data.append("image", media_id);
+      data.append("MediaId", media_id);
     } else {
-      data.append("image", "");
+      data.append("MediaId", "");
     }
     data.append("LanguageId", that.props.language_id);
     data.append("DriverId", that.props.driver_id);
@@ -314,7 +333,8 @@ class DriverAdd extends React.Component {
 
                     <div className="form-group">
 
-                      <input accept="image/*" onChange={this.handleImageUpload} id="driver_Image" type="file" className="form-control" autoComplete="off" name="media[]"
+                      <input accept="image/*" onChange={this.handleImageUpload} id="driver_Image" 
+                      type="file" className="form-control" autoComplete="off" name="media"
                         data-toggle="tooltip" title="Click To Upload Photo"
                       />
                       <div id="id_image_section_lable" className="pt-2">
@@ -341,13 +361,13 @@ class DriverAdd extends React.Component {
 
           </div>
           <div className="row float-right p-3">
-            {
+            {/* {
               this.state.isSaving
                 ?
                 <button className="btn btn-grd-disabled mr-2" disabled>Saving...!</button>
-                :
+                : */}
                 <button onClick={this.onSaveData} className="btn btn-grd-disabled mr-2"><i className="icofont icofont-save"></i> Save</button>
-            }
+           {/* // } */}
             <Link to={"/driver"} className="btn btn-outline-dark"> Cancel </Link>
           </div>
         </div>

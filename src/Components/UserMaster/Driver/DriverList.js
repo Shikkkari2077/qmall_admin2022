@@ -17,22 +17,38 @@ class DriverList extends React.Component {
 
   }
   handleStatusChange = (sid) => {
-    var isChecked = $('#cattogBtn_' + sid);
-    isChecked.prop("checked", !isChecked.prop("checked"));
-    //console.log(isChecked.prop('checked'), !isChecked.prop("checked"));
-    if (!isChecked.prop("checked") === true) {
-      var status = 'active'
-    } else {
-      var status = 'inactive'
-    }
-    let newArray = this.state.Driver_list;
-    var a = newArray.find((element) => {
-      return element.id === sid
+    var that = this;
+    var data = new URLSearchParams();
+    this.setState({ isSaving: true });
+ 
+    data.append("DriverId", sid);
+   
+    fetch(Constant.getAPI() + "/driver/update", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": localStorage.getItem('q8_mall_auth')
+      },
+      body: data
+    }).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      if (json.status === true) {
+        Swal.fire("Updated !", "Driver has been Updated", "success");
+        window.location.href = "#/driver";
+        that.setState({ isSaving: false });
+      } else {
+        that.setState({ isSaving: false });
+        Swal.fire({
+          title: "Something went wrong. Try again after some Time.!",
+          icon: 'error',
+          text: "",
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Ok"
+        })
+      }
     })
-    a.status = status;
-    //console.log(newArray)
-    this.setState({ Driver_list: newArray })
-    Swal.fire("Update Status!", "Status has been updated.", "success");
   }
 
   deletedealer = (id) => {
@@ -65,6 +81,7 @@ class DriverList extends React.Component {
       return response.json();
     }).then(function (json) {
       if (json.status === true) {
+        console.log(json.data)
         that.setState({ drivers_data: json.data });
       } else {
         that.setState({ drivers_data: [] });
@@ -106,7 +123,7 @@ class DriverList extends React.Component {
                             <th>Email</th>
                             {/* <th>Civl ID</th> */}
                             {/* <th>Total Post</th> */}
-                            <th>Status </th>
+                            {/* <th>Status </th> */}
                             <th>Action </th>
                           </tr>
                         </thead>
@@ -119,21 +136,21 @@ class DriverList extends React.Component {
                                 <tr key={i}>
                                   <td>{i + 1}</td>
                                   <td>
-                                    <img src={driver.DriversImage} className="img-fluid img-40" alt="tbl" />
+                                    <img src={driver.Medium !== null? driver.Medium.url :null} className="img-fluid img-40" alt="tbl" />
                                   </td>
                                   <td>{driver.firstName} {driver.lastName}</td>
                                   <td>{driver.userName}</td>
                                   <td>{driver.mobileNumber}</td>
                                   <td>{driver.email}</td>
                                   {/* <td>{driver.post}</td> */}
-                                  <td>
+                                  {/* <td>
                                     <Toggle
                                       id={"cattogBtn_" + driver.id}
                                       checked={driver.status === 'inactive' ? false : true}
                                       value={driver.status}
                                       onChange={this.handleStatusChange.bind(this, driver.id)}
                                     />
-                                  </td>
+                                  </td> */}
                                   <td className="action-icon ">
                                     <Link to={"/driver/add/" + driver.id} className="m-r-15 text-muted" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
                                       <i className="f-20 icofont icofont-ui-edit text-custom"></i>
@@ -157,7 +174,7 @@ class DriverList extends React.Component {
                             <th>Email</th>
                             {/* <th>Civl ID</th> */}
                             {/* <th>Total Post</th> */}
-                            <th>Status </th>
+                            {/* <th>Status </th> */}
                             <th>Action </th>
                           </tr>
                         </tfoot>
