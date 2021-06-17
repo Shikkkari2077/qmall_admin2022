@@ -119,9 +119,11 @@ class ProductList extends React.Component {
       // //console.log(localStorage.getItem('q8_mall_auth'))
 
       data.append("ShopId", localStorage.getItem('q8_mall_ad_uid'));
+      // data.append("startRange",1);
+
     }
     //console.log(localStorage.getItem('q8_mall_auth'))
-    fetch(Constant.getAPI() + "/product/get", {
+    fetch(Constant.getAPI() + "/product/getByAdmin", {
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -129,31 +131,34 @@ class ProductList extends React.Component {
       },
       body: data
     }).then(function (response) {
+      console.log(response)
       return response.json();
+
     }).then(function (json) {
-       console.log(json.data)
+       console.log(json)
 
-      if (json.status === true) {
+      if (json.success == true) {
         var products = []
-        for (var i = 0; i < json.data.length; i++) {
-          var obj = json.data[i];
-          if (json.data[i].Shop !== null) {
-            obj.Shop_name = json.data[i].Shop.name_en
-          } else {
-            obj.Shop_name = '-'
-          }
-          var stock = 0;
-          if (json.data[i].Stocks !== null) {
-            for (var j = 0; j < json.data[i].Stocks.length; j++) {
-              stock = parseInt(stock) + parseInt(json.data[i].Stocks[j].count)
-            }
-          }
-
-          obj.stock = stock
-          products.push(obj);
-        }
+        // for (var i = 0; i < json.data.length; i++) {
+        //   var obj = json.data[i];
+        //   if (json.data[i].Shop !== null) {
+        //     obj.Shop_name = json.data[i].Shop.name_en
+        //   } else {
+        //     obj.Shop_name = '-'
+        //   }
+        //   var stock = 0;
+        //   // if (json.data[i].Stocks !== null) {
+        //   //   for (var j = 0; j < json.data[i].Stocks.length; j++) {
+        //   //     stock = parseInt(stock) + parseInt(json.data[i].Stocks[j].count)
+        //   //   }
+        //   // }
+         
+        //   obj.stock = stock
+        //   products.push(obj);
+        //   console.log(products)
+        // }
         that.setState({ product_list: products, isSaving: false });
-        // that.setState({ product_list: json.data, isSaving: false });
+        that.setState({ product_list: json.data, isSaving: false });
       } else {
         that.setState({ product_list: [], isSaving: false });
         Swal.fire({
@@ -460,35 +465,36 @@ class ProductList extends React.Component {
     //     }
     //   }
     // },
-    {
-      name: "Attributes",
-      label: "Product Attributes",
-      options: {
-        filter: true,
-        sort: false,
-        customBodyRender: (Attributes, tableMeta) => {
-          return <div>
-            {/* {console.log(Attributes)} */}
-            {      
+    // {
+    //   name: "Attributes",
+    //   label: "Product Attributes",
+    //   options: {
+    //     filter: true,
+    //     sort: false,
+    //     customBodyRender: (Attributes, tableMeta) => {
+    //       return <div>
+    //         {/* {console.log(Attributes)} */}
+    //         {      
 
-              Attributes !== null && Attributes !== [] && Attributes.length > 0
-                ?
-                <ol>
-                  { 
-                    Attributes.map(product_attr =>
-                      product_attr.name_en !== "Default Attribute"?
-                      <li key={product_attr.id}>{product_attr.name_en}</li>
-                      :null
-                    )
-                  }
-                </ol>
-                :
-                "-"
-            }
-          </div >
-        }
-      }
-    }, {
+    //           Attributes !== null && Attributes !== [] && Attributes.length > 0
+    //             ?
+    //             <ol>
+    //               { 
+    //                 Attributes.map(product_attr =>
+    //                   product_attr.name_en !== "Default Attribute"?
+    //                   <li key={product_attr.id}>{product_attr.name_en}</li>
+    //                   :null
+    //                 )
+    //               }
+    //             </ol>
+    //             :
+    //             "-"
+    //         }
+    //       </div >
+    //     }
+    //   }
+    // },
+     {
       name: "status",
       label: "Status",
       options: {
@@ -558,8 +564,8 @@ class ProductList extends React.Component {
       name: "productMedia",
       label: "Image",
       options: {
-        filter: true,
-        sort: true,
+        filter: false,
+        sort: false,
         customBodyRender: (productMedia, tableMeta) => {
           return (<img src={productMedia !== undefined && productMedia !== null && productMedia !== {} ? productMedia.url : "./assets/images/icon.png"} className="img-fluid img-40" alt="tbl" />)
         }
@@ -568,14 +574,14 @@ class ProductList extends React.Component {
       name: "unique_identifier",
       label: "Product ID",
       options: {
-        filter: true,
-        sort: true
+        filter: false,
+        sort: false
       }
     },  {
       name: "name_en",
       label: "Product Name",
       options: {
-        filter: true,
+        filter: false,
         sort: true
       }
     },
@@ -583,7 +589,7 @@ class ProductList extends React.Component {
       name: "name_ar",
       label: "Product Name:Arabic",
       options: {
-        filter: true,
+        filter: false,
         sort: true
       }
     },{
@@ -594,22 +600,20 @@ class ProductList extends React.Component {
         sort: true
       }
     }, {
-      name: "Shop_name",
+      name: "Shop",
       label: "Shop Name",
       options: {
-        filter: true,
-        sort: true,
-        // customBodyRender: (Shop_name, tableMeta) => {
-        //   return <div>
-        //     {
-        //       Shop.name !== null
-        //         ?
-        //         Shop.name
-        //         :
-        //         "-"
-        //     }
-        //   </div >
-        // }
+        filter: false,
+        sort: false,
+        customBodyRender: (Shop, tableMeta) => {
+          return <div>
+            {
+              Shop !== null
+                ? Shop.name_en
+                :"-"
+            }
+          </div >
+        }
       }
     },
     
@@ -660,35 +664,36 @@ class ProductList extends React.Component {
     //     }
     //   }
     // },
-     {
-      name: "Attributes",
-      label: "Product Attributes",
-      options: {
-        filter: false,
-        sort: false,
-        customBodyRender: (Attributes, tableMeta) => {
-          return <div>
-            {
-              Attributes !== null && Attributes !== [] 
-              && Attributes.length > 0
-                ?
-                <ol>
-                  {
-                    Attributes.map(product_attr =>
-                      product_attr.name_en !== "Default Attribute"?
+    //  {
+    //   name: "Attributes",
+    //   label: "Product Attributes",
+    //   options: {
+    //     filter: false,
+    //     sort: false,
+    //     customBodyRender: (Attributes, tableMeta) => {
+    //       return <div>
+    //         {
+    //           Attributes !== null && Attributes !== [] 
+    //           && Attributes.length > 0
+    //             ?
+    //             <ol>
+    //               {
+    //                 Attributes.map(product_attr =>
+    //                   product_attr.name_en !== "Default Attribute"?
 
-                      <li key={product_attr.id}>{product_attr.name_en}</li>
-                      :null
-                    )
-                  }
-                </ol>
-                :
-                null
-            }
-          </div >
-        }
-      }
-    }, {
+    //                   <li key={product_attr.id}>{product_attr.name_en}</li>
+    //                   :null
+    //                 )
+    //               }
+    //             </ol>
+    //             :
+    //             null
+    //         }
+    //       </div >
+    //     }
+    //   }
+    // }, 
+    {
       name: "isActive",
       label: "Active",
       options: {
@@ -809,6 +814,7 @@ class ProductList extends React.Component {
       print: false,
       download: false,
       selectableRows: 'none',
+      // pagination:false,
       textLabels: {
         body: {
           noMatch: this.state.isSaving ?

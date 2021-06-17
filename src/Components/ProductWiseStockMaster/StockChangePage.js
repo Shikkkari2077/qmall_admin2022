@@ -60,7 +60,7 @@ class StockChangePage extends React.Component {
           obj.stock = stock
           products.push(obj);
         }
-        that.setState({ product_list: products, isSaving: false });
+        that.setState({ product_list: json.data, isSaving: false });
         // that.setState({ product_list: json.data, isSaving: false });
       } else {
         that.setState({ product_list: [], isSaving: false });

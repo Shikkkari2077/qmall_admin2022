@@ -10,7 +10,28 @@ class ProductWiseStockAdd extends React.Component {
   state = {
     status: true,
     description: "",
-    selected_attributes: []
+    selected_attributes: [],
+    combinationArray:[
+      {
+        stock:0,
+        price:0,
+        currency:"",
+        sku:"",
+        barNumber:"",
+        barCode:"",
+        variantId:"",
+        deliveryOptions:"",
+        showInListing:"false",
+        MediaId:"",
+      attributeArray:[
+                {  AttributeId:"",
+                   AttributeValueId:""
+                },
+              ],
+        mediaArray:[]
+       }
+     ]
+      
   };
   onHandleDescriptionChange = value => {
     this.setState({ description: value });
@@ -108,14 +129,14 @@ class ProductWiseStockAdd extends React.Component {
         }
       } else {
         that.setState({ product_stock_list: [], isSaving: false });
-        Swal.fire({
-          title: "Something went wrong. Try again after some Time.!",
-          icon: 'error',
-          text: "",
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Ok"
-        })
+        // Swal.fire({
+        //   title: "Something went wrong. Try again after some Time.!",
+        //   icon: 'error',
+        //   text: "",
+        //   confirmButtonColor: "#3085d6",
+        //   cancelButtonColor: "#d33",
+        //   confirmButtonText: "Ok"
+        // })
       }
     });
   }
@@ -166,14 +187,14 @@ class ProductWiseStockAdd extends React.Component {
         }
       } else {
         that.setState({ attribute_type_data: {} });
-        Swal.fire({
-          title: "Something went wrong. Try again after some Time.!",
-          icon: 'error',
-          text: "",
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Ok"
-        })
+        // Swal.fire({
+        //   title: "Something went wrong. Try again after some Time.!",
+        //   icon: 'error',
+        //   text: "",
+        //   confirmButtonColor: "#3085d6",
+        //   cancelButtonColor: "#d33",
+        //   confirmButtonText: "Ok"
+        // })
       }
     });
   }
@@ -244,14 +265,14 @@ class ProductWiseStockAdd extends React.Component {
         that.setState({ isSaving: false })
       } else {
         that.setState({ isSaving: false });
-        Swal.fire({
-          title: "Something went wrong. Try again after some Time.!",
-          icon: 'error',
-          text: "",
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Ok"
-        })
+        // Swal.fire({
+        //   title: "Something went wrong. Try again after some Time.!",
+        //   icon: 'error',
+        //   text: "",
+        //   confirmButtonColor: "#3085d6",
+        //   cancelButtonColor: "#d33",
+        //   confirmButtonText: "Ok"
+        // })
       }
     });
 
@@ -269,27 +290,12 @@ class ProductWiseStockAdd extends React.Component {
         media_data.push(media_id[media].id);
       }
     }
-    // var data2={
-    //   count:that.state.count,
-    //   ProductId:this.state.product_id,
-    //   barNumber:this.state.barNumber,
-    //   AttributeValueIds:JSON.stringify(that.state.selected_attributes)
-    // }
+   
     var data
     var bar
-    //  = new URLSearchParams();
-    this.setState({ isSaving: true });
-    // data.append("count", that.state.count);
-    // data.append("MediaIds",'');
-    // data.append("deliveryOptions",'');
-    //    data.append("ProductId", that.props.product_id);
-    //   if(this.state.barNumber !== undefined){
-    //     data.append("barNumber", that.state.barNumber)
-    //      bar =this.state.barNumber
-    //     }
   
-    
-    // data.append("AttributeValueIds", JSON.stringify(that.state.selected_attributes));
+    this.setState({ isSaving: true });
+  
     fetch(Constant.getAPI() + "/product/stock/add", {
       method: "post",
       headers: {
@@ -478,10 +484,45 @@ class ProductWiseStockAdd extends React.Component {
     });
 
   };
+  AddCombination(){
+    var combinationArray=this.state.combinationArray
+    combinationArray[combinationArray.length]=  {
+      stock:0,
+      price:0,
+      currency:"",
+      sku:"",
+      barNumber:"",
+      barCode:"",
+      variantId:"",
+      deliveryOptions:"",
+      showInListing:"false",
+      MediaId:"",
+    attributeArray:[
+              {  AttributeId:"",
+                 AttributeValueId:""
+              },
+            ],
+      mediaArray:[]
+     }
+  }
   render() {
+    const style={height:"40px",opacity:"0.8",color:"black",fontWeight:"bold",borderRadius:"10px"}
+
     return (
       <div className="">
-        <div className="card-body">
+        <div className="row justify-right">
+        <button className="col-2 btn btn-primary form-control" style={style} 
+            onClick={this.AddCombination.bind(this,"productDetails")} 
+             >
+           <i className="f-16 icofont icofont-plus"></i> Add Combination
+          </button>
+          
+        </div>
+        {console.log(this.state.combinationArray)}
+        <div className="card-body" style={{margin:"20px"}}>
+          {this.state.combinationArray.map(combination=>{
+     return(
+         <div >
           <div className="row">
             <div className="col-md-6">
               <div className="form-group row">
@@ -661,7 +702,8 @@ class ProductWiseStockAdd extends React.Component {
             </div>
           </div>
 
-
+     </div>)
+      }) }
           <div className="card-footer">
             <div className="row float-right p-3">
               {

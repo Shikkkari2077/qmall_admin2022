@@ -9,11 +9,14 @@ import AddGalleryImagesIndex from "../GalleryMaster/AddGalleryImagesIndex";
 
 class ProductAdd extends React.Component {
   state = {
+    isSaving:false,
     status: true,
     description: "",
     description_ar:'',
+    activePage:"productDetails",
     priority: 1,
     refund_policy: "",
+    isDisabled:true,
     refund_policy_ar: "",
     media_id:"",
     selected_attributes: [],
@@ -390,6 +393,11 @@ class ProductAdd extends React.Component {
       }
     });
   }
+  onNext(){
+    this.setState({
+      activePage:"gallery"
+    })
+  }
   onSaveData = () => {
     var that = this;
     that.setState({ isSaving: true });
@@ -536,7 +544,7 @@ class ProductAdd extends React.Component {
     data.append("LanguageId", that.props.language_id);
     data.append("unique_identifier", that.state.Product_unique_id);
 
-    data.append("AttributeIds", JSON.stringify(that.state.selected_attributes));
+    //data.append("AttributeIds", JSON.stringify(that.state.selected_attributes));
     fetch(Constant.getAPI() + "/product/add", {
       method: "post",
       headers: {
@@ -557,8 +565,7 @@ class ProductAdd extends React.Component {
         that.setState({
           ProductId:product_id
         })
-        //window.location.href = `#/products/gallery/${product_id}`;
-       //that.saveGalleryMedia(that.state.media_id,product_id)
+     
        if(that.state.galleryupload == true ){
         that.uploadGalleryMedia()
 
@@ -616,10 +623,40 @@ class ProductAdd extends React.Component {
       this.setState({ selected_attributes: arr });
     }
   }
+  ActivePage(v){
+    console.log(v)
+   this.setState({
+     activePage:v
+   })
+  }
   render() {
+    const style={height:"40px",opacity:"0.8",color:"black",fontWeight:"bold",borderRadius:"10px"}
+    const style2={borderRadius:"18px",color:"black",fontSize:"15px",justifyContent:"center",background:"#f5c856",opacity:"0.8"}
     return (
-      <div className="">
-        <div className="card-body">
+     <div>
+       <div className="row p-2 mb-1 " style={style2}>
+        <b>Save Product Details & Gallery Before Adding Attributes!!</b>
+       </div>
+      <div className="row">
+        <div className="col-2 p-2" style={{background:"#e6e6e6"}} >
+          <button className="btn btn-primary form-control" style={style} 
+             onClick={this.ActivePage.bind(this,"productDetails")} >
+           Product Details
+          </button><br/><br/>
+          <button className="btn btn-primary form-control" style={style} 
+             onClick={this.ActivePage.bind(this,"gallery")} >
+           Gallery
+          </button><br/><br/>
+          <button className="btn btn-primary form-control" style={style} 
+              onClick={this.ActivePage.bind(this,"attributes")} disabled={this.state.isDisabled} >
+           Attributes
+          </button>
+         
+
+        </div>
+       
+       { this.state.activePage == "productDetails"?
+        <div className="col-9 card-body "style={{marginLeft:"15px"}} >
           <div className="row">
           <div className="col-md-6">
               <div className="form-group row">
@@ -755,7 +792,6 @@ class ProductAdd extends React.Component {
 
                     <div className="form-group">
 
-                      {/* <input onChange={this.handleChange} id="shop_Image" type="text" className="form-control" name="image" /> */}
                       <input accept="image/*" onChange={this.handleImageUpload.bind(this)}
                        id="product_banner_image" type="file" className="form-control" autoComplete="off" name="media"
                         data-toggle="tooltip" title="Click To Upload Banner Image"
@@ -845,7 +881,7 @@ class ProductAdd extends React.Component {
             
              
           
-          <div className="row">
+          {/* <div className="row">
             <div className="col-md-12">
               <div className="form-group row">
                 <label className="col-sm-2 col-form-label">Attributes</label>
@@ -889,8 +925,8 @@ class ProductAdd extends React.Component {
                 </div>
               </div>
             </div>
-          </div>
-          {this.props.case === "add" ?<div>
+          </div> */}
+          {/* {this.props.case === "add" ?<div>
           <div className="row">
             <div className="col-md-6">
               <div className="row">
@@ -926,25 +962,99 @@ class ProductAdd extends React.Component {
               </div>
             </div>
           </div>
-          </div>:"" }
+          </div>:"" } */}
     
           
           <div className="card-footer">
+            {this.props.product_id !==undefined  ?  
             <div className="row float-right p-3">
-              {
-                this.state.isSaving
-                  ?
-                  <button className="btn btn-grd-disabled mr-2" disabled>Saving...!</button>
-                  :
-                  <button onClick={this.onSaveData} className="btn btn-grd-disabled mr-2"><i className="icofont icofont-save"></i> Save</button>
-              }
+
+              <button onClick={this.onSaveData} className="btn btn-grd-disabled mr-2">
+                  <i className="icofont icofont-save"></i> Save
+              </button>
               <Link to={"/products"} className="btn btn-outline-dark">
                 Cancel
              </Link>
             </div>
+             :
+             <div className="row float-right p-3">
+
+             <button onClick={this.onNext.bind(this)} className="btn btn-grd-disabled mr-2">
+                Next
+             </button>
+            
+           </div>
+             
+             }
+
           </div>
+
+
         </div >
-      </div >
+        :null}
+        {
+          this.state.activePage == "gallery"?
+          <div className="col-9 card-body "style={{marginLeft:"15px"}} >
+          
+           
+          
+      {this.props.case === "add" ?
+        <div>
+          <div className="row">
+            <div className="col-md-6">
+              <div className="row">
+                <div className="col-sm-3">
+                  Media Gallery <br/><small>(size : 220 X 220)</small>
+              </div>
+                <div className="col-sm-9">
+                  <form id="productMedia" name="productMedia" encType="multipart/form-data" className="text-capitalize">
+
+                    <div className="form-group">
+
+                      <input accept="image/*" onChange={this.handleGalleryImageUpload} id="gallery_media" type="file" className="form-control" autoComplete="off" name="media" multiple
+                        data-toggle="tooltip" title="Click To Upload Media Image"
+                      />
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 mb-2">
+              <div id="gallery_image_label" className="pt-2">
+                {
+                  this.state.image
+                    ?
+                    this.state.image !== null || this.state.image !== undefined || this.state.image !== {}
+                      ?
+                      <div className="col">
+                      <img src={this.state.image} alt="" className="img-100" onError={e => { e.target.src = "" }} />
+                      &nbsp;
+                      </div>
+                      :
+                      ''
+                    :
+                    ''
+                 }
+                  </div>
+                </div>
+              </div>
+              <div className="row float-right p-3">
+ 
+                     <button onClick={this.onSaveData} className="btn btn-grd-disabled mr-2">
+                        <i className="icofont icofont-save"></i> Save
+                     </button>
+                     <Link to={"/products"} className="btn btn-outline-dark">
+                         Cancel
+                     </Link>
+              </div>
+
+            </div>:"" }
+
+        
+             </div>
+          :null
+        }
+      </div ></div>
     );
   }
 }
