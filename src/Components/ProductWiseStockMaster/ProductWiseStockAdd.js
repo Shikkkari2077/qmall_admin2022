@@ -404,7 +404,7 @@ class ProductWiseStockAdd extends React.Component {
     }).then(function (json) {
       console.log(json)
       if (json.success == true) {
-        window.location.href="#/products"
+        window.location.reload()
         //that.addProductPrice(json.data.id,json.data.ProductId)
         that.setState({ isSaving: false })
       } else {
