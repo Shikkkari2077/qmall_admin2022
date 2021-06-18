@@ -402,7 +402,8 @@ class ProductAdd extends React.Component {
     var that = this;
     that.setState({ isSaving: true });
     if (that.state.accepted) {
-      {that.uploadMedia()}
+      {
+        that.uploadMedia()}
 
     
     } else {
@@ -410,7 +411,7 @@ class ProductAdd extends React.Component {
         that.updateCategoryData(that.state.MediaId);
       } else {
         that.addCategory(that.state.MediaId);
-        // that.saveGalleryMedia(that.state.media_id);
+       // that.saveGalleryMedia(that.state.media_id);
 
       }
     }
@@ -449,7 +450,7 @@ class ProductAdd extends React.Component {
         if (that.props.product_id !== undefined) {
           that.updateCategoryData(json.data[0].id);
         } else {
-          that.addCategory(json.data[0].id);
+          that.addCategory([]);
         }
       } else {
         // that.setState({ category_data: [] });
@@ -536,7 +537,7 @@ class ProductAdd extends React.Component {
     data.append("refundPolicy_en", that.state.refund_policy);
     data.append("refundPolicy_ar", that.state.refund_policy_ar);
     if(media_id !== undefined)
-    {data.append("MediaId", media_id);}
+    {data.append("MediaId",[]);}
     else
     {data.append("MediaId",[])}
     data.append("SectionId", that.state.SectionId);

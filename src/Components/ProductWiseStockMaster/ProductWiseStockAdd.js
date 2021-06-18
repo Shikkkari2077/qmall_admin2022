@@ -11,33 +11,48 @@ class ProductWiseStockAdd extends React.Component {
     status: true,
     description: "",
     selected_attributes: [],
+    attribute_list:[],
+    attributeValue_list:[],
     combinationArray:[
       {
-        stock:0,
-        price:0,
-        currency:"",
-        sku:"",
-        barNumber:"",
-        barCode:"",
-        variantId:"",
-        deliveryOptions:"",
-        showInListing:"false",
-        MediaId:"",
-      attributeArray:[
-                {  AttributeId:"",
-                   AttributeValueId:""
+        "stock":0,
+        "price":0,
+        "currency":"KWD",
+        "sku":"",
+        "barNumber":"",
+        "barCode":"",
+        "variantId":"",
+        "deliveryOptions":"",
+        "showInListing":"false",
+        "MediaId":"",
+        "attributeArray":[
+                {  "AttributeId":"",
+                   "AttributeValueId":""
                 },
               ],
-        mediaArray:[]
+        "mediaArray":["00c9e804-195c-4401-b410-fe87847fa023"]
        }
+     ],
+     nameArray:[
+       {
+        attributeArray:[
+          {
+            name:""
+          }
+        ]
+
+       }
+        
+
      ]
-      
+
+     
   };
   onHandleDescriptionChange = value => {
     this.setState({ description: value });
   };
   componentDidUpdate(prevProps, prevState) {
-    console.log(prevProps)
+    //console.log(prevProps)
     if (prevProps.product_id !== this.props.product_id) { 
       this.setState({ product_id: this.props.product_id });
       this.getProductDetails();
@@ -57,9 +72,40 @@ class ProductWiseStockAdd extends React.Component {
       }
     }
   }
-  handleChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
+  handleChange = (key,event) => {
+
+    console.log(key)
+    var combinationArray=this.state.combinationArray
+    
+    combinationArray[key][event.target.name] = event.target.value
+    console.log(combinationArray)
+    this.setState({ combinationArray });
   };
+  handleChangeAtt=(index,key,event)=>{
+    console.log(key,index,event.target.name,event.target.value)
+    this.getAttributesValue(event.target.value)
+    var combinationArray=this.state.combinationArray
+    combinationArray[key].attributeArray[index][event.target.name]=event.target.value
+    this.setState({
+      combinationArray
+    })
+
+
+  }
+ 
+  handleChangeAttVal=(index,key,event)=>{
+    var combinationArray=this.state.combinationArray
+    combinationArray[key].attributeArray[index][event.target.name]=event.target.value
+    // var nameArray=this.state.nameArray
+    // nameArray[key].attributeArray[index].name= event.target.name
+    this.setState({
+      combinationArray
+    })
+
+
+  }
+
+
   handleImageUpload = (event) => {
     document.getElementById('banner_image_label').innerHTML = "";
     let element = $("#product_stock_media").get(0);
@@ -156,7 +202,7 @@ class ProductWiseStockAdd extends React.Component {
       return response.json();
     }).then(function (json) {
       console.log(json.data)
-      if (json.status === true && json.data[0].productMedia!== undefined) {
+      if (json.status === true && json.data !==undefined &&json.data[0].productMedia!== undefined) {
         var attribute_list = []
         // if (json.data[0].Attributes !== null && json.data[0].Attributes !== [] && json.data[0].Attributes.length > 0) {
         //   for (var i = 0; i < json.data[0].Attributes.length; i++) {
@@ -196,6 +242,60 @@ class ProductWiseStockAdd extends React.Component {
         //   confirmButtonText: "Ok"
         // })
       }
+    });
+  }
+  componentDidMount(){
+    this.getAttributes()
+  }
+
+  getAttributes = () => {
+    var that = this;
+    var data = new URLSearchParams();
+    // data.append("ProductId", this.props.product_id);
+    //console.logog(this.props.product_id)
+    fetch(Constant.getAPI() + "/attribute/get", {
+      method: "post",
+      headers: {
+        // "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": localStorage.getItem('q8_mall_auth')
+      },
+      body: data
+    }).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      console.log(json)
+      if(json.status == true){
+        that.setState({
+          attribute_list:json.data
+        })
+      }
+      
+   
+    });
+  }
+  getAttributesValue = (id) => {
+    var that = this;
+    var data = new URLSearchParams();
+    data.append("AttributeId", id);
+    //console.logog(this.props.product_id)
+    fetch(Constant.getAPI() + "/attribute/value/get", {
+      method: "post",
+      headers: {
+        // "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": localStorage.getItem('q8_mall_auth')
+      },
+      body: data
+    }).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      console.log(json)
+      if(json.status == true){
+        that.setState({
+          attributeValue_list:json.data
+        })
+      }
+      
+   
     });
   }
   onSaveData = () => {
@@ -282,40 +382,30 @@ class ProductWiseStockAdd extends React.Component {
   //   this.loadScript(process.env.PUBLIC_URL + "/assets/pages/filer/jquery.fileuploads.init.js");
   // }
   addProductWiseStockData = (media_id) => {
-    var that = this;
-    //console.logog(media_id)
-    var media_data = [];
-    if (media_id !== undefined && media_id !== null && media_id !== [] && media_id.length > 0) {
-      for (var media = 0; media < media_id.length; media++) {
-        media_data.push(media_id[media].id);
-      }
-    }
-   
-    var data
-    var bar
+ 
+    var that = this;  
   
     this.setState({ isSaving: true });
-  
-    fetch(Constant.getAPI() + "/product/stock/add", {
+    var data={
+      productId:that.props.product_id,
+      combinationArray:that.state.combinationArray
+      
+    }
+    fetch(Constant.getAPI() + "/product/combination/add", {
       method: "post",
       headers: {
         "Content-Type": "application/json",
         "Authorization": localStorage.getItem('q8_mall_auth')
       },
-      body:JSON.stringify({
-        count:this.state.count,
-        MediaIds:'',
-        deliveryOptions:"",
-        ProductId:that.props.product_id,
-        barNumber:bar,
-        AttributeValueIds:that.state.selected_attributes
-      }),
+      body:JSON.stringify(data)
+      
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      if (json.status === true) {
-     
-        that.addProductPrice(json.data.id,json.data.ProductId)
+      console.log(json)
+      if (json.success == true) {
+        window.location.href="#/products"
+        //that.addProductPrice(json.data.id,json.data.ProductId)
         that.setState({ isSaving: false })
       } else {
         that.setState({ isSaving: false });
@@ -487,23 +577,38 @@ class ProductWiseStockAdd extends React.Component {
   AddCombination(){
     var combinationArray=this.state.combinationArray
     combinationArray[combinationArray.length]=  {
-      stock:0,
-      price:0,
-      currency:"",
-      sku:"",
-      barNumber:"",
-      barCode:"",
-      variantId:"",
-      deliveryOptions:"",
-      showInListing:"false",
-      MediaId:"",
-    attributeArray:[
-              {  AttributeId:"",
-                 AttributeValueId:""
+      'stock':0,
+      'price':0,
+      'currency':"",
+      'sku':"",
+      'barNumber':"",
+      'barCode':"",
+      'variantId':"",
+      'deliveryOptions':"",
+      'showInListing':"false",
+      'MediaId':"",
+      'attributeArray':
+            [
+              {  'AttributeId':"",
+                 'AttributeValueId':""
               },
             ],
-      mediaArray:[]
+      'mediaArray':[]
      }
+     this.setState({
+       combinationArray
+     })
+  }
+  AddAttribute(key){
+    var combinationArray=this.state.combinationArray
+    var length =combinationArray[key].attributeArray.length
+    combinationArray[key].attributeArray[length]={
+        'AttributeId':"",
+        'AttributeValueId':""
+    }
+    this.setState({
+      combinationArray
+    })
   }
   render() {
     const style={height:"40px",opacity:"0.8",color:"black",fontWeight:"bold",borderRadius:"10px"}
@@ -514,15 +619,16 @@ class ProductWiseStockAdd extends React.Component {
         <button className="col-2 btn btn-primary form-control" style={style} 
             onClick={this.AddCombination.bind(this,"productDetails")} 
              >
-           <i className="f-16 icofont icofont-plus"></i> Add Combination
+           <i className="f-16 icofont icofont-plus"></i> Add Variant
           </button>
           
         </div>
-        {console.log(this.state.combinationArray)}
+        {/* {console.log(this.state.combinationArray[0].stock)} */}
         <div className="card-body" style={{margin:"20px"}}>
-          {this.state.combinationArray.map(combination=>{
+          {this.state.combinationArray.map((combination,key)=>{
      return(
-         <div >
+         <div style={{borderBottom:"4px groove lightgrey",marginBottom:"10px"}}>
+           <h5>Variant No. {key+1}</h5> <br/>
           <div className="row">
             <div className="col-md-6">
               <div className="form-group row">
@@ -531,28 +637,77 @@ class ProductWiseStockAdd extends React.Component {
                   <input
                     type="text"
                     className="form-control"
-                    name="count"
-                    id="count"
+                    name='stock'
                     placeholder="Stock"
-                    onChange={this.handleChange}
-                    value={this.state.count}
+                    onChange={this.handleChange.bind(this,key)}
+                    value={combination.stock}
                   />
                 </div>
               </div>
             </div>
             <div className="col-md-6">
               <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Barcode</label>
+                <label className="col-sm-3 col-form-label">barCode</label>
                 <div className="col-sm-9">
                   <input
                     type="text"
                     className="form-control"
-                    name="barNumber"
-                    id="barNumber"
+                    name="barCode"
+                    
                     placeholder="Enter Barcode"
-                    onChange={this.handleChange}
-                    value={this.state.barNumber}
+                    onChange={this.handleChange.bind(this,key)}
+                    value={combination.barCode}
                   />
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="form-group row">
+                <label className="col-sm-3 col-form-label">SKU</label>
+                <div className="col-sm-9">
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="sku"
+                    
+                    placeholder="Enter SKU"
+                    onChange={this.handleChange.bind(this,key)}
+                    value={combination.sku}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="form-group row">
+                <label className="col-sm-3 col-form-label">Variant ID</label>
+                <div className="col-sm-9">
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="variantId"
+                    
+                    placeholder="Enter Variant ID"
+                    onChange={this.handleChange.bind(this,key)}
+                    value={combination.variantId}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="form-group row">
+                <label className="col-sm-3 col-form-label">Listing Product</label>
+                <div className="col-sm-9">
+                 <select
+                 className="form-control"
+                 value={combination.showInListing}
+                 onChange={this.handleChange.bind(this,key)}
+
+                  name="showInListing">
+                    <option value=""> Select </option>
+                    <option value="true">Active</option>
+                    <option value="false">In-Active</option>
+
+                 </select>
                 </div>
               </div>
             </div>
@@ -572,18 +727,40 @@ class ProductWiseStockAdd extends React.Component {
                 </div>
               </div>
             </div> */}
+               <div className="col-md-6">
+              <div className="form-group row">
+                <label className="col-sm-3 col-form-label">Price</label>
+                <div className="col-sm-9">
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="price"
+                    placeholder="Price"
+                    onChange={this.handleChange.bind(this,key)}
+                    value={combination.price}
+                  />
+                </div>
+              </div>
+            </div>
 
-            {/* <div className="col-md-6">
+            <div className="col-md-6">
               <div className="row">
                 <div className="col-sm-3">
-                  Product Media
+                  Variant Gallery Media
                 </div>
                 <div className="col-sm-9">
                   <form id="productStockMedia" name="productStockMedia" encType="multipart/form-data" className="text-capitalize">
 
                     <div className="form-group">
-                      <input accept="image/*" onChange={this.handleImageUpload} id="product_stock_media" type="file" className="form-control" autoComplete="off" name="media" multiple
-                        data-toggle="tooltip" title="Click To Upload Stock Media"
+                      <input accept="image/*"
+                       onChange={this.handleImageUpload} 
+                       id="product_stock_media" 
+                       type="file" 
+                       className="form-control" 
+                       autoComplete="off" 
+                       name="media" 
+                       multiple
+                       data-toggle="tooltip" title="Click To Upload Stock Media"
                       />
                     </div>
                   </form>
@@ -604,68 +781,133 @@ class ProductWiseStockAdd extends React.Component {
                     ''
                 }
               </div>
-              </div> */}
-          </div>
-
+              </div>
+              
+         
+            </div>
 
           <div className="row">
             <div className="col-md-12">
               <div className="form-group row">
-                <label className="col-sm-2 col-form-label">Attributes</label>
-                <div className="col-sm-10">
-                  <div className="p-20 z-depth-right-1 waves-effect " data-toggle="tooltip" data-placement="top" title="" data-original-title="Service List">
-                    {/* <div className="row"> */}
-                    {
-                      this.state.attribute_list !== undefined && this.state.attribute_list !== null && this.state.attribute_list !== [] && this.state.attribute_list.length > 0
-                        ?
-                        this.state.attribute_list.map(attributes =>
-                          <div className="row" key={attributes.id}>
-                            <div className="col-sm-3">
-                              <label>{attributes.name}</label>
-                            </div>
-                            {attributes.AttributeValues.map(attribute_val =>
-                                // attribute_val.name !=="Default Attribute Value" ?
-                              <div className=" col-sm-3" key={attribute_val.id}>
-                                <div className="checkbox-fade fade-in-primary">
-                                  <label>
-                                    <input type="checkbox" id={"product_attributes_value_" + attribute_val.id} value={attribute_val.id} onChange={this.changeAttributesSelection} />
-                                    <span className="cr">
-                                      <i className="cr-icon icofont icofont-ui-check txt-primary"></i>
-                                    </span>
-                                    <span>{attribute_val.name}</span>
-                                  </label>
-                                </div>
-                              </div>
-                              // :null
-                            )}
-                          </div>
-                        )
-                        : ""
+                <label className="col-sm-1 col-form-label">Attributes</label>
+                <div className="col-sm-11">
+                  <div className="p-20 z-depth-right-1 waves-effect"
+                        data-toggle="tooltip" data-placement="top" 
+                        title="" data-original-title="Select Attribute" style={{border:"2px groove lightgrey"}}>
+                    <button className="col-2 btn btn-primary form-control" style={style} 
+                               onClick={this.AddAttribute.bind(this,key)} 
+                           > <i className="f-16 icofont icofont-plus"></i> Add 
+                    </button>
+                   <br/><br/>
+                    {  
+                    combination.attributeArray ? 
+                    combination.attributeArray.map((attribute,index)=>{
+
+                   return(
+                    <div className="row ">
+                     <div className="col-md-6">
+                     <div className="form-group row">
+                       <label className="col-sm-3 col-form-label">Select Attribute </label>
+                       <div className="col-sm-9">
+                         
+                        <select
+                        className="form-control"
+                        value={attribute.AttributeId}
+                        onChange={this.handleChangeAtt.bind(this,index,key)}
+       
+                         name="AttributeId">
+                           <option value="">Select</option>
+                           {
+                             this.state.attribute_list.length>0 ?
+                             this.state.attribute_list.map(option=>{
+                               return(
+                                 <option value={option.id}>{option.name}</option>
+                               )
+                             })
+
+                             :null
+
+                           }
+                           
+       
+                        </select>
+                       </div>
+                     </div>
+                   </div>
+                   <div className="col-md-6">
+                     <div className="form-group row">
+                       <label className="col-sm-3 col-form-label">Select Value</label>
+                       <div className="col-sm-9">
+                    {/* {
+                      attribute.AttributeValueId !== "" ?
+                        <input
+                        disabled
+                        className="form-control"
+                        value={this.state.nameArray[key].attributeArray[index].name}>
+
+                        </input>
+                   : */}
+                        <select
+                        className="form-control"
+                        value={attribute.AttributeValueId}
+                        onChange={this.handleChangeAttVal.bind(this,index,key)}
+       
+                         name="AttributeValueId">
+                           <option value=""> Select </option>
+                           {
+                             this.state.attributeValue_list.length>0?
+                             this.state.attributeValue_list.map(val=>{
+                               return(
+                                 <option value={val.id}>{val.name_en+"/"+val.name_ar}</option>
+                               )
+                             })
+                             :null
+                           }
+       
+                        </select>
+                           
+                          {/* } */}
+                       </div>
+                     </div>
+                   </div>
+                   
+                   </div>
+                   )
+                    }) :null
+                      // this.state.attribute_list !== undefined && this.state.attribute_list !== null && this.state.attribute_list !== [] && this.state.attribute_list.length > 0
+                      //   ?
+                      //   this.state.attribute_list.map(attributes =>
+                      //     <div className="row" key={attributes.id}>
+                      //       <div className="col-sm-3">
+                      //         <label>{attributes.name}</label>
+                      //       </div>
+                      //       {attributes.AttributeValues.map(attribute_val =>
+                      //           // attribute_val.name !=="Default Attribute Value" ?
+                      //         <div className=" col-sm-3" key={attribute_val.id}>
+                      //           <div className="checkbox-fade fade-in-primary">
+                      //             <label>
+                      //               <input type="checkbox" id={"product_attributes_value_" + attribute_val.id} value={attribute_val.id} onChange={this.changeAttributesSelection} />
+                      //               <span className="cr">
+                      //                 <i className="cr-icon icofont icofont-ui-check txt-primary"></i>
+                      //               </span>
+                      //               <span>{attribute_val.name}</span>
+                      //             </label>
+                      //           </div>
+                      //         </div>
+                      //         // :null
+                      //       )}
+                      //     </div>
+                      //   )
+                      //   : ""
                     }
-                    {/* </div> */}
+                  
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="row">
-            <div className="col-md-6">
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Price</label>
-                <div className="col-sm-9">
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="value"
-                    id="value"
-                    placeholder="Price"
-                    onChange={this.handleChange}
-                    value={this.state.value}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6">
+         
+            {/* <div className="col-md-6">
               <div className="form-group row">
                 <label className="col-sm-3 col-form-label">Special Price</label>
                 <div className="col-sm-9">
@@ -680,8 +922,8 @@ class ProductWiseStockAdd extends React.Component {
                   />
                 </div>
               </div>
-            </div>
-            <div className="col-md-6">
+            </div> */}
+            {/* <div className="col-md-6">
               <div className="form-group row">
                 <label className="col-sm-3 col-form-label">Country ( Currancy )</label>
                 <div className="col-sm-9">
@@ -699,9 +941,8 @@ class ProductWiseStockAdd extends React.Component {
                   </select>
                 </div>
               </div>
-            </div>
-          </div>
-
+            </div> */}
+      
      </div>)
       }) }
           <div className="card-footer">

@@ -56,7 +56,7 @@ class ProductWiseStockAddTab extends React.Component {
               <div className="col-lg-8">
                 <div className="page-header-title">
                   <div className="d-inline">
-                    <h4>Add Product Stock</h4>
+                    <h4>Add Product Variant</h4>
                   </div>
                 </div>
               </div>
@@ -76,7 +76,7 @@ class ProductWiseStockAddTab extends React.Component {
                         Product Stock</Link>
                     </li>
                     <li className="breadcrumb-item active">
-                      Add Product Stock
+                      Add Product Variant
                     </li>
                   </ul>
                 </div>
