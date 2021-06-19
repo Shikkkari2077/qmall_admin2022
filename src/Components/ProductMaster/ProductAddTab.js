@@ -99,7 +99,7 @@ class ProductAddTab extends React.Component {
                       {
                         this.props.match.params.product_id
                           ?<>
-                          <li className="nav-item" onClick={this.handleLanguage.bind(this, 'product')}>
+                          {/* <li className="nav-item" onClick={this.handleLanguage.bind(this, 'product')}>
                           <a className={this.state.language_id === 'product' ? "nav-link active" : "nav-link"} 
                             id='product'
                             data-toggle="tab"
@@ -108,18 +108,18 @@ class ProductAddTab extends React.Component {
                             aria-controls={`products/add/${this.props.match.params.product_id}`} 
                             aria-selected="true">Product info</a>
                             
-                        </li>
+                        </li> */}
                           
-                          <li className="nav-item" onClick={this.handleLanguage.bind(this, 'gallery')}>
+                          {/* <li className="nav-item" onClick={this.handleLanguage.bind(this, 'gallery')}>
                             <a className={this.state.language_id === 'gallery' ? "nav-link active" : "nav-link "} id='gallery'
                               data-toggle="tab"
                               href={"#product_add_gallery"}
                               role="tab"
                               aria-controls={"product_add_gallery"} aria-selected="true">Product Gallery </a>
-                          </li> &nbsp; &nbsp;
-                          <div style={{color:"red", paddingTop:"20px",fontSize:"14px"}} >
+                          </li> &nbsp; &nbsp; */}
+                          {/* <div style={{color:"red", paddingTop:"20px",fontSize:"14px"}} >
                           <small> * Save Before Switching Tabs</small>
-                          </div>
+                          </div> */}
                        </>
                           : null
                       }

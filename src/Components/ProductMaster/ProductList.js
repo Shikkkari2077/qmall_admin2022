@@ -111,25 +111,37 @@ class ProductList extends React.Component {
   // }
   getProductList = () => {
     var that = this;
-    var data = new URLSearchParams();
+    var data ={}
     this.setState({ isSaving: true });
     if (localStorage.getItem('q8_mall_ad_role') === "shop") {
       // //console.log(localStorage.getItem('q8_mall_ad_role'))
       // //console.log( localStorage.getItem('q8_mall_ad_uid'))
       // //console.log(localStorage.getItem('q8_mall_auth'))
+      // data.append("count",150);
+      // data.append("startRange",0);
+      data={
+      count:150,
+      startRange:0,
+      ShopId:localStorage.getItem('q8_mall_ad_uid')
+      }
 
-      data.append("ShopId", localStorage.getItem('q8_mall_ad_uid'));
-      // data.append("startRange",1);
-
+      // data.append("ShopId", localStorage.getItem('q8_mall_ad_uid'));
+ 
+    }
+    else{
+      data={
+        count:150,
+        startRange:0,
+      }
     }
     //console.log(localStorage.getItem('q8_mall_auth'))
     fetch(Constant.getAPI() + "/product/getByAdmin", {
       method: "post",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type": "application/json",
         "Authorization": localStorage.getItem('q8_mall_auth')
       },
-      body: data
+      body:JSON.stringify(data)
     }).then(function (response) {
       console.log(response)
       return response.json();
@@ -137,7 +149,7 @@ class ProductList extends React.Component {
     }).then(function (json) {
        console.log(json)
 
-      if (json.success == true) {
+      if (json.status == true) {
         var products = []
         // for (var i = 0; i < json.data.length; i++) {
         //   var obj = json.data[i];
@@ -701,10 +713,10 @@ class ProductList extends React.Component {
         sort: false,
         customBodyRender: (isActive, tableMeta) => {
           return <Toggle
-            id={"product_isActive_" + tableMeta.rowData[12]}
+            id={"product_isActive_" + tableMeta.rowData[11]}
             checked={isActive === true ? true : false}
             value={isActive}
-            onChange={this.handleIsActiveChange.bind(this, tableMeta.rowData[12])}
+            onChange={this.handleIsActiveChange.bind(this, tableMeta.rowData[11])}
           />
         }
 
@@ -719,10 +731,10 @@ class ProductList extends React.Component {
           return (<div>
             {/* * {//console.log(tableMeta.rowData)} */}
           <Toggle
-            id={"product_status_" + tableMeta.rowData[12]}
+            id={"product_status_" + tableMeta.rowData[11]}
             checked={status === true ? true : false}
             value={status}
-            onChange={this.handleStatusChange.bind(this, tableMeta.rowData[12])}
+            onChange={this.handleStatusChange.bind(this, tableMeta.rowData[11])}
           /></div>)
         }
       }
@@ -736,10 +748,10 @@ class ProductList extends React.Component {
         sort: false,
         customBodyRender: (mediaStatus, tableMeta) => {
           return <Toggle
-            id={"product_media_" + tableMeta.rowData[12] }
+            id={"product_media_" + tableMeta.rowData[11] }
             checked={mediaStatus === true ? true : false}
             value={mediaStatus}
-            onChange={this.handleMediaChange.bind(this, tableMeta.rowData[12])}
+            onChange={this.handleMediaChange.bind(this, tableMeta.rowData[11])}
           />
         }
       }
@@ -752,10 +764,10 @@ class ProductList extends React.Component {
         sort: false,
         customBodyRender: (descriptionStatus, tableMeta) => {
           return <Toggle
-            id={"product_description_" + tableMeta.rowData[12]}
+            id={"product_description_" + tableMeta.rowData[11]}
             checked={descriptionStatus === true ? true : false}
             value={descriptionStatus}
-            onChange={this.handleDescriptionChange.bind(this, tableMeta.rowData[12])}
+            onChange={this.handleDescriptionChange.bind(this, tableMeta.rowData[11])}
           />
         }
       }

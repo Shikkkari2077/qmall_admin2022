@@ -6,7 +6,7 @@ import Constant from "../../Constant";
 import GalleryImageList from "../GalleryMaster/GalleryImageList";
 import ReactQuill from "react-quill";
 import AddGalleryImagesIndex from "../GalleryMaster/AddGalleryImagesIndex";
-
+import ProductWiseStockAdd from "../ProductWiseStockMaster/ProductWiseStockAdd";
 class ProductAdd extends React.Component {
   state = {
     isSaving:false,
@@ -309,7 +309,7 @@ class ProductAdd extends React.Component {
     var data = new URLSearchParams();
     data.append("ProductId", this.props.product_id);
    // data.append("LanguageId", that.props.language_id);
-    fetch(Constant.getAPI() + "/product/get", {
+    fetch(Constant.getAPI() + "/product/getByAdmin", {
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -319,74 +319,20 @@ class ProductAdd extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      //console.log(json.data)
+      console.log(json.productArray[0])
+
+      if(json.productArray !==undefined && json.productArray[0]!==undefined ){
+        var product=json.productArray[0]
+        that.setState({
+          product_name:product.name_en,
+          product_name_ar:product.name_ar,
+          image:product.productMedia.url
+          
+        })
+      }
 
       if (json.status === true) {
-        var selected_attributes = []
-        if (json.data[0].Attributes !== null && json.data[0].Attributes !== [] && json.data[0].Attributes.length > 0) {
-          for (var i = 0; i < json.data[0].Attributes.length; i++) {
-            selected_attributes.push(json.data[0].Attributes[i].id);
-            $("#product_attributes_" + json.data[0].Attributes[i].id).prop("checked", true)
-          }
-        }
-        if (json.data[0].productMedia !== null) {
-          that.setState({
-            attribute_type_data: json.data[0],
-            product_name: json.data[0].name_en,
-            product_name_ar: json.data[0].name_ar,
-
-            priority: json.data[0].priority,
-            description: json.data[0].description_en,
-            description_ar: json.data[0].description_ar,
-
-            refund_policy: json.data[0].refundPolicy_en,
-            refund_policy_ar: json.data[0].refundPolicy_ar,
-            Product_unique_id:json.data[0].unique_identifier,
-            attribute_unit: json.data[0].unit,
-            attribute_value: json.data[0].value,
-            image: json.data[0].productMedia.url,
-            MediaId: json.data[0].MediaId,
-            selected_attributes: selected_attributes
-          });
-          if(json.data[0].Section !== null && json.data[0].Section !== undefined){
-            that.setState({
-              SectionId: json.data[0].Section.id,
-
-            })
-          }
-          if(localStorage.getItem('q8_mall_ad_role') =='admin'){
-            that.getCategoryListAdmin2(json.data[0].ShopId)
-            //console.log(json.data[0].ShopId)
-          }
-        } else {
-          that.setState({
-            attribute_type_data: json.data[0],
-            product_name: json.data[0].name_en,
-            product_name_ar: json.data[0].name_ar,
-            Product_unique_id:json.data[0].unique_identifier,
-
-            priority: json.data[0].priority,
-            description: json.data[0].description_en,
-            description_ar: json.data[0].description_ar,
-            refund_policy_ar: json.data[0].refundPolicy_ar,
-
-            refund_policy: json.data[0].refundPolicy_en,
-            attribute_unit: json.data[0].unit,
-            attribute_value: json.data[0].value,
-            MediaId: json.data[0].MediaId,
-            selected_attributes: selected_attributes
-          });
-          if(json.data[0].Section !== null && json.data[0].Section !== undefined ){
-            that.setState({
-              SectionId: json.data[0].Section.id,
-
-            })
-          }
-          if(localStorage.getItem('q8_mall_ad_role') =='admin'){
-            that.getCategoryListAdmin2(json.data[0].ShopId)
-            //console.log(json.data[0].ShopId)
-          }
-        }
+      
       } else {
         that.setState({ attribute_type_data: {} });
     
@@ -564,7 +510,8 @@ class ProductAdd extends React.Component {
         //Swal.fire("Added !", "Add Product Image", "success");
         const product_id =json.result.id
         that.setState({
-          ProductId:product_id
+          ProductId:product_id,
+          activePage:"attributes"
         })
      
        if(that.state.galleryupload == true ){
@@ -572,8 +519,8 @@ class ProductAdd extends React.Component {
 
       }
       else{
-        Swal.fire("Added !", "NOW ADD STOCK", "success");
-        window.location.href = `#/products/stock/${json.result.id}/add`;
+        //Swal.fire("Added !", "NOW ADD STOCK", "success");
+        //window.location.href = `#/products/stock/${json.result.id}/add`;
 
       }
         that.setState({ isSaving: false })
@@ -631,25 +578,35 @@ class ProductAdd extends React.Component {
    })
   }
   render() {
-    const style={height:"40px",opacity:"0.8",color:"black",fontWeight:"bold",borderRadius:"10px"}
+    const style={height:"40px",opacity:"0.8",color:"black",fontWeight:"bold",borderRadius:"10px",marginTop:"10px"}
     const style2={borderRadius:"18px",color:"black",fontSize:"15px",justifyContent:"center",background:"#f5c856",opacity:"0.8"}
+    const style3={background:"#e6e6e6",borderRadius:"25px",marginTop:"20px"}
     return (
      <div>
-       <div className="row p-2 mb-1 " style={style2}>
+       {/* <div className="row p-2 mb-1 " style={style2}>
         <b>Save Product Details & Gallery Before Adding Attributes!!</b>
-       </div>
-      <div className="row">
-        <div className="col-2 p-2" style={{background:"#e6e6e6"}} >
+       </div> */}
+      <div className="row" >
+        <div className="col-2 p-2 z-depth-right-1 waves-effect" style={style3} >
           <button className="btn btn-primary form-control" style={style} 
-             onClick={this.ActivePage.bind(this,"productDetails")} >
+             onClick={this.ActivePage.bind(this,"productDetails")}  >
            Product Details
           </button><br/><br/>
+          {
+          this.props.product_id == undefined? 
           <button className="btn btn-primary form-control" style={style} 
              onClick={this.ActivePage.bind(this,"gallery")} >
            Gallery
-          </button><br/><br/>
+          </button>
+          :
+
           <button className="btn btn-primary form-control" style={style} 
-              onClick={this.ActivePage.bind(this,"attributes")} disabled={this.state.isDisabled} >
+          onClick={this.ActivePage.bind(this,"gallery")} >
+           Gallery
+           </button>
+          }<br/><br/>
+          <button className="btn btn-primary form-control" style={style} 
+              onClick={this.ActivePage.bind(this,"attributes")}  >
            Attributes
           </button>
          
@@ -964,10 +921,10 @@ class ProductAdd extends React.Component {
             </div>
           </div>
           </div>:"" } */}
-    
+   
           
           <div className="card-footer">
-            {this.props.product_id !==undefined  ?  
+            {this.props.product_id !== undefined  ?  
             <div className="row float-right p-3">
 
               <button onClick={this.onSaveData} className="btn btn-grd-disabled mr-2">
@@ -999,7 +956,7 @@ class ProductAdd extends React.Component {
           
            
           
-      {this.props.case === "add" ?
+      {/* {this.props.case === "add" ? */}
         <div>
           <div className="row">
             <div className="col-md-6">
@@ -1049,12 +1006,30 @@ class ProductAdd extends React.Component {
                      </Link>
               </div>
 
-            </div>:"" }
+            </div>
+            {/* :"" } */}
 
         
              </div>
           :null
         }
+
+    {
+      this.state.activePage == "attributes"
+      ?
+      this.state.ProductId !== undefined ?
+      <div className="col-9 card-body "style={{marginLeft:"15px"}} >
+      <ProductWiseStockAdd product_id={this.props.ProductId}/>
+      </div>
+      :
+      this.props.product_id !== undefined?
+      <div className="col-9 card-body "style={{marginLeft:"15px"}} >
+      <ProductWiseStockAdd product_id={this.props.product_id}/>
+      </div>
+      :null
+      :null
+    }
+
       </div ></div>
     );
   }

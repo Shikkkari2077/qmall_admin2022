@@ -92,14 +92,40 @@ class ProductWiseStockAdd extends React.Component {
 
 
   }
+  reset(index,key){
+    console.log("vsd")
+    var nameArray=this.state.nameArray
+    nameArray[key].attributeArray[index].name=""
+
+    var combinationArray=this.state.combinationArray
+    combinationArray[key].attributeArray[index].AttributeValueId=""
+
+    this.setState({
+      nameArray,
+      combinationArray
+    })
+
+
+  }
  
   handleChangeAttVal=(index,key,event)=>{
     var combinationArray=this.state.combinationArray
     combinationArray[key].attributeArray[index][event.target.name]=event.target.value
+    var arr=this.state.attributeValue_list
+
+   var nameArray=this.state.nameArray
+
+    for(let i=0;i<arr.length;i++){
+      if(event.target.value == arr[i].id){
+         nameArray[key].attributeArray[index].name= arr[i].name_en
+      }
+    }
+    console.log(nameArray)
     // var nameArray=this.state.nameArray
     // nameArray[key].attributeArray[index].name= event.target.name
     this.setState({
-      combinationArray
+      combinationArray,
+      nameArray
     })
 
 
@@ -124,6 +150,7 @@ class ProductWiseStockAdd extends React.Component {
       $("#banner_image_label").append(img);
     }
   }
+ 
   getProductWiseStockList = () => {
     var that = this;
     var data = new URLSearchParams();
@@ -202,8 +229,8 @@ class ProductWiseStockAdd extends React.Component {
       return response.json();
     }).then(function (json) {
       console.log(json.data)
-      if (json.status === true && json.data !==undefined &&json.data[0].productMedia!== undefined) {
-        var attribute_list = []
+      // if (json.status === true && json.data[0] !==undefined && json.data[0].productMedia!== undefined) {
+      //   var attribute_list = []
         // if (json.data[0].Attributes !== null && json.data[0].Attributes !== [] && json.data[0].Attributes.length > 0) {
         //   for (var i = 0; i < json.data[0].Attributes.length; i++) {
         //     for (var j = 0; j < json.data[0].Attributes[i].AttributeValues.length; j++) {
@@ -212,27 +239,28 @@ class ProductWiseStockAdd extends React.Component {
         //   }
         // }
          //console.logog(json.data[0].Attributes)
-        if (json.data[0].productMedia !== null) {
-          that.setState({
-            attribute_type_data: json.data[0],
-            product_name: json.data[0].name,
-            attribute_unit: json.data[0].unit,
-            attribute_value: json.data[0].value,
-            CategoryId: json.data[0].CategoryId,
-            attribute_list: json.data[0].Attributes,
-          });
-        } else {
-          that.setState({
-            attribute_type_data: json.data[0],
-            product_name: json.data[0].name,
-            attribute_unit: json.data[0].unit,
-            attribute_value: json.data[0].value,
-            CategoryId: json.data[0].CategoryId,
-            attribute_list: json.data[0].Attributes
-          });
-        }
-      } else {
-        that.setState({ attribute_type_data: {} });
+        // if (json.data[0].productMedia !== null) {
+        //   that.setState({
+        //     attribute_type_data: json.data[0],
+        //     product_name: json.data[0].name,
+        //     attribute_unit: json.data[0].unit,
+        //     attribute_value: json.data[0].value,
+        //     CategoryId: json.data[0].CategoryId,
+        //     attribute_list: json.data[0].Attributes,
+        //   });
+        // } 
+        // else {
+        //   that.setState({
+        //     attribute_type_data: json.data[0],
+        //     product_name: json.data[0].name,
+        //     attribute_unit: json.data[0].unit,
+        //     attribute_value: json.data[0].value,
+        //     CategoryId: json.data[0].CategoryId,
+        //     attribute_list: json.data[0].Attributes
+        //   });
+        // }
+      // } else {
+      //   that.setState({ attribute_type_data: {} });
         // Swal.fire({
         //   title: "Something went wrong. Try again after some Time.!",
         //   icon: 'error',
@@ -241,11 +269,12 @@ class ProductWiseStockAdd extends React.Component {
         //   cancelButtonColor: "#d33",
         //   confirmButtonText: "Ok"
         // })
-      }
+     // }
     });
   }
   componentDidMount(){
     this.getAttributes()
+    console.log(this.props.product_id)
   }
 
   getAttributes = () => {
@@ -404,8 +433,18 @@ class ProductWiseStockAdd extends React.Component {
     }).then(function (json) {
       console.log(json)
       if (json.success == true) {
-        window.location.reload()
-        //that.addProductPrice(json.data.id,json.data.ProductId)
+        Swal.fire({
+          title: "Something went wrong. Try again after some Time.!",
+          icon: 'error',
+          text: "",
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Ok"
+        }).then((result)=>{
+          if (result.isConfirmed) {
+             window.location.href="#/products"
+          } 
+        })
         that.setState({ isSaving: false })
       } else {
         that.setState({ isSaving: false });
@@ -575,6 +614,17 @@ class ProductWiseStockAdd extends React.Component {
 
   };
   AddCombination(){
+    var nameArray=this.state.nameArray
+    var length=this.state.nameArray.length
+    nameArray[length]= {
+      attributeArray:[
+        {
+          name:""
+        }
+      ]
+
+     }
+
     var combinationArray=this.state.combinationArray
     combinationArray[combinationArray.length]=  {
       'stock':0,
@@ -596,7 +646,8 @@ class ProductWiseStockAdd extends React.Component {
       'mediaArray':[]
      }
      this.setState({
-       combinationArray
+       combinationArray,
+       nameArray
      })
   }
   AddAttribute(key){
@@ -606,8 +657,13 @@ class ProductWiseStockAdd extends React.Component {
         'AttributeId':"",
         'AttributeValueId':""
     }
+    var nameArray=this.state.nameArray
+    var length=this.state.nameArray[key].attributeArray.length
+    nameArray[key].attributeArray[length]={name:""}
+    console.log(nameArray)
     this.setState({
-      combinationArray
+      combinationArray,
+      nameArray
     })
   }
   render() {
@@ -619,7 +675,7 @@ class ProductWiseStockAdd extends React.Component {
         <button className="col-2 btn btn-primary form-control" style={style} 
             onClick={this.AddCombination.bind(this,"productDetails")} 
              >
-           <i className="f-16 icofont icofont-plus"></i> Add Variant
+        <h6><i className="f-16 icofont icofont-plus"/><b>Add Variant</b></h6>
           </button>
           
         </div>
@@ -789,14 +845,14 @@ class ProductWiseStockAdd extends React.Component {
           <div className="row">
             <div className="col-md-12">
               <div className="form-group row">
-                <label className="col-sm-1 col-form-label">Attributes</label>
+                <label className="col-sm-1 col-form-label">Attribute</label>
                 <div className="col-sm-11">
                   <div className="p-20 z-depth-right-1 waves-effect"
                         data-toggle="tooltip" data-placement="top" 
                         title="" data-original-title="Select Attribute" style={{border:"2px groove lightgrey"}}>
-                    <button className="col-2 btn btn-primary form-control" style={style} 
+                    <button className="col-2 btn btn-primary form-control " style={style} 
                                onClick={this.AddAttribute.bind(this,key)} 
-                           > <i className="f-16 icofont icofont-plus"></i> Add 
+                           > <i className="f-16 icofont icofont-plus "></i> Add 
                     </button>
                    <br/><br/>
                     {  
@@ -838,15 +894,16 @@ class ProductWiseStockAdd extends React.Component {
                      <div className="form-group row">
                        <label className="col-sm-3 col-form-label">Select Value</label>
                        <div className="col-sm-9">
-                    {/* {
+                    {
                       attribute.AttributeValueId !== "" ?
                         <input
-                        disabled
+                        
                         className="form-control"
+                        onFocus={this.reset.bind(this,index,key)}
                         value={this.state.nameArray[key].attributeArray[index].name}>
 
                         </input>
-                   : */}
+                   :
                         <select
                         className="form-control"
                         value={attribute.AttributeValueId}
@@ -866,7 +923,7 @@ class ProductWiseStockAdd extends React.Component {
        
                         </select>
                            
-                          {/* } */}
+                           } 
                        </div>
                      </div>
                    </div>
