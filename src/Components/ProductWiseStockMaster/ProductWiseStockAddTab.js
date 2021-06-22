@@ -112,7 +112,7 @@ class ProductWiseStockAddTab extends React.Component {
                             <ProductWiseStockAdd language_id={this.state.language_id}
                               goBack={this.props.history.goBack}
                               stock_id={this.props.match.params.stock_id}
-                              product_id={this.state.product_id} />
+                              product_id={this.props.match.params.product_id} />
                             :
                             <ProductWiseStockAdd
                               language_id={this.state.language_id}

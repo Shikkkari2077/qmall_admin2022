@@ -5,7 +5,7 @@ import $ from "jquery";
 import Constant from "../../Constant";
 import GalleryImageList from "../GalleryMaster/GalleryImageList";
 import ReactQuill from "react-quill";
-import AddGalleryImagesIndex from "../GalleryMaster/AddGalleryImagesIndex";
+// import GalleryImageList from "../GalleryMaster/GalleryImageList";
 import ProductWiseStockAdd from "../ProductWiseStockMaster/ProductWiseStockAdd";
 class ProductAdd extends React.Component {
   state = {
@@ -319,14 +319,22 @@ class ProductAdd extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      console.log(json.productArray[0])
+    console.log(json)
 
-      if(json.productArray !==undefined && json.productArray[0]!==undefined ){
-        var product=json.productArray[0]
+      if(json.data !==undefined && json.data[0]!==undefined ){
+        var product=json.data[0]
         that.setState({
           product_name:product.name_en,
           product_name_ar:product.name_ar,
-          image:product.productMedia.url
+          Product_unique_id:product.unique_identifier,
+          priority:product.priority,
+          description:product.description_en,
+          refund_policy:product.refundPolicy_en,
+          description_ar:product.description_ar,
+          refund_policy_ar:product.refundPolicy_ar,
+
+          //image:product.productMedia.url
+
           
         })
       }
@@ -508,12 +516,12 @@ class ProductAdd extends React.Component {
 
         //console.log(json.result.id)
         //Swal.fire("Added !", "Add Product Image", "success");
-        const product_id =json.result.id
+        const product_id = json.result.id
         that.setState({
           ProductId:product_id,
           activePage:"attributes"
         })
-     
+        
        if(that.state.galleryupload == true ){
         that.uploadGalleryMedia()
 
@@ -601,8 +609,8 @@ class ProductAdd extends React.Component {
           :
 
           <button className="btn btn-primary form-control" style={style} 
-          onClick={this.ActivePage.bind(this,"gallery")} >
-           Gallery
+          onClick={this.ActivePage.bind(this,"galleryEdit")} >
+           Gallery 
            </button>
           }<br/><br/>
           <button className="btn btn-primary form-control" style={style} 
@@ -1017,14 +1025,25 @@ class ProductAdd extends React.Component {
     {
       this.state.activePage == "attributes"
       ?
-      this.state.ProductId !== undefined ?
+      this.state.ProductId !== undefined  ?
       <div className="col-9 card-body "style={{marginLeft:"15px"}} >
-      <ProductWiseStockAdd product_id={this.props.ProductId}/>
+      <ProductWiseStockAdd product_id={this.state.ProductId}/>
       </div>
       :
       this.props.product_id !== undefined?
       <div className="col-9 card-body "style={{marginLeft:"15px"}} >
       <ProductWiseStockAdd product_id={this.props.product_id}/>
+      </div>
+      :null
+      :null
+    }
+    {
+      this.state.activePage =="galleryEdit"
+      ?
+
+      this.props.product_id !==undefined?
+      <div className="col-9 card-body "style={{marginLeft:"15px"}} >
+      <GalleryImageList product_id={this.props.product_id}/>
       </div>
       :null
       :null

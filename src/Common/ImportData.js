@@ -44,7 +44,7 @@ class ImportData extends React.Component {
           formData.append("sheet", file);
         //console.log(file)
 
-        fetch(Constant.getAPI() + "/product/upload-sheet", {
+        fetch(Constant.getAPI() + "/product/import", {
           method:"post",
           headers: {
             "Authorization": localStorage.getItem('q8_mall_auth')

@@ -39,47 +39,47 @@ class OrderListShop extends React.Component {
       .then(function (json) {
 
         if (json.status === true) {
-          var orders = [];
-          for (var i = 0; i < json.data.length; i++) {
-            var order_obj = json.data[i];
-            var total_orders = 0;
-            var completed_orders = 0;
-            for (var j = 0; j < json.data[i].OrderShops.length; j++) {
-              total_orders =
-                json.data[i].OrderShops[j].OrderStocks.length + total_orders;
-              if (json.data[i].OrderShops[j].status === "Delivered") {
-                completed_orders =
-                  json.data[i].OrderShops[j].OrderStocks.length +
-                  completed_orders;
-              } else {
-                completed_orders = completed_orders;
-              }
-            }
-            order_obj.complete_status = completed_orders + " / " + total_orders;
-            if (completed_orders === total_orders) {
-              order_obj.complete = true;
-            } else {
-              order_obj.complete = false;
-            }
-            var order_date = new Date(order_obj.createdAt);
-            var order_day, order_month, order_year;
-            if (order_date.getDate() > 9) {
-              order_day = order_date.getDate();
-            } else {
-              order_day = "0" + order_date.getDate();
-            }
-            if (order_date.getMonth() + 1 > 9) {
-              order_month = order_date.getMonth() + 1;
-            } else {
-              order_month = "0" + (order_date.getMonth() + 1);
-            }
-            order_year = order_date.getFullYear();
+          // var orders = [];
+          // for (var i = 0; i < json.data.length; i++) {
+          //   var order_obj = json.data[i];
+          //   var total_orders = 0;
+          //   var completed_orders = 0;
+          //   for (var j = 0; j < json.data[i].OrderShops.length; j++) {
+          //     total_orders =
+          //       json.data[i].OrderShops[j].OrderStocks.length + total_orders;
+          //     if (json.data[i].OrderShops[j].status === "Delivered") {
+          //       completed_orders =
+          //         json.data[i].OrderShops[j].OrderStocks.length +
+          //         completed_orders;
+          //     } else {
+          //       completed_orders = completed_orders;
+          //     }
+          //   }
+          //   order_obj.complete_status = completed_orders + " / " + total_orders;
+          //   if (completed_orders === total_orders) {
+          //     order_obj.complete = true;
+          //   } else {
+          //     order_obj.complete = false;
+          //   }
+          //   var order_date = new Date(order_obj.createdAt);
+          //   var order_day, order_month, order_year;
+          //   if (order_date.getDate() > 9) {
+          //     order_day = order_date.getDate();
+          //   } else {
+          //     order_day = "0" + order_date.getDate();
+          //   }
+          //   if (order_date.getMonth() + 1 > 9) {
+          //     order_month = order_date.getMonth() + 1;
+          //   } else {
+          //     order_month = "0" + (order_date.getMonth() + 1);
+          //   }
+          //   order_year = order_date.getFullYear();
 
-            var created_at = order_day + "-" + order_month + "-" + order_year;
-            order_obj.create_date = created_at;
-            orders.push(order_obj);
-          }
-          that.setState({ orders_list: orders, isSaving: false });
+          //   var created_at = order_day + "-" + order_month + "-" + order_year;
+          //   order_obj.create_date = created_at;
+          //   orders.push(order_obj);
+          // }
+          that.setState({ orders_list: json.data, isSaving: false });
         } else {
           that.setState({ orders_list: [], isSaving: false });
           Swal.fire({
@@ -131,29 +131,29 @@ class OrderListShop extends React.Component {
         //   }
       },
       {
-        name: "create_date",
+        name: "createdAt",
         label: "Date",
         options: {
           filter: true,
           sort: true,
-          customBodyRender: (create_date, tableMeta) => {
-            // var order_date = new Date(create_date);
-            // var order_day, order_month, order_year;
-            // if (order_date.getDate() > 9) {
-            //   order_day = order_date.getDate();
-            // } else {
-            //   order_day = "0" + order_date.getDate();
-            // }
-            // if ((order_date.getMonth() + 1) > 9) {
-            //   order_month = (order_date.getMonth() + 1);
-            // } else {
-            //   order_month = "0" + (order_date.getMonth() + 1);
-            // }
-            // order_year = order_date.getFullYear();
+          customBodyRender: (createdAt, tableMeta) => {
+            var order_date = new Date(createdAt);
+            var order_day, order_month, order_year;
+            if (order_date.getDate() > 9) {
+              order_day = order_date.getDate();
+            } else {
+              order_day = "0" + order_date.getDate();
+            }
+            if ((order_date.getMonth() + 1) > 9) {
+              order_month = (order_date.getMonth() + 1);
+            } else {
+              order_month = "0" + (order_date.getMonth() + 1);
+            }
+            order_year = order_date.getFullYear();
 
-            // var created_at = order_day + "-" + order_month + "-" + order_year
+            var created_at = order_day + "-" + order_month + "-" + order_year
 
-            return <div>{create_date}</div>;
+            return <div>{created_at}</div>;
           },
         },
       },

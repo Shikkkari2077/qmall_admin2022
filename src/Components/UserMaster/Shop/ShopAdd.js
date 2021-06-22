@@ -18,20 +18,21 @@ class ShopAdd extends React.Component {
   onHandleDescriptionChange = value => {
     this.setState({ description: value });
   };
-  // componentMount(){
-  //   this.getCategoryList();
+  componentWillMount(){
+    this.getCategoryList();
 
-  // }
+  }
 
   componentDidUpdate(prevProps) {
     //console.log(prevProps)
     if (this.props.language_id !== undefined) {
       //console.log("Called")
-      this.getCategoryList();
 
       if (prevProps.shop_id !== this.props.shop_id) {
         this.setState({ shop_id: this.props.shop_id });
         this.getShopDetails();
+        this.getCategoryList();
+
 
      
       }
@@ -120,7 +121,7 @@ class ShopAdd extends React.Component {
   getCategoryList = () => {
     var that = this;
     var data = new URLSearchParams();
-    data.append("LanguageId", that.props.language_id);
+    //data.append("LanguageId", that.props.language_id);
     fetch(Constant.getAPI() + "/category/get", {
       method: "post",
       headers: {

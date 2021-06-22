@@ -30,7 +30,7 @@ class ProductWiseStockAdd extends React.Component {
                    "AttributeValueId":""
                 },
               ],
-        "mediaArray":["00c9e804-195c-4401-b410-fe87847fa023"]
+        "mediaArray":[""]
        }
      ],
      nameArray:[
@@ -184,7 +184,7 @@ class ProductWiseStockAdd extends React.Component {
               that.setState({
                 value:json.data[i].Prices[0].value,
                 specialPrice:json.data[i].Prices[0].specialPrice,
-                CurrencyId:json.data[i].Prices[0].CurrencyId,
+               // CurrencyId:json.data[i].Prices[0].CurrencyId,
 
               })
             }
@@ -275,6 +275,7 @@ class ProductWiseStockAdd extends React.Component {
   componentDidMount(){
     this.getAttributes()
     console.log(this.props.product_id)
+    console.log(this.props.stock_id)
   }
 
   getAttributes = () => {
@@ -431,17 +432,20 @@ class ProductWiseStockAdd extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      console.log(json)
+      console.log(json,json.success,json.success == true,json.success=='true',json.success === true)
       if (json.success == true) {
         Swal.fire({
-          title: "Something went wrong. Try again after some Time.!",
-          icon: 'error',
-          text: "",
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Ok"
+          title: "Added Successful",
+          icon: 'success',
+          // showDenyButton: true,
+          // showCancelButton: true,
+          // showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  // cancelButtonColor: '#d33',
+  confirmButtonText: 'OK'
         }).then((result)=>{
-          if (result.isConfirmed) {
+          console.log(result,result.value)
+          if (result.value) {
              window.location.href="#/products"
           } 
         })
@@ -629,7 +633,7 @@ class ProductWiseStockAdd extends React.Component {
     combinationArray[combinationArray.length]=  {
       'stock':0,
       'price':0,
-      'currency':"",
+      'currency':"KWD",
       'sku':"",
       'barNumber':"",
       'barCode':"",
@@ -672,11 +676,13 @@ class ProductWiseStockAdd extends React.Component {
     return (
       <div className="">
         <div className="row justify-right">
+          {this.props.stock_id == undefined ?
         <button className="col-2 btn btn-primary form-control" style={style} 
             onClick={this.AddCombination.bind(this,"productDetails")} 
              >
         <h6><i className="f-16 icofont icofont-plus"/><b>Add Variant</b></h6>
           </button>
+          :null}
           
         </div>
         {/* {console.log(this.state.combinationArray[0].stock)} */}
@@ -684,7 +690,13 @@ class ProductWiseStockAdd extends React.Component {
           {this.state.combinationArray.map((combination,key)=>{
      return(
          <div style={{borderBottom:"4px groove lightgrey",marginBottom:"10px"}}>
-           <h5>Variant No. {key+1}</h5> <br/>
+          {this.props.stock_id == undefined ?
+           <div>
+           <h5>Variant No. {key+1}</h5> 
+           <br/>
+           </div>
+           :null
+           }
           <div className="row">
             <div className="col-md-6">
               <div className="form-group row">

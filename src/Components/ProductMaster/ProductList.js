@@ -6,10 +6,16 @@ import Swal from 'sweetalert2'
 import MUIDataTable from "mui-datatables";
 import "react-toggle/style.css" // for ES6 modules
 import Toggle from 'react-toggle'
+import Pagination from 'react-js-pagination';
+
 import $ from 'jquery';
 
 class ProductList extends React.Component {
-  state = {}
+  state = {
+    datarange:0,
+    dataLength:10,
+    activePage:1
+  }
   deleteAttributeValue = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -109,29 +115,23 @@ class ProductList extends React.Component {
   //     }
   //   });
   // }
-  getProductList = () => {
+  getProductList = (count,startRange) => {
+
     var that = this;
     var data ={}
     this.setState({ isSaving: true });
     if (localStorage.getItem('q8_mall_ad_role') === "shop") {
-      // //console.log(localStorage.getItem('q8_mall_ad_role'))
-      // //console.log( localStorage.getItem('q8_mall_ad_uid'))
-      // //console.log(localStorage.getItem('q8_mall_auth'))
-      // data.append("count",150);
-      // data.append("startRange",0);
+     
       data={
-      count:150,
-      startRange:0,
+      count,
+      startRange,
       ShopId:localStorage.getItem('q8_mall_ad_uid')
-      }
-
-      // data.append("ShopId", localStorage.getItem('q8_mall_ad_uid'));
- 
+      } 
     }
     else{
       data={
-        count:150,
-        startRange:0,
+        count,
+        startRange,
       }
     }
     //console.log(localStorage.getItem('q8_mall_auth'))
@@ -169,8 +169,8 @@ class ProductList extends React.Component {
         //   products.push(obj);
         //   console.log(products)
         // }
-        that.setState({ product_list: products, isSaving: false });
-        that.setState({ product_list: json.data, isSaving: false });
+       // that.setState({ product_list: products, isSaving: false });
+        that.setState({ product_list: json.data,count:json.count,totalProducts:json.totalProducts, isSaving: false });
       } else {
         that.setState({ product_list: [], isSaving: false });
         Swal.fire({
@@ -185,7 +185,7 @@ class ProductList extends React.Component {
     });
   }
   componentWillMount() {
-    this.getProductList();
+    this.getProductList(this.state.dataLength,this.state.datarange);
   }
   handleIsActiveChange = (sid) => {
     var isChecked = $('#product_isActive_' + sid);
@@ -387,6 +387,20 @@ class ProductList extends React.Component {
   //     });
 
   // }
+  handlePageChange(pageNumber) {
+		console.log('active page is', pageNumber);
+		console.log(pageNumber * 10 - 10);
+		const range = pageNumber * 10 - 10;
+		const dataLength = this.state.dataLength;
+   this.getProductList(dataLength,range)
+	
+		this.setState({
+			datarange: range,
+			dataLength: dataLength,
+		});
+		this.setState({ activePage: pageNumber });
+		console.log(range, dataLength);
+	}
   render() {
     const shop_columns = [{
       name: "productMedia",
@@ -821,6 +835,7 @@ class ProductList extends React.Component {
     }
     ];
     const options = {
+      pagination:false,
       filterType: "dropdown",
       viewColumns: false,
       print: false,
@@ -891,7 +906,6 @@ class ProductList extends React.Component {
                           localStorage.getItem('q8_mall_ad_role') === "shop"
                             ?
                             <MUIDataTable
-                              title={"Product List"}
                               className="table-responsive"
                               data={this.state.product_list}
                               columns={shop_columns}
@@ -899,13 +913,33 @@ class ProductList extends React.Component {
                             />
                             :
                             <MUIDataTable
-                              title={"Product List"}
                               className="table-responsive"
                               data={this.state.product_list}
                               columns={columns}
                               options={options}
                             />
                         }
+                        	<nav
+													aria-label="Page navigation example "
+													className="display-flex float-right"
+												>
+													<ul class="pagination">
+														<li class="page-item mx-2 py-2">
+															Count : {this.state.datarange+1}-
+															{this.state.datarange + this.state.dataLength}
+														</li>
+													
+														<Pagination
+															itemClass="page-item"
+															linkClass="page-link"
+															activePage={this.state.activePage}
+															itemsCountPerPage={10}
+															totalItemsCount={this.state.totalProducts}
+															pageRangeDisplayed={20}
+															onChange={this.handlePageChange.bind(this)}
+														/>
+													</ul>
+												</nav>
 
                       </div>
                     </div>

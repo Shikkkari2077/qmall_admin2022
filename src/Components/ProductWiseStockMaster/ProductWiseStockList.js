@@ -55,8 +55,8 @@ class ProductWiseStockList extends React.Component {
     // if (localStorage.getItem('q8_mall_ad_role') === "shop") {
     //   data.append("ShopId", localStorage.getItem('q8_mall_ad_uid'));
     // }
-    data.append("ProductId", that.props.match.params.product_id);
-    fetch(Constant.getAPI() + "/product/stock/get", {
+    data.append("productId", that.props.match.params.product_id);
+    fetch(Constant.getAPI() + "/product/combination/list", {
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -67,7 +67,7 @@ class ProductWiseStockList extends React.Component {
       return response.json();
     }).then(function (json) {
       //console.log(json)
-      if (json.status === true) {
+      if (json.success === true) {
         that.setState({ product_list: json.data, isSaving: false });
       } else {
         that.setState({ product_list: [], isSaving: false });
@@ -108,8 +108,8 @@ class ProductWiseStockList extends React.Component {
         sort: true
       }
     }, {
-      name: "count",
-      label: "Product Count",
+      name: "stock",
+      label: "Variant Stock",
       options: {
         filter: true,
         sort: true
@@ -132,60 +132,58 @@ class ProductWiseStockList extends React.Component {
     //   }
     // },
     {
-      name: "AttributeValues",
-      label: "Product Attribute Values",
+      name: "CombinationAttributes",
+      label: "Attribute Values",
       options: {
         filter: true,
         sort: true,
-        customBodyRender: (AttributeValues, tableMeta) => {
+        customBodyRender: (CombinationAttributes, tableMeta) => {
           return <div>
-            {
-              AttributeValues !== null && AttributeValues !== [] && AttributeValues.length > 0
-                ?
-                <ul>
-                  {
-                    AttributeValues.map(product_attr =>
-                      <li key={product_attr.id}>{product_attr.name !== 'Default Attribute Value'?product_attr.name:''}</li>
-                    )
-                  }
-                </ul>
-                :
-                "-"
+            {  
+              CombinationAttributes.length>0?
+              CombinationAttributes.map(comb=>{
+                return(
+                  <li>{comb.Attribute.name_en +" "+"-"+" "+ comb.AttributeValue.name_en}</li>
+                )
+              })
+ 
+              :"-"
+            
             }
           </div>
         }
       }
     }, {
-      name: "Prices",
-      label: "Product Attribute Pricing",
+      name: "price",
+      label: "Variant Pricing",
       options: {
         filter: true,
         sort: true,
-        customBodyRender: (Prices, tableMeta) => {
-          return <div>
-            {
-              Prices !== null && Prices !== [] && Prices.length > 0
-                ?
-                <ul type="square">
-                  {
-                    Prices.map(price_data =>
-                      <li key={price_data.id}>
-                        {/* <span className="text-line-through"> */}
-                        <span>
-                          Original Price : {price_data.value} {price_data.CurrencyId}
-                        </span> <br />
-                        <span>
-                          Special Price : {price_data.specialPrice} {price_data.CurrencyId}
-                        </span>
-                      </li>
-                    )
-                  }
-                </ul>
-                :
-                "-"
-            }
-          </div>
-        }
+        // customBodyRender: (price, tableMeta) => {
+        //   return <div>
+        //     {
+        //       // Prices !== null && Prices !== [] && Prices.length > 0
+        //       //   ?
+        //       //   <ul type="square">
+        //       //     {
+        //       //       Prices.map(price_data =>
+        //       //         <li key={price_data.id}>
+        //       //           {/* <span className="text-line-through"> */}
+        //       //           <span>
+        //       //             Original Price : {price_data.value} {price_data.CurrencyId}
+        //       //           </span> <br />
+        //       //           <span>
+        //       //             Special Price : {price_data.specialPrice} {price_data.CurrencyId}
+        //       //           </span>
+        //       //         </li>
+        //       //       )
+        //       //     }
+        //       //   </ul>
+        //       //   :
+        //       //   "-"
+        //     }
+        //   </div>
+        // }
       }
     }, {
       name: "id",
@@ -257,10 +255,10 @@ class ProductWiseStockList extends React.Component {
                       <h4>Product Wise Stock List</h4>
                     </div>
                   </div>
-                  <Link to={"/products/stock/" + this.props.match.params.product_id + "/add"} 
+                  {/* <Link to={"/products/stock/" + this.props.match.params.product_id + "/add"} 
                         className="btn btn-sm btn-inverse waves-effect waves-light f-right d-inline-block md-trigger" 
                         data-modal="modal-13">
-                     <i className="icofont icofont-plus m-r-5"></i> Add Product Wise Stock </Link>
+                     <i className="icofont icofont-plus m-r-5"></i> Add Product Wise Stock </Link> */}
                 </div>
                 <div className="col-lg-4">
                   <div className="page-header-breadcrumb">
@@ -284,7 +282,6 @@ class ProductWiseStockList extends React.Component {
                     <div className="card-block">
                       <div className="dt-responsive table-responsive">
                         <MUIDataTable
-                          title={"Product Wise Stock List"}
                           className="table-responsive"
                           data={this.state.product_list}
                           columns={columns}

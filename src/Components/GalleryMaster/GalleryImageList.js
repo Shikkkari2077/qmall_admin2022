@@ -75,10 +75,13 @@ class GalleryImageList extends React.Component {
       return response.json();
     }).then(function (json) {
       if (json.status === true) {
-        
+        if(json.data !==undefined && json.data[0] !== undefined){
+
+  
         that.setState({ 
           product_list: json.data[0], 
           gallery: json.data[0].productGallery });
+        }
       } else {
         that.setState({ product_list: [], gallery: [] });
         Swal.fire({
