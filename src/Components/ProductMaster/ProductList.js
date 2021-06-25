@@ -57,65 +57,8 @@ class ProductList extends React.Component {
       }
     });
   }
-  // getProductList = () => {
-  //   var that = this;
-  //   var data = new URLSearchParams();
-  //   this.setState({ isSaving: true });
-  //   if (localStorage.getItem('q8_mall_ad_role') === "shop") {
-  //     // //console.log(localStorage.getItem('q8_mall_ad_role'))
-  //     // //console.log( localStorage.getItem('q8_mall_ad_uid'))
-  //     // //console.log(localStorage.getItem('q8_mall_auth'))
-
-  //     data.append("ShopId", localStorage.getItem('q8_mall_ad_uid'));
-  //   }
-  //   //console.log( localStorage.getItem('q8_mall_auth'))
-  //   fetch(Constant.getAPI() + "/product/get", {
-  //     method: "post",
-  //     headers: {
-  //       "Content-Type": "application/x-www-form-urlencoded",
-  //       "Authorization": localStorage.getItem('q8_mall_auth')
-  //     },
-  //     body: data
-  //   }).then(function (response) {
-  //     return response.json();
-  //   }).then(function (json) {
-  //     // //console.log(json.data[0])
-
-  //     if (json.status === true) {
-  //       var products = []
-  //       for (var i = 0; i < json.data.length; i++) {
-  //         var obj = json.data[i];
-  //         if (json.data[i].Shop !== null) {
-  //           obj.Shop_name = json.data[i].Shop.name_en
-  //         } else {
-  //           obj.Shop_name = '-'
-  //         }
-  //         var stock = 0;
-  //         if (json.data[i].Stocks !== null) {
-  //           for (var j = 0; j < json.data[i].Stocks.length; j++) {
-  //             stock = parseInt(stock) + parseInt(json.data[i].Stocks[j].count)
-  //           }
-  //         }
-
-  //         obj.stock = stock
-  //         products.push(obj);
-  //       }
-  //       that.setState({ product_list: products, isSaving: false });
-  //       // that.setState({ product_list: json.data, isSaving: false });
-  //     } else {
-  //       that.setState({ product_list: [], isSaving: false });
-  //       Swal.fire({
-  //         title: "Something went wrong. Try again after some Time.!",
-  //         icon: 'error',
-  //         text: "",
-  //         confirmButtonColor: "#3085d6",
-  //         cancelButtonColor: "#d33",
-  //         confirmButtonText: "Ok"
-  //       })
-  //     }
-  //   });
-  // }
-  getProductList = (count,startRange) => {
+ 
+  getProductList = (count,startRange, uniqueidentifier,name) => {
 
     var that = this;
     var data ={}
@@ -133,6 +76,14 @@ class ProductList extends React.Component {
         count,
         startRange,
       }
+    }
+    if(name !== " ")
+    {
+      data={...data,'keyword':name}
+    }
+    if(uniqueidentifier !== "")
+    {
+      data={...data,'unique_identifier':uniqueidentifier}
     }
     //console.log(localStorage.getItem('q8_mall_auth'))
     fetch(Constant.getAPI() + "/product/getByAdmin", {
@@ -252,8 +203,8 @@ class ProductList extends React.Component {
       return response.json();
     }).then(function (json) {
       if (json.status === true) {
-        Swal.fire("Update Status!", "Status has been updated.", "success");
-        that.getProductList();
+        //Swal.fire("Update Status!", "Status has been updated.", "success");
+        that.getProductList(that.state.dataLength,that.state.datarange);
       } else {
         Swal.fire({
           title: "Something went wrong. Try again after some Time.!",
@@ -351,42 +302,7 @@ class ProductList extends React.Component {
       }
     });
   }
-  // getSubCategory=(id)=>{
-  //   var that = this;
-  //   this.setState({ isSaving: true });
-  //   var data = new URLSearchParams();
-     
-  //     data.append("CategoryId", id);
-    
-  //   fetch(Constant.getAPI() + "/category/get", {
-  //     method: "post",
-  //     headers: {
-  //       "Content-Type": "application/x-www-form-urlencoded",
-  //       Authorization: localStorage.getItem("q8_mall_auth"),
-  //     },
-  //     body: data,
-  //   })
-  //     .then(function (response) {
-  //       return response.json();
-  //     })
-  //     .then(function (json) {
-  //       if (json.status === true) {
-  //         //console.log(json.data)
-  //         that.setState({ SubCategory: json.data, isSaving: false });
-  //       } else {
-  //         that.setState({ SubCategory: [], isSaving: false });
-  //         Swal.fire({
-  //           title: "Something went wrong. Try again after some Time.!",
-  //           icon: "error",
-  //           text: "",
-  //           confirmButtonColor: "#3085d6",
-  //           cancelButtonColor: "#d33",
-  //           confirmButtonText: "Ok",
-  //         });
-  //       }
-  //     });
-
-  // }
+ 
   handlePageChange(pageNumber) {
 		console.log('active page is', pageNumber);
 		console.log(pageNumber * 10 - 10);
@@ -401,6 +317,26 @@ class ProductList extends React.Component {
 		this.setState({ activePage: pageNumber });
 		console.log(range, dataLength);
 	}
+  search=(e)=>{
+    if(e.target.value.length == 0)
+    { this.getProductList(10,0)}
+   this.setState({
+     search:e.target.value
+   })
+   if(e.target.value==" ")
+   {
+     console.log('empty now')
+   }
+
+  }
+  byID=()=>{
+    this.getProductList(10,0,this.state.search)
+
+  }
+  byName=()=>{
+    this.getProductList(10,0,"",this.state.search)
+
+  }
   render() {
     const shop_columns = [{
       name: "productMedia",
@@ -440,6 +376,7 @@ class ProductList extends React.Component {
       name: "stock",
       label: "Product Total Stock",
       options: {
+        display:false,
         filter: true,
         sort: true
       }
@@ -835,6 +772,7 @@ class ProductList extends React.Component {
     }
     ];
     const options = {
+      search:false,
       pagination:false,
       filterType: "dropdown",
       viewColumns: false,
@@ -873,7 +811,8 @@ class ProductList extends React.Component {
                         {" "+" "}
                         <Link
                           to={"/importData/"+"products"}
-                          className="btn btn-sm btn-inverse waves-effect waves-light d-inline-block md-trigger"  data-modal="modal-13">Import Sheet</Link>
+                          className="btn btn-sm btn-inverse waves-effect waves-light d-inline-block md-trigger"
+                            data-modal="modal-13">Import Sheet</Link>
                         
                         <Link to="/" className="btn btn-sm btn-outline-dark waves-effect waves-light d-inline-block md-trigger ml-3" data-modal="modal-13"> <i className="icofont icofont-arrow-left m-r-5"></i> Back </Link>
                        
@@ -900,6 +839,31 @@ class ProductList extends React.Component {
                 <div className="col-sm-12">
                   <div className="card">
                     <div className="card-block">
+                      <div className="d-flex justify-content-center ">
+                        <div className="col-sm-3">
+                        <input 
+                        className="form-control"
+                        placeholder={"Search..."}
+                        style={{borderRadius:"20px",height:"35px"}}
+                        onChange={this.search} 
+                        value={this.state.search} 
+                        />
+
+                        </div>
+                        <div className="col-sm-3">
+                       <button className="btn btn-outline-primary"
+                        style={{borderRadius:"20px",height:'35px',width:"130px",padding:"8px"}}
+                        onClick={this.byName}>
+                         <h6>By Name <i className="icofont icofont-search " /> </h6>
+                       </button>&nbsp;
+                       <button className="btn btn-outline-primary"
+                        style={{borderRadius:"20px",height:'35px',width:"120px",padding:"8px"}}
+                        onClick={this.byID}>
+                         <h6 className="font-dark">By ID <i className="icofont icofont-search " /> </h6>
+                       </button>
+
+                        </div>
+                      </div>
                       <div className="dt-responsive table-responsive">
 
                         {

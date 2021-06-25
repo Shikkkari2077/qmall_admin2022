@@ -51,7 +51,7 @@ class Header extends React.Component {
   componentDidMount() {
     var that = this;
     
-    setInterval(this.getPushNotificationList, 9000)
+    setInterval(this.getPushNotificationList, 10000)
 
     // that.getPushNotificationList();
     // setTimeout(function () {

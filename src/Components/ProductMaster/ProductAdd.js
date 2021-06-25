@@ -200,44 +200,7 @@ class ProductAdd extends React.Component {
         }
       });
   };
-  // getCategoryList = () => {
-  //   var that = this;
-  //   var data = new URLSearchParams();
-  //   if (localStorage.getItem('q8_mall_ad_role') === "shop") {
-  //     data.append("ShopId", localStorage.getItem('q8_mall_ad_uid'))
-  //   }
-  //   //data.append("LanguageId", that.props.language_id);
-  //   fetch(Constant.getAPI() + "/category/get", {
-  //     method: "post",
-  //     headers: {
-  //       "Content-Type": "application/x-www-form-urlencoded",
-  //       Authorization: localStorage.getItem("q8_mall_auth"),
-
-  //     },
-  //     body: data
-  //   }).then(function (response) {
-  //     return response.json();
-  //   }).then(function (json) {
-  //     //console.log(json.data[0])
-  //     if (json.status === true) {
-  //       var category = []
-  //       for (var i = 0; i < json.data.length; i++) {
-  //         if (json.data[i].child !== null && json.data[i].child !== [] && json.data[i].child.length > 0) {
-  //           for (var j = 0; j < json.data[i].child.length; j++) {
-  //             category.push(json.data[i].child[j]);
-  //           }
-  //           // } else {
-  //           //   category.push(json.data[i]);
-  //         }
-  //       }
-  //       that.setState({ category_list: category });
-  //       //console.log(category)
-  //     } else {
-  //       that.setState({ category_list: [] });
-       
-  //     }
-  //   });
-  // }
+ 
   getShopList = () => {
     var that = this;
     var data = new URLSearchParams();
@@ -633,7 +596,7 @@ class ProductAdd extends React.Component {
                     className="form-control"
                     name="Product_unique_id"
                     id="Product_unique_id"
-                    placeholder="Priduct Id"
+                    placeholder="Product Id"
                     onChange={this.handleChange}
                     value={this.state.Product_unique_id}
                   />
@@ -800,7 +763,7 @@ class ProductAdd extends React.Component {
               </div>
              </div>
             </div>
-            <div className="row">
+            {/* <div className="row">
             <div className="col-md-12">
               <div className="form-group row">
                 <label className="col-sm-2 col-form-label">Refund Policy (English) </label>
@@ -813,7 +776,7 @@ class ProductAdd extends React.Component {
                 </div>
               </div>
             </div>
-            </div>
+            </div> */}
            <div className="row">
             <div className="col-md-12">
               <div className="form-group row">
@@ -830,7 +793,7 @@ class ProductAdd extends React.Component {
              </div>
           
          
-            <div className="row">
+            {/* <div className="row">
             <div className="col-md-12">
               <div className="form-group row">
                 <label className="col-sm-2 col-form-label">Refund Policy (Arabic) </label>
@@ -843,7 +806,7 @@ class ProductAdd extends React.Component {
                 </div>
               </div>
             </div>
-            </div>
+            </div> */}
             
              
           
@@ -1037,6 +1000,7 @@ class ProductAdd extends React.Component {
       :null
       :null
     }
+    
     {
       this.state.activePage =="galleryEdit"
       ?

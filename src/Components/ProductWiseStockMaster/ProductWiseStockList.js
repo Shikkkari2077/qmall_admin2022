@@ -100,14 +100,16 @@ class ProductWiseStockList extends React.Component {
     this.setState({ isOpen: false, stock_media: media });
   }
   render() {
-    const columns = [{
-      name: "Product.name_en",
-      label: "Product Name",
-      options: {
-        filter: true,
-        sort: true
-      }
-    }, {
+    const columns = [
+    //   {
+    //   name: "Product.name_en",
+    //   label: "Product Name",
+    //   options: {
+    //     filter: true,
+    //     sort: true
+    //   }
+    // },
+     {
       name: "stock",
       label: "Variant Stock",
       options: {
@@ -116,7 +118,7 @@ class ProductWiseStockList extends React.Component {
       }
     }, 
     {
-      name: "barNumber",
+      name: "barCode",
       label: "Bar Code",
       options: {
         filter: true,
@@ -143,7 +145,9 @@ class ProductWiseStockList extends React.Component {
               CombinationAttributes.length>0?
               CombinationAttributes.map(comb=>{
                 return(
+                  comb.Attribute.name_en !== "Default Attribute" ?
                   <li>{comb.Attribute.name_en +" "+"-"+" "+ comb.AttributeValue.name_en}</li>
+                  :"-"
                 )
               })
  
@@ -189,6 +193,7 @@ class ProductWiseStockList extends React.Component {
       name: "id",
       label: "Action",
       options: {
+        display:false,
         filter: true,
         sort: true,
         customBodyRender: (id, tableMeta) => {
@@ -252,11 +257,13 @@ class ProductWiseStockList extends React.Component {
                 <div className="col-lg-8">
                   <div className="page-header-title">
                     <div className="d-inline">
-                      <h4>Product Wise Stock List</h4>
+                      <h4>Product Variant List</h4>
                     </div>
                   </div>
                   {/* <Link to={"/products/stock/" + this.props.match.params.product_id + "/add"} 
-                        className="btn btn-sm btn-inverse waves-effect waves-light f-right d-inline-block md-trigger" 
+                        className="btn btn-sm 
+                        btn-inverse waves-effect waves-light
+                         f-right d-inline-block md-trigger" 
                         data-modal="modal-13">
                      <i className="icofont icofont-plus m-r-5"></i> Add Product Wise Stock </Link> */}
                 </div>
