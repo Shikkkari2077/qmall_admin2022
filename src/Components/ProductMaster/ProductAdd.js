@@ -5,7 +5,6 @@ import $ from "jquery";
 import Constant from "../../Constant";
 import GalleryImageList from "../GalleryMaster/GalleryImageList";
 import ReactQuill from "react-quill";
-// import GalleryImageList from "../GalleryMaster/GalleryImageList";
 import ProductWiseStockAdd from "../ProductWiseStockMaster/ProductWiseStockAdd";
 class ProductAdd extends React.Component {
   state = {
@@ -44,14 +43,14 @@ class ProductAdd extends React.Component {
       return response.json();
     }).then(function (json) {
       if (json.status === true) {
-        Swal.fire("Added !", "NOW ADD STOCK", "success");
+        // Swal.fire("Added !", "NOW ADD STOCK", "success");
         // if(that.props.case =="add")
         //  {//console.log(json.data[0].ProductId)
-          window.location.href = `#/products/stock/${json.data[0].ProductId}/add`;
+         // window.location.href = `#/products/stock/${json.data[0].ProductId}/add`;
       //   else
       //  {window.location.href = `#/products/add/${that.props.product_id}`;}
         //console.log(json.data)
-        that.setState({ isSaving: false })
+        that.setState({ isSaving: false,activePage:"attributes",isDisabled:false })
       } else {
         //console.log("gallery")
 
@@ -270,7 +269,12 @@ class ProductAdd extends React.Component {
   getProductDetails = () => {
     var that = this;
     var data = new URLSearchParams();
-    data.append("ProductId", this.props.product_id);
+    {
+      that.state.ProductId !== undefined?
+      data.append("ProductId", this.state.ProductId)
+      :    data.append("ProductId", this.props.product_id)
+
+    }
    // data.append("LanguageId", that.props.language_id);
     fetch(Constant.getAPI() + "/product/getByAdmin", {
       method: "post",
@@ -292,9 +296,9 @@ class ProductAdd extends React.Component {
           Product_unique_id:product.unique_identifier,
           priority:product.priority,
           description:product.description_en,
-          refund_policy:product.refundPolicy_en,
+         // refund_policy:product.refundPolicy_en,
           description_ar:product.description_ar,
-          refund_policy_ar:product.refundPolicy_ar,
+         // refund_policy_ar:product.refundPolicy_ar,
 
           //image:product.productMedia.url
 
@@ -315,6 +319,11 @@ class ProductAdd extends React.Component {
       activePage:"gallery"
     })
   }
+  // onsavegalley=()=>{
+  //   var that = this;
+  //   that.setState({ isSaving: true });
+
+  // }
   onSaveData = () => {
     var that = this;
     that.setState({ isSaving: true });
@@ -324,19 +333,24 @@ class ProductAdd extends React.Component {
 
     
     } else {
-      if (that.props.product_id !== undefined) {
+      if (that.props.product_id !== undefined || this.state.ProductId !== undefined) {
         that.updateCategoryData(that.state.MediaId);
       } else {
         that.addCategory(that.state.MediaId);
-       // that.saveGalleryMedia(that.state.media_id);
+        // that.uploadGalleryMedia();
 
       }
     }
   }
   uploadGalleryMedia = () => {
     var that = this;
-    var form = $('#productMedia')[0];
-    var data = new FormData(form);
+    console.log(this.state.category_image)
+    var media_data=this.state.category_image
+    var data = new FormData();
+    for(let i=0;i<media_data.length;i++){
+      data.append('media',media_data[i])
+    }
+    console.log(data)
     fetch(Constant.getAPI() + "/media/add", {
       method: "post",
       body: data
@@ -354,8 +368,11 @@ class ProductAdd extends React.Component {
   }
   uploadMedia = () => {
     var that = this;
-    var form = $('#bannerImage')[0];
-    var data = new FormData(form);
+    // var form = $('#bannerImage')[0];
+
+    var data = new FormData();
+    data.append("media",that.state.product_banner_image[0]);
+
     // data.append('upload_for', 'user');
     fetch(Constant.getAPI() + "/media/add", {
       method: "post",
@@ -367,13 +384,13 @@ class ProductAdd extends React.Component {
         if (that.props.product_id !== undefined) {
           that.updateCategoryData(json.data[0].id);
         } else {
-          that.addCategory([]);
+          that.addCategory(json.data[0].id);
         }
       } else {
         // that.setState({ category_data: [] });
         //console.log(json.error);
       }
-    });
+    }); 
   }
   updateCategoryData = (media_id) => {
     console.log(media_id)
@@ -393,8 +410,8 @@ class ProductAdd extends React.Component {
     data.append("description_en", that.state.description);
     data.append("description_ar", that.state.description_ar);
 
-    data.append("refundPolicy_en", that.state.refund_policy);
-    data.append("refundPolicy_ar", that.state.refund_policy_ar);
+    // data.append("refundPolicy_en", that.state.refund_policy);
+    // data.append("refundPolicy_ar", that.state.refund_policy_ar);
 
     data.append("LanguageId", that.props.language_id);
     data.append("MediaId", media_id);
@@ -454,7 +471,7 @@ class ProductAdd extends React.Component {
     data.append("refundPolicy_en", that.state.refund_policy);
     data.append("refundPolicy_ar", that.state.refund_policy_ar);
     if(media_id !== undefined)
-    {data.append("MediaId",[]);}
+    {data.append("MediaId",[media_id]);}
     else
     {data.append("MediaId",[])}
     data.append("SectionId", that.state.SectionId);
@@ -481,8 +498,9 @@ class ProductAdd extends React.Component {
         //Swal.fire("Added !", "Add Product Image", "success");
         const product_id = json.result.id
         that.setState({
+          isDisabled:false,
           ProductId:product_id,
-          activePage:"attributes"
+          activePage:"gallery"
         })
         
        if(that.state.galleryupload == true ){
@@ -564,22 +582,30 @@ class ProductAdd extends React.Component {
            Product Details
           </button><br/><br/>
           {
-          this.props.product_id == undefined? 
+          this.props.product_id == undefined ? 
           <button className="btn btn-primary form-control" style={style} 
-             onClick={this.ActivePage.bind(this,"gallery")} >
+             onClick={this.ActivePage.bind(this,"gallery")}>
            Gallery
           </button>
           :
 
           <button className="btn btn-primary form-control" style={style} 
-          onClick={this.ActivePage.bind(this,"galleryEdit")} >
+          onClick={this.ActivePage.bind(this,"galleryEdit")}  >
            Gallery 
            </button>
           }<br/><br/>
+            {
+          this.props.product_id == undefined ? 
           <button className="btn btn-primary form-control" style={style} 
-              onClick={this.ActivePage.bind(this,"attributes")}  >
+              onClick={this.ActivePage.bind(this,"attributes")} disabled={this.state.isDisabled} >
            Attributes
           </button>
+          :
+          <button className="btn btn-primary form-control" style={style} 
+          onClick={this.ActivePage.bind(this,"attributes")}  >
+       Attributes
+      </button>
+            }
          
 
         </div>
@@ -936,11 +962,15 @@ class ProductAdd extends React.Component {
                   Media Gallery <br/><small>(size : 220 X 220)</small>
               </div>
                 <div className="col-sm-9">
-                  <form id="productMedia" name="productMedia" encType="multipart/form-data" className="text-capitalize">
+                  <form id="productMedia" name="productMedia" encType="multipart/form-data" 
+                  className="text-capitalize">
 
                     <div className="form-group">
 
-                      <input accept="image/*" onChange={this.handleGalleryImageUpload} id="gallery_media" type="file" className="form-control" autoComplete="off" name="media" multiple
+                      <input accept="image/*" 
+                      onChange={this.handleGalleryImageUpload}
+                       id="gallery_media" type="file" 
+                       className="form-control" autoComplete="off" name="media" multiple
                         data-toggle="tooltip" title="Click To Upload Media Image"
                       />
                     </div>
@@ -1005,7 +1035,7 @@ class ProductAdd extends React.Component {
       this.state.activePage =="galleryEdit"
       ?
 
-      this.props.product_id !==undefined?
+      this.props.product_id !==undefined ?
       <div className="col-9 card-body "style={{marginLeft:"15px"}} >
       <GalleryImageList product_id={this.props.product_id}/>
       </div>

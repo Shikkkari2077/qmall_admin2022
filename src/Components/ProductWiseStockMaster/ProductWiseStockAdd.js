@@ -811,7 +811,7 @@ class ProductWiseStockAdd extends React.Component {
               </div>
             </div>
 
-            <div className="col-md-6">
+            {/* <div className="col-md-6">
               <div className="row">
                 <div className="col-sm-3">
                   Variant Gallery Media
@@ -851,8 +851,8 @@ class ProductWiseStockAdd extends React.Component {
               </div>
               </div>
               
-         
-            </div>
+         */}
+            </div> 
 
           <div className="row">
             <div className="col-md-12">

@@ -342,8 +342,8 @@ class ProductList extends React.Component {
       name: "productMedia",
       label: "Image",
       options: {
-        filter: true,
-        sort: true,
+        filter: false,
+        sort: false,
         customBodyRender: (productMedia, tableMeta) => {
           return (<img src={productMedia !== undefined
              && productMedia !== null 
@@ -355,30 +355,30 @@ class ProductList extends React.Component {
       name: "unique_identifier",
       label: "Product ID",
       options: {
-        filter: true,
-        sort: true
+        filter: false,
+        sort: false
       }
     },  {
       name: "name_en",
       label: "Product Name:English",
       options: {
-        filter: true,
-        sort: true
+        filter: false,
+        sort: false
       }
     }, {
       name: "name_ar",
       label: "Product Name:Arabic",
       options: {
-        filter: true,
-        sort: true
+        filter: false,
+        sort: false
       }
     }, {
       name: "stock",
       label: "Product Total Stock",
       options: {
         display:false,
-        filter: true,
-        sort: true
+        filter: false,
+        sort: false
       }
     },
     {
@@ -779,6 +779,7 @@ class ProductList extends React.Component {
       print: false,
       download: false,
       selectableRows: 'none',
+      filter:false,
       // pagination:false,
       textLabels: {
         body: {
@@ -864,6 +865,7 @@ class ProductList extends React.Component {
 
                         </div>
                       </div>
+                      <br/>
                       <div className="dt-responsive table-responsive">
 
                         {

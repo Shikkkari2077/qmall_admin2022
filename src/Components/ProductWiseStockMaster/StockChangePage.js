@@ -29,7 +29,7 @@ class StockChangePage extends React.Component {
       data.append("ShopId", localStorage.getItem('q8_mall_ad_uid'));
     }
     //console.log(localStorage.getItem('q8_mall_auth'))
-    fetch(Constant.getAPI() + "/product/get", {
+    fetch(Constant.getAPI() + "/product/combination/list", {
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -42,25 +42,8 @@ class StockChangePage extends React.Component {
        console.log(json.data)
 
       if (json.status === true) {
-        var products = []
-        for (var i = 0; i < json.data.length; i++) {
-          var obj = json.data[i];
-          if (json.data[i].Shop !== null) {
-            obj.Shop_name = json.data[i].Shop.name_en
-          } else {
-            obj.Shop_name = '-'
-          }
-          var stock = 0;
-          if (json.data[i].Stocks !== null) {
-            for (var j = 0; j < json.data[i].Stocks.length; j++) {
-              stock = parseInt(stock) + parseInt(json.data[i].Stocks[j].count)
-            }
-          }
-
-          obj.stock = stock
-          products.push(obj);
-        }
-        that.setState({ product_list: json.data, isSaving: false });
+       
+        that.setState({ product_list: [], isSaving: false });
         // that.setState({ product_list: json.data, isSaving: false });
       } else {
         that.setState({ product_list: [], isSaving: false });

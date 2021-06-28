@@ -116,6 +116,9 @@ class AddGalleryImages extends React.Component {
   render() {
     return (
       <div className="">
+        {
+          console.log("hello")
+        }
         <div className="card-body">
           <div className="row">
             <div className="col-md-6">
