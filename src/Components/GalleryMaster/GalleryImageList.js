@@ -102,6 +102,10 @@ class GalleryImageList extends React.Component {
   imgLoadError = (event) => {
     event.target.src = './theme/images/default.jpg'
   }
+  reload=()=>{
+    this.getProductList();
+
+  }
   render() {
     return (
       <div className="pcoded-inner-content" >
@@ -154,7 +158,7 @@ class GalleryImageList extends React.Component {
                       <div class="default-grid ">
                         <div id="lightgallery" className="lightgallery-popup">
                           {/* <Link class="media-middle" to="/"> */}
-                          <AddGalleryImages product_id={this.props.product_id !== undefined ?this.props.product_id:this.props.match.params.product_id} />
+                          <AddGalleryImages product_id={this.props.product_id !== undefined ?this.props.product_id:this.props.match.params.product_id}  reload={this.reload}/>
 
                           <div class="row">
                             {

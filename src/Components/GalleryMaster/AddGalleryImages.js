@@ -79,12 +79,14 @@ class AddGalleryImages extends React.Component {
       return response.json();
     }).then(function (json) {
       if (json.status === true) {
-        Swal.fire("Added !", "Product Media has been Added", "success");
-        if(that.props.case =="add")
+         that.props.reload()
+        
+      //   Swal.fire("Added !", "Product Media has been Added", "success");
+      //   if(that.props.case =="add")
          
-          window.location.href = `#/products/stock/${json.data[0].ProductId}/add`;
-        else
-       {window.location.href = `#/products/add/${that.props.product_id}`;}
+      //     window.location.href = `#/products/stock/${json.data[0].ProductId}/add`;
+      //   else
+      //  {window.location.href = `#/products/add/${that.props.product_id}`;}
         //console.log(this.props.match.params.product_id)
         that.setState({ isSaving: false })
       } else {

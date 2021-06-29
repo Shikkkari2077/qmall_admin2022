@@ -24,13 +24,13 @@ class ProductWiseStockAdd extends React.Component {
         "variantId":"",
         "deliveryOptions":"",
         "showInListing":"false",
-        "MediaId":"",
+        "MediaId":localStorage.getItem('shop_media'),
         "attributeArray":[
                 {  "AttributeId":"",
                    "AttributeValueId":""
                 },
               ],
-        "mediaArray":[""]
+        "mediaArray":[localStorage.getItem('shop_media')]
        }
      ],
      nameArray:[
@@ -150,69 +150,9 @@ class ProductWiseStockAdd extends React.Component {
       $("#banner_image_label").append(img);
     }
   }
+
  
-  getProductWiseStockList = () => {
-    var that = this;
-    var data = new URLSearchParams();
-    // this.setState({ isSaving: true });
-    // if (localStorage.getItem('q8_mall_ad_role') === "shop") {
-    //   data.append("ShopId", localStorage.getItem('q8_mall_ad_uid'));
-    // }
-    data.append("ProductId", that.props.product_id);
-    // data.append("StockId", that.props.stock_id);
-    fetch(Constant.getAPI() + "/product/stock/get", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Authorization": localStorage.getItem('q8_mall_auth')
-      },
-      body: data
-    }).then(function (response) {
-      return response.json();
-    }).then(function (json) {
-      console.log(json.data)
-      if (json.status === true) {
-        for (var i = 0; i < json.data.length; i++) {
-          if (json.data[i].id === that.props.stock_id) {
-            var attributes = []
-            for (var j = 0; j < json.data[i].AttributeValues.length; j++) {
-              attributes.push(json.data[i].AttributeValues[j].id)
-              //console.logog("Selected Attributes : ", attributes)
-              $("#product_attributes_value_" + json.data[i].AttributeValues[j].id).prop("checked", true)
-            }
-            if(json.data[i].Prices !== undefined && json.data[i].Prices[0] !== undefined){
-              that.setState({
-                value:json.data[i].Prices[0].value,
-                specialPrice:json.data[i].Prices[0].specialPrice,
-               // CurrencyId:json.data[i].Prices[0].CurrencyId,
 
-              })
-            }
-            that.setState({
-              product_stock_list: json.data[i],
-              count: json.data[i].count,
-              selected_attributes: attributes,
-              isSaving: false,
-              barNumber:json.data[i].barNumber,
-             
-              
-            });
-
-          }
-        }
-      } else {
-        that.setState({ product_stock_list: [], isSaving: false });
-        // Swal.fire({
-        //   title: "Something went wrong. Try again after some Time.!",
-        //   icon: 'error',
-        //   text: "",
-        //   confirmButtonColor: "#3085d6",
-        //   cancelButtonColor: "#d33",
-        //   confirmButtonText: "Ok"
-        // })
-      }
-    });
-  }
   getProductDetails = () => {
     var that = this;
     var data = new URLSearchParams();
@@ -229,51 +169,12 @@ class ProductWiseStockAdd extends React.Component {
       return response.json();
     }).then(function (json) {
       console.log(json.data)
-      // if (json.status === true && json.data[0] !==undefined && json.data[0].productMedia!== undefined) {
-      //   var attribute_list = []
-        // if (json.data[0].Attributes !== null && json.data[0].Attributes !== [] && json.data[0].Attributes.length > 0) {
-        //   for (var i = 0; i < json.data[0].Attributes.length; i++) {
-        //     for (var j = 0; j < json.data[0].Attributes[i].AttributeValues.length; j++) {
-        //       attribute_list.push(json.data[0].Attributes[i].AttributeValues[j]);
-        //     }
-        //   }
-        // }
-         //console.logog(json.data[0].Attributes)
-        // if (json.data[0].productMedia !== null) {
-        //   that.setState({
-        //     attribute_type_data: json.data[0],
-        //     product_name: json.data[0].name,
-        //     attribute_unit: json.data[0].unit,
-        //     attribute_value: json.data[0].value,
-        //     CategoryId: json.data[0].CategoryId,
-        //     attribute_list: json.data[0].Attributes,
-        //   });
-        // } 
-        // else {
-        //   that.setState({
-        //     attribute_type_data: json.data[0],
-        //     product_name: json.data[0].name,
-        //     attribute_unit: json.data[0].unit,
-        //     attribute_value: json.data[0].value,
-        //     CategoryId: json.data[0].CategoryId,
-        //     attribute_list: json.data[0].Attributes
-        //   });
-        // }
-      // } else {
-      //   that.setState({ attribute_type_data: {} });
-        // Swal.fire({
-        //   title: "Something went wrong. Try again after some Time.!",
-        //   icon: 'error',
-        //   text: "",
-        //   confirmButtonColor: "#3085d6",
-        //   cancelButtonColor: "#d33",
-        //   confirmButtonText: "Ok"
-        // })
-     // }
+    
     });
   }
   componentDidMount(){
     this.getAttributes()
+    console.log(localStorage.getItem('shop_media'))
     console.log(this.props.product_id)
     console.log(this.props.stock_id)
   }

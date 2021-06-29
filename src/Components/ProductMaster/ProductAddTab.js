@@ -70,7 +70,7 @@ class ProductAddTab extends React.Component {
                     </li>
                     <li className="breadcrumb-item">
                       <Link to="/products">
-                        Product</Link>
+                        Product List</Link>
                     </li>
                     <li className="breadcrumb-item active">
                       {this.props.match.params.product_id ? "Edit" : "Add"}{" "} Product

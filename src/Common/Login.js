@@ -40,6 +40,8 @@ class Login extends React.Component {
           localStorage.setItem("q8_mall_ad_uid", json.id)
           localStorage.setItem("q8_mall_ad_email", json.email)
           localStorage.setItem("q8_mall_ad_role", that.state.role)
+          localStorage.setItem("shop_media", json.MediaId)
+
         }
         Swal.fire({
           title: "Login Successfully ",

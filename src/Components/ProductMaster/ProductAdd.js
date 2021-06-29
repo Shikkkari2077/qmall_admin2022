@@ -17,6 +17,8 @@ class ProductAdd extends React.Component {
     refund_policy: "",
     isDisabled:true,
     refund_policy_ar: "",
+    byId:"",
+    byName:"",
     media_id:"",
     selected_attributes: [],
     gallery_media: []
@@ -67,22 +69,22 @@ class ProductAdd extends React.Component {
     });
   }
   handleGalleryImageUpload = (event) => {
-    document.getElementById('gallery_image_label').innerHTML = "";
+   // document.getElementById('gallery_image_label').innerHTML = "";
     let element = $("#gallery_media").get(0);
-    $("#socialize_image_section").empty();
+    // $("#socialize_image_section").empty();
     this.setState({ acceptedgallery: element });
-    var proof_img = [];
-    let obj = {};
-    //console.log(element.files);
-    this.setState({ category_image: element.files, galleryupload:true });
+  
+
+        var arrayImage=[]
     for (var i = 0; i < element.files.length; i++) {
-      var file1 = element.files[i];
-      var img = document.createElement("img");
-      img.className = "img-responsive img-100";
-      var filePath = URL.createObjectURL(file1);
-      img.src = filePath;
-      $("#gallery_image_label").append(img);
+      arrayImage[i]=URL.createObjectURL(event.target.files[i]) 
     }
+    
+    this.setState({ 
+      category_image: element.files,
+      galleryupload:true,
+      arrayImage        });
+  
   }
   onHandleDescriptionChange = value => {
     this.setState({ description: value });
@@ -90,15 +92,7 @@ class ProductAdd extends React.Component {
   onHandleDescriptionChangeAr = value => {
     this.setState({ description_ar: value });
   };
-  onHandleRefundPolicyChange = value => {
-    this.setState({ refund_policy: value });
-  };
-  onHandleRefundPolicyChangeAr= (value) => {
-    this.setState({ refund_policy_ar: value });
-  };
-  // onHandleRefundPolicyChangeAr = value => {
-  //   this.setState({ refund_policy_ar: value });
-  // };
+
   componentDidMount() {
     if (this.props.language_id !== undefined) {
       if (this.props.product_id !== undefined) {
@@ -135,7 +129,7 @@ class ProductAdd extends React.Component {
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
- getCategoryListAdmin2(id){
+  getCategoryListAdmin2(id){
     var that = this;
     this.setState({ isSaving: true });
     var data = new URLSearchParams();
@@ -188,14 +182,7 @@ class ProductAdd extends React.Component {
         } else {
           that.setState({ category_list: [], isSaving: false });
 
-          // Swal.fire({
-          //   title: "Something went wrong. Try again after some Time.!",
-          //   icon: "error",
-          //   text: "",
-          //   confirmButtonColor: "#3085d6",
-          //   cancelButtonColor: "#d33",
-          //   confirmButtonText: "Ok",
-          // });
+         
         }
       });
   };
@@ -256,13 +243,14 @@ class ProductAdd extends React.Component {
     var proof_img = [];
     let obj = {};
     //console.log(element.files);
-    this.setState({ product_banner_image: element.files });
+    this.setState({ product_banner_image: element.files,image:URL.createObjectURL(event.target.files[0]) });
     for (var i = 0; i < element.files.length; i++) {
       var file1 = element.files[i];
       var img = document.createElement("img");
       img.className = "img-100";
       var filePath = URL.createObjectURL(file1);
       img.src = filePath;
+      console.log(filePath)
       $("#banner_image_label").append(img);
     }
   }
@@ -296,11 +284,9 @@ class ProductAdd extends React.Component {
           Product_unique_id:product.unique_identifier,
           priority:product.priority,
           description:product.description_en,
-         // refund_policy:product.refundPolicy_en,
           description_ar:product.description_ar,
-         // refund_policy_ar:product.refundPolicy_ar,
-
-          //image:product.productMedia.url
+         SectionId:product.SectionId,
+          image:product.productMedia.url
 
           
         })
@@ -319,11 +305,7 @@ class ProductAdd extends React.Component {
       activePage:"gallery"
     })
   }
-  // onsavegalley=()=>{
-  //   var that = this;
-  //   that.setState({ isSaving: true });
-
-  // }
+  
   onSaveData = () => {
     var that = this;
     that.setState({ isSaving: true });
@@ -337,7 +319,6 @@ class ProductAdd extends React.Component {
         that.updateCategoryData(that.state.MediaId);
       } else {
         that.addCategory(that.state.MediaId);
-        // that.uploadGalleryMedia();
 
       }
     }
@@ -414,7 +395,10 @@ class ProductAdd extends React.Component {
     // data.append("refundPolicy_ar", that.state.refund_policy_ar);
 
     data.append("LanguageId", that.props.language_id);
-    data.append("MediaId", media_id);
+    if(this.state.accepted){
+      data.append("MediaId", media_id);
+
+    }
     data.append("SectionId", that.state.SectionId);
     // data.append("ShopId", that.state.ShopId);
     data.append("ProductId", that.props.product_id);
@@ -433,7 +417,6 @@ class ProductAdd extends React.Component {
     }).then(function (json) {
       if (json.status === true) {
         Swal.fire("Updated !", "Product has been Updated", "success");
-        window.location.href = "#/products"
         that.setState({ isSaving: false })
       } else {
         that.setState({ isSaving: false });
@@ -500,7 +483,7 @@ class ProductAdd extends React.Component {
         that.setState({
           isDisabled:false,
           ProductId:product_id,
-          activePage:"gallery"
+          activePage:"attributes"
         })
         
        if(that.state.galleryupload == true ){
@@ -582,7 +565,7 @@ class ProductAdd extends React.Component {
            Product Details
           </button><br/><br/>
           {
-          this.props.product_id == undefined ? 
+          this.props.product_id == undefined && this.state.ProductId == undefined ? 
           <button className="btn btn-primary form-control" style={style} 
              onClick={this.ActivePage.bind(this,"gallery")}>
            Gallery
@@ -598,13 +581,13 @@ class ProductAdd extends React.Component {
           this.props.product_id == undefined ? 
           <button className="btn btn-primary form-control" style={style} 
               onClick={this.ActivePage.bind(this,"attributes")} disabled={this.state.isDisabled} >
-           Attributes
+          Add Variant 
           </button>
           :
           <button className="btn btn-primary form-control" style={style} 
           onClick={this.ActivePage.bind(this,"attributes")}  >
-       Attributes
-      </button>
+          Add Variant 
+          </button>
             }
          
 
@@ -719,13 +702,7 @@ class ProductAdd extends React.Component {
                         ?
                         this.state.category_list.map(category =>
                           <option key={category.id} value={category.id}>{category.name_en + " / " + category.name_ar}</option>
-                          // category.child !== undefined && category.child !== null && category.child !== [] && category.child.length > 0
-                          //   ?
-                          //   category.child.map(child_category =>
-                          //     <option key={child_category.id} value={child_category.id}>{child_category.name}</option>
-                          //   )
-                          //   :
-                          //   null
+                        
                         )
                         :
                         null
@@ -833,91 +810,6 @@ class ProductAdd extends React.Component {
               </div>
             </div>
             </div> */}
-            
-             
-          
-          {/* <div className="row">
-            <div className="col-md-12">
-              <div className="form-group row">
-                <label className="col-sm-2 col-form-label">Attributes</label>
-                <div className="col-sm-10">
-                  <div className="p-20 z-depth-right-1 waves-effect " data-toggle="tooltip" data-placement="top" title="" data-original-title="Service List">
-                    <div className="row">
-                      { 
-                        this.state.attribute_list !== undefined &&
-                          this.state.attribute_list !== null &&
-                          this.state.attribute_list !== [] &&
-                          this.state.attribute_list.length > 0 ? (
-                            this.state.attribute_list.map(attributes =>(
-                              attributes.name_en !=="Default Attribute"?
-                              // attributes.AttributeTypeId !== null ?
-                              <div className=" col-sm-4" key={attributes.id}>
-                                <div className="checkbox-fade fade-in-primary">
-                                  <label>
-                                    <input
-                                     type="checkbox" 
-                                     id={"product_attributes_" + attributes.id} 
-                                     value={attributes.id}
-                                     onChange={this.changeAttributesSelection} />
-                                     <span className="cr">
-                                     <i className="cr-icon icofont icofont-ui-check txt-primary"></i>
-                                    </span>
-                                    <span>
-                                      {  attributes.name_ar !== "" ?
-                                      attributes.name_en + " / " + attributes.name_ar 
-                                      :
-                                      attributes.name_en
-                                      }</span>
-                                  </label>
-                                </div>
-                              </div>
-                               :null
-
-                          ))) : ""
-                      }
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> */}
-          {/* {this.props.case === "add" ?<div>
-          <div className="row">
-            <div className="col-md-6">
-              <div className="row">
-                <div className="col-sm-3">
-                  Media Gallery <br/><small>(size : 220 X 220)</small>
-              </div>
-                <div className="col-sm-9">
-                  <form id="productMedia" name="productMedia" encType="multipart/form-data" className="text-capitalize">
-
-                    <div className="form-group">
-
-                      <input accept="image/*" onChange={this.handleGalleryImageUpload} id="gallery_media" type="file" className="form-control" autoComplete="off" name="media" multiple
-                        data-toggle="tooltip" title="Click To Upload Media Image"
-                      />
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6 mb-2">
-              <div id="gallery_image_label" className="pt-2">
-                {
-                  this.state.image
-                    ?
-                    this.state.image !== null || this.state.image !== undefined || this.state.image !== {}
-                      ?
-                      <img src={this.state.image} alt="" className="img-100" onError={e => { e.target.src = "" }} />
-                      :
-                      ''
-                    :
-                    ''
-                }
-              </div>
-            </div>
-          </div>
-          </div>:"" } */}
    
           
           <div className="card-footer">
@@ -948,12 +840,15 @@ class ProductAdd extends React.Component {
         </div >
         :null}
         {
-          this.state.activePage == "gallery"?
+          this.state.activePage == "gallery" && this.state.ProductId == undefined?
           <div className="col-9 card-body "style={{marginLeft:"15px"}} >
           
            
           
       {/* {this.props.case === "add" ? */}
+      {
+         console.log(this.state.arrayImage)
+      }
         <div>
           <div className="row">
             <div className="col-md-6">
@@ -981,16 +876,17 @@ class ProductAdd extends React.Component {
             <div className="col-md-6 mb-2">
               <div id="gallery_image_label" className="pt-2">
                 {
-                  this.state.image
-                    ?
-                    this.state.image !== null || this.state.image !== undefined || this.state.image !== {}
-                      ?
-                      <div className="col">
-                      <img src={this.state.image} alt="" className="img-100" onError={e => { e.target.src = "" }} />
-                      &nbsp;
-                      </div>
-                      :
-                      ''
+            this.state.arrayImage !==undefined       
+             ?
+             this.state.arrayImage.map(image2=>{
+               return(
+                <img src={image2} alt="" className="img-100"  />
+                //  &nbsp;
+               
+              )
+               })
+                     
+                      
                     :
                     ''
                  }
@@ -1035,12 +931,13 @@ class ProductAdd extends React.Component {
       this.state.activePage =="galleryEdit"
       ?
 
-      this.props.product_id !==undefined ?
+      this.props.product_id !==undefined || this.state.ProductId !== undefined ?
       <div className="col-9 card-body "style={{marginLeft:"15px"}} >
-      <GalleryImageList product_id={this.props.product_id}/>
+      <GalleryImageList product_id={this.props.product_id !== undefined ? this.props.product_id:this.state.ProductId }/>
       </div>
       :null
       :null
+
     }
 
       </div ></div>

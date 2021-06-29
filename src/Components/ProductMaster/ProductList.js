@@ -42,7 +42,7 @@ class ProductList extends React.Component {
         }).then(function (json) {
           if (json.status === true) {
             Swal.fire("Deleted!", "Product deleted.", "success");
-            that.getProductList();
+            that.getProductList(that.state.dataLength,that.state.datarange,that.state.byID,that.state.byname);
           } else {
             Swal.fire({
               title: "Something went wrong. Try again after some Time.!",
@@ -319,22 +319,34 @@ class ProductList extends React.Component {
 	}
   search=(e)=>{
     if(e.target.value.length == 0)
-    { this.getProductList(10,0)}
+    { this.getProductList(10,0)
+      this.setState({
+        byname:"",
+        byID:"",
+        search:""
+      })
+    }
    this.setState({
      search:e.target.value
    })
-   if(e.target.value==" ")
-   {
-     console.log('empty now')
-   }
+  
 
   }
   byID=()=>{
     this.getProductList(10,0,this.state.search)
+    this.setState({
+      byID:this.state.search,
+      byname:""
+    })
 
   }
   byName=()=>{
     this.getProductList(10,0,"",this.state.search)
+    this.setState({
+      byname:this.state.search,
+      byID:"",
+
+    })
 
   }
   render() {

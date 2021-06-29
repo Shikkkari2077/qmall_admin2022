@@ -86,6 +86,53 @@ class ProductWiseStockList extends React.Component {
     this.getProductWiseStockList();
 
   }
+  changeStock=(combinationId,productId,e)=>{
+    console.log(e.target.value,combinationId,productId)
+    this.setState({
+     count:e.target.value,
+     combinationId,
+     productId
+    })
+   }
+   updateStock=()=>{
+    var that = this;
+   if( that.state.count>=0){
+    var data = new URLSearchParams();
+    this.setState({ isSaving: true });
+    data.append("stock", that.state.count);
+    data.append("productId", that.state.productId);
+    data.append("combinationId", that.state.combinationId);
+   
+    fetch(Constant.getAPI() + "/product/combination/update", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": localStorage.getItem('q8_mall_auth')
+      },
+      body: data
+    }).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      if (json.success === true) {
+        that.getProductWiseStockList()
+         that.setState({ isSaving: false, count:'', StockId:'', ProductId:'' })
+      } else {
+        that.setState({ isSaving: false });
+        Swal.fire({
+          title: "Something went wrong. Try again after some Time.!",
+          icon: 'error',
+          text: "",
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Ok"
+        })
+      }
+    });
+  }
+  
+
+}
+
   onOpenMediaModal = (stock_id) => {
     var media = []
     for (var i = 0; i < this.state.product_list.length; i++) {
@@ -99,24 +146,12 @@ class ProductWiseStockList extends React.Component {
     var media = []
     this.setState({ isOpen: false, stock_media: media });
   }
+ 
   render() {
     const columns = [
-    //   {
-    //   name: "Product.name_en",
-    //   label: "Product Name",
-    //   options: {
-    //     filter: true,
-    //     sort: true
-    //   }
-    // },
-     {
-      name: "stock",
-      label: "Variant Stock",
-      options: {
-        filter: true,
-        sort: true
-      }
-    }, 
+
+     
+    
     {
       name: "barCode",
       label: "Bar Code",
@@ -125,14 +160,7 @@ class ProductWiseStockList extends React.Component {
         sort: true
       }
     },
-    // {
-    //   name: "variantId",
-    //   label: "Varient Id",
-    //   options: {
-    //     filter: true,
-    //     sort: true
-    //   }
-    // },
+ 
     {
       name: "CombinationAttributes",
       label: "Attribute Values",
@@ -163,31 +191,7 @@ class ProductWiseStockList extends React.Component {
       options: {
         filter: true,
         sort: true,
-        // customBodyRender: (price, tableMeta) => {
-        //   return <div>
-        //     {
-        //       // Prices !== null && Prices !== [] && Prices.length > 0
-        //       //   ?
-        //       //   <ul type="square">
-        //       //     {
-        //       //       Prices.map(price_data =>
-        //       //         <li key={price_data.id}>
-        //       //           {/* <span className="text-line-through"> */}
-        //       //           <span>
-        //       //             Original Price : {price_data.value} {price_data.CurrencyId}
-        //       //           </span> <br />
-        //       //           <span>
-        //       //             Special Price : {price_data.specialPrice} {price_data.CurrencyId}
-        //       //           </span>
-        //       //         </li>
-        //       //       )
-        //       //     }
-        //       //   </ul>
-        //       //   :
-        //       //   "-"
-        //     }
-        //   </div>
-        // }
+        
       }
     }, {
       name: "id",
@@ -231,10 +235,63 @@ class ProductWiseStockList extends React.Component {
         }
 
       }
-    }];
+    },
+   { name: "stock",
+    label: "Variant Stock",
+    options: {
+      filter: true,
+      sort: true
+    }
+  }, 
+    {
+      name: "stock",
+      label: "Update Stock",
+      options: {
+        filter: true,
+        sort: true,
+        customBodyRender:(stock,tableMeta)=>{
+            return(
+                  <div style={{paddingBottom:"5px"}}>
+                      
+                     <li >
+                         
+                      <input 
+                      style={{width:"50px",height:"30px"}}
+                      type="number" 
+                      //value={stock}
+                       onChange={this.changeStock.bind(this,tableMeta.rowData[3],tableMeta.rowData[6])}
+                     />
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                      
+           <span 
+           onClick={this.updateStock}
+            className="m-r-15 text-muted"
+            data-toggle="tooltip"
+            data-placement="top"
+            title=""
+            data-original-title="tick">
+            <i className="f-24 icofont icofont-refresh text-primary"></i>  </span> 
+                      </li>
+                      </div>
+                    
+                )
+            
+
+        }
+      }
+    },
+    {
+      name:"ProductId",
+      options:{
+        display:false,
+      }
+    }
+  ];
     const options = {
       filterType: "dropdown",
       viewColumns: false,
+      rowsPerPage:"100",
       print: false,
       download: false,
       selectableRows: 'none',
