@@ -20,6 +20,8 @@ class ImportData extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      showLoad:false,
+      showLoadmessage:"UPLOADING IN PROGRESS",
       errorArray:[],
       error:{},
       Sheetmessage:"",
@@ -39,10 +41,13 @@ class ImportData extends React.Component {
     };
   }
   productToUpload(file){
+    this.setState({
+      showLoad:true
+    })
     const that=this;
-   const formData = new FormData();
-          formData.append("sheet", file);
-        //console.log(file)
+    const formData = new FormData();
+     formData.append("sheet", file);
+       
 
         fetch(Constant.getAPI() + "/product/import", {
           method:"post",
@@ -56,6 +61,7 @@ class ImportData extends React.Component {
           .then(function (json) {
             //console.log(json)
              if (json.sucess == true) {
+     
                Swal.fire({
                  title:json.message,
                  
@@ -64,16 +70,26 @@ class ImportData extends React.Component {
                that.setState({
                  errorArray:json.errors,
                  show:true,
-                 Sheetmessage:json.message
-                 
+                 Sheetmessage:json.message,
+                 showLoadmessage:"SHEET UPLODED SUCCESSFULLY",
+
                })
           }
+          else{
+            this.setState({
+              showLoadmessage:"FAILED"
+            })
+          }
          })
-        //  .catch((err) => {
-        //     const errMsg = err.message;
-        //     //console.log(err)
-        //     this.onError();
-        //   });
+         .catch((err) => {
+           this.setState({
+            showLoadmessage:"FAILED",
+
+           })
+            const errMsg = err.message;
+            //console.log(err)
+            this.onError();
+          });
   }
 
   componentDidMount() {
@@ -248,57 +264,25 @@ class ImportData extends React.Component {
       search: false,
       print: false,
       download: false,
-      //fixedHeader: true,
-     // serverSide: true,
-      // onTableChange: (action, tableState) => {
-      //   //console.log(action, tableState);
-      //   switch (action) {
-      //     case "changePage":
-      //       this.changePage(tableState.page);
-      //       break;
-      //     default:
-      //   }
-      // },
+  
       selectableRows: false,
-      // textLabels: {
-      //   body: {
-      //     noMatch: this.state.showLabel ? (
-      //       <div
-      //         style={{
-      //           textAlign: "center",
-      //           display: "flex",
-      //           color: "red",
-      //           width: "1024px",
-      //           justifyContent: "center",
-      //         }}
-      //       >
-      //         Loading data..!
-      //       </div>
-      //     ) : (
-      //       <div
-      //         style={{
-      //           textAlign: "center",
-      //           display: "flex",
-      //           color: "red",
-      //           width: "1024px",
-      //           justifyContent: "center",
-      //         }}
-      //       >
-      //         <p style={{ textAlign: "center" }}>
-      //         Sorry, No Data Found
-      //         </p>
-      //       </div>
-      //     ),
-      //     toolTip: "Sort",
-      //     columnHeaderTooltip: (column) => `Sort for ${column.label}`,
-      //   },
-      // },
+ 
     };
     return (
+
       <div className="pcoded-inner-content">
         <div className="main-body">
           <div className="page-wrapper">
             <div className="page-header">
+            { this.state.showLoad === true?
+                  <div className="row bg-primary d-flex justify-content-center text-dark font-weight-bold" 
+                    >
+                    {
+                      this.state.showLoadmessage
+                    }
+                    </div>
+                    :null
+                }
               <div className="row align-items-end">
                 <div className="col-lg-8">
                   <div className="page-header-title">
@@ -307,6 +291,7 @@ class ImportData extends React.Component {
                     </div>
                   </div>
                 </div>
+             
                 <div className="col-lg-4">
                   <div className="page-header-breadcrumb">
                     <ul className="breadcrumb-title">
