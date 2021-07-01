@@ -195,6 +195,18 @@ class ProductWiseStockAdd extends React.Component {
       return response.json();
     }).then(function (json) {
       console.log(json)
+      var arr=json.data
+      var combinationArray =that.state.combinationArray
+      for(let i=0;i<arr.length;i++){
+        
+        if(arr[i].name_en == "Default Attribute"){
+          console.log(arr[i])
+          //AttributeValues[0].id
+          combinationArray[0].attributeArray[0].AttributeId=arr[i].id
+          combinationArray[0].attributeArray[0].AttributeValueId=arr[i].AttributeValues[0].id
+
+        }
+      }
       if(json.status == true){
         that.setState({
           attribute_list:json.data

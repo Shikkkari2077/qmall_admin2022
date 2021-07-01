@@ -167,14 +167,14 @@ class Header extends React.Component {
          
           <div className="navbar-container container-fluid">
             <ul className="nav-right">
-            {/* {
+            {
                 localStorage.getItem('q8_mall_ad_role') === "shop"?
               <li> 
               <Link to="/stockchange">
           <i  className="f-16 feather "> STOCK<sup><i class="feather icon-layers f-16"/></sup></i>
           </Link>
               </li>
-              :null} */}
+              :null}
               {
                 localStorage.getItem('q8_mall_ad_role') === "shop"
                   ?

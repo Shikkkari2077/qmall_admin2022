@@ -15,6 +15,40 @@ class StockChangePage extends React.Component {
     StockId:'',
     ProductId:''
   }
+  getProductWiseStockList = () => {
+    var that = this;
+    var data = new URLSearchParams();
+    this.setState({ isSaving: true });
+    // if (localStorage.getItem('q8_mall_ad_role') === "shop") {
+    //   data.append("ShopId", localStorage.getItem('q8_mall_ad_uid'));
+    // }
+    data.append("productId", that.props.match.params.product_id);
+    fetch(Constant.getAPI() + "/product/combination/list", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": localStorage.getItem('q8_mall_auth')
+      },
+      body: data
+    }).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      //console.log(json)
+      if (json.success === true) {
+        that.setState({ product_list: json.data, isSaving: false });
+      } else {
+        that.setState({ product_list: [], isSaving: false });
+        Swal.fire({
+          title: "Something went wrong. Try again after some Time.!",
+          icon: 'error',
+          text: "",
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Ok"
+        })
+      }
+    });
+  }
  
   getProductList = () => {
       console.log("called")
@@ -59,271 +93,265 @@ class StockChangePage extends React.Component {
     });
   }
   componentWillMount() {
-    this.getProductList();
   }
  
 
-  changeStock(id,productId,e){
-   console.log(e.target.value,id,productId)
-   this.setState({
-    count:e.target.value,
-    StockId:id,
-         ProductId:productId
-   })
+  changeStock=(combinationId,productId,e)=>{
+    console.log(e.target.value,combinationId,productId)
+    this.setState({
+     count:e.target.value,
+     combinationId,
+     productId
+    })
+   }
+
+  updateStock=()=>{
+    var that = this;
+   if( that.state.count>=0){
+    var data = new URLSearchParams();
+    this.setState({ isSaving: true });
+    data.append("stock", that.state.count);
+    data.append("productId", that.state.productId);
+    data.append("combinationId", that.state.combinationId);
+   
+    fetch(Constant.getAPI() + "/product/combination/update", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": localStorage.getItem('q8_mall_auth')
+      },
+      body: data
+    }).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      if (json.success === true) {
+        that.getProductWiseStockList()
+         that.setState({ isSaving: false, count:'', StockId:'', ProductId:'' })
+      } else {
+        that.setState({ isSaving: false });
+        Swal.fire({
+          title: "Something went wrong. Try again after some Time.!",
+          icon: 'error',
+          text: "",
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Ok"
+        })
+      }
+    });
   }
+  
 
-  updateStock(){
-        var that = this;
-       
-        var data = new URLSearchParams();
-        this.setState({ isSaving: true });
-        data.append("count", that.state.count);
-        
-        data.append("ProductId", that.state.ProductId);
-        data.append("StockId", that.state.StockId);
-       
-        fetch(Constant.getAPI() + "/product/stock/update", {
-          method: "post",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Authorization": localStorage.getItem('q8_mall_auth')
-          },
-          body: data
-        }).then(function (response) {
-          return response.json();
-        }).then(function (json) {
-          if (json.status === true) {
-            Swal.fire("Stock Updated!", "", "success");
-            that.getProductList()
-
-           // window.location.href = `#/products/stock/${that.props.product_id}`
-            that.setState({ isSaving: false, count:'',
-                StockId:'',
-                     ProductId:'' })
-          } else {
-            that.setState({ isSaving: false });
-            Swal.fire({
-              title: "Something went wrong. Try again after some Time.!",
-              icon: 'error',
-              text: "",
-              confirmButtonColor: "#3085d6",
-              cancelButtonColor: "#d33",
-              confirmButtonText: "Ok"
-            })
-          }
-        });
-    
-      
-
-  }
+}
  
  
   render() {
-    const shop_columns = [{
-      name: "productMedia",
-      label: "Image",
-      options: {
-          filter:false,
-          sort:false,
+    const shop_columns = [
+    //   {
+    //   name: "productMedia",
+    //   label: "Image",
+    //   options: {
+    //       filter:false,
+    //       sort:false,
       
-        customBodyRender: (productMedia, tableMeta) => {
-          return (<img src={productMedia !== undefined
-             && productMedia !== null 
-             && productMedia !== {} ? productMedia.url : localStorage.getItem("companylogo")} className="img-fluid img-40" alt="tbl" />)
-        }
-      }
-    },
-    {
-      name: "unique_identifier",
-      label: "Product ID",
-      options: {
-        filter: false,
-        sort: false
-      }
-    },  {
-      name: "name_en",
-      label: "Product Name",
-      options: {
-        filter: true,
-        sort: true,
-        customBodyRender:(name_en,tableMeta)=>{
-            return(
-                name_en+" "+"/"+" "+tableMeta.rowData[3]
-            )
-        }
+    //     customBodyRender: (productMedia, tableMeta) => {
+    //       return (<img src={productMedia !== undefined
+    //          && productMedia !== null 
+    //          && productMedia !== {} ? productMedia.url : localStorage.getItem("companylogo")} className="img-fluid img-40" alt="tbl" />)
+    //     }
+    //   }
+    // },
+    // {
+    //   name: "unique_identifier",
+    //   label: "Product ID",
+    //   options: {
+    //     filter: false,
+    //     sort: false
+    //   }
+    // },  {
+    //   name: "name_en",
+    //   label: "Product Name",
+    //   options: {
+    //     filter: true,
+    //     sort: true,
+    //     customBodyRender:(name_en,tableMeta)=>{
+    //         return(
+    //             name_en+" "+"/"+" "+tableMeta.rowData[3]
+    //         )
+    //     }
         
-      }
-    },
-     {
-      name: "name_ar",
-      label: "Product Name:Arabic",
-      options: {
-          display:false,
-        filter: true,
-        sort: true
-      }
-    },
-    {
-        name: "id",
-        label: "ProductId",
-        options: {
-            display:false,
+    //   }
+    // },
+    //  {
+    //   name: "name_ar",
+    //   label: "Product Name:Arabic",
+    //   options: {
+    //       display:false,
+    //     filter: true,
+    //     sort: true
+    //   }
+    // },
+    // {
+    //     name: "id",
+    //     label: "ProductId",
+    //     options: {
+    //         display:false,
       
-        }
-      },
+    //     }
+    //   },
 
-     {
-      name: "stock",
-      label: "Product Total Stock",
-      options: {
-        filter: true,
-        sort: true
-      }
-    },
-     {
-      name: "Attributes",
-      label: "Product Attributes",
-      options: {
-        filter: true,
-        sort: false,
-        customBodyRender: (Attributes, tableMeta) => {
-          return <div>
-            {/* {console.log(Attributes)} */}
-            {      
+    //  {
+    //   name: "stock",
+    //   label: "Product Total Stock",
+    //   options: {
+    //     filter: true,
+    //     sort: true
+    //   }
+    // },
+    //  {
+    //   name: "Attributes",
+    //   label: "Product Attributes",
+    //   options: {
+    //     filter: true,
+    //     sort: false,
+    //     customBodyRender: (Attributes, tableMeta) => {
+    //       return <div>
+    //         {/* {console.log(Attributes)} */}
+    //         {      
 
-              Attributes !== null && Attributes !== [] && Attributes.length > 0
-                ?
-                <ol>
-                  { 
-                    Attributes.map(product_attr =>
-                      product_attr.name_en !== "Default Attribute"?
-                      <li key={product_attr.id}>{product_attr.name_en}</li>
-                      :null
-                    )
-                  }
-                </ol>
-                :
-                "-"
-            }
-          </div >
-        }
-      }
-    },
-    {
-        name: "Stocks",
-        label: "Barcode",
-        options: {
-          filter: true,
-          sort: true,
-          customBodyRender:(Stocks)=>{
-              return(
-                  Stocks.map(stock=>(
-                      <li >{
-                    stock.barNumber
-          }</li>
+    //           Attributes !== null && Attributes !== [] && Attributes.length > 0
+    //             ?
+    //             <ol>
+    //               { 
+    //                 Attributes.map(product_attr =>
+    //                   product_attr.name_en !== "Default Attribute"?
+    //                   <li key={product_attr.id}>{product_attr.name_en}</li>
+    //                   :null
+    //                 )
+    //               }
+    //             </ol>
+    //             :
+    //             "-"
+    //         }
+    //       </div >
+    //     }
+    //   }
+    // },
+    // {
+    //     name: "Stocks",
+    //     label: "Barcode",
+    //     options: {
+    //       filter: true,
+    //       sort: true,
+    //       customBodyRender:(Stocks)=>{
+    //           return(
+    //               Stocks.map(stock=>(
+    //                   <li >{
+    //                 stock.barNumber
+    //       }</li>
                       
-                  ))
-              )
+    //               ))
+    //           )
 
-          }
-        }
-      },
+    //       }
+    //     }
+    //   },
    
-    {
-        name: "Stocks",
-        label: "Attribute Value Stock Wise",
-        options: {
-          filter: true,
-          sort: true,
-          customBodyRender:(Stocks)=>{
-              return(
-                  Stocks.map(stock=>(
-                      //console.log(stock)
-                      <li style={{listStyle:"decimal"}}>{
-                      stock.AttributeValues.map(attribute=>(
-                        //   <li style={{ listStyle:"disc" }}>{
-                            attribute.name+" "+","+" "
-                            // }</li>
-                      ))
-          }</li>
+    // {
+    //     name: "Stocks",
+    //     label: "Attribute Value Stock Wise",
+    //     options: {
+    //       filter: true,
+    //       sort: true,
+    //       customBodyRender:(Stocks)=>{
+    //           return(
+    //               Stocks.map(stock=>(
+    //                   //console.log(stock)
+    //                   <li style={{listStyle:"decimal"}}>{
+    //                   stock.AttributeValues.map(attribute=>(
+    //                     //   <li style={{ listStyle:"disc" }}>{
+    //                         attribute.name+" "+","+" "
+    //                         // }</li>
+    //                   ))
+    //       }</li>
                       
-                  ))
-              )
+    //               ))
+    //           )
 
-          }
-        }
-      },
-      {
-        name: "Stocks",
-        label: "Price",
-        options: {
-          filter: true,
-          sort: true,
-          customBodyRender:(Stocks)=>{
-              return(
-                  Stocks.map(stock=>(
-                      <li>{
-                       stock.Prices.map(price=>(
-                        price.value
-                     ))
-          }</li>
+    //       }
+    //     }
+    //   },
+    //   {
+    //     name: "Stocks",
+    //     label: "Price",
+    //     options: {
+    //       filter: true,
+    //       sort: true,
+    //       customBodyRender:(Stocks)=>{
+    //           return(
+    //               Stocks.map(stock=>(
+    //                   <li>{
+    //                    stock.Prices.map(price=>(
+    //                     price.value
+    //                  ))
+    //       }</li>
                       
-                  ))
-              )
+    //               ))
+    //           )
 
-          }
-        }
-      },
-      {
-        name: "Stocks",
-        label: "Stock",
-        options: {
-          filter: true,
-          sort: true,
-          customBodyRender:(Stocks)=>{
-              return(
-                  Stocks.map(stock=>(
-                      <li>{
-                     stock.count}</li>))
-              )}}
-      },
-      {
-        name: "Stocks",
-        label: "Update Stock",
-        options: {
-          filter: true,
-          sort: true,
-          customBodyRender:(Stocks,tableMeta)=>{
-              return(
-                  Stocks.map(stock=>(
-                    <div style={{paddingBottom:"5px"}}>
+    //       }
+    //     }
+    //   },
+    //   {
+    //     name: "Stocks",
+    //     label: "Stock",
+    //     options: {
+    //       filter: true,
+    //       sort: true,
+    //       customBodyRender:(Stocks)=>{
+    //           return(
+    //               Stocks.map(stock=>(
+    //                   <li>{
+    //                  stock.count}</li>))
+    //           )}}
+    //   },
+    //   {
+    //     name: "Stocks",
+    //     label: "Update Stock",
+    //     options: {
+    //       filter: true,
+    //       sort: true,
+    //       customBodyRender:(Stocks,tableMeta)=>{
+    //           return(
+    //               Stocks.map(stock=>(
+    //                 <div style={{paddingBottom:"5px"}}>
                         
-                       <li >
+    //                    <li >
                            
-                        <input 
-                        style={{width:"50px",height:"30px"}}
-                        type="number" 
-                        //value={}
-                        onChange={this.changeStock.bind(this,stock.id,tableMeta.rowData[4])}/>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    //                     <input 
+    //                     style={{width:"50px",height:"30px"}}
+    //                     type="number" 
+    //                     //value={}
+    //                     onChange={this.changeStock.bind(this,stock.id,tableMeta.rowData[4])}/>
+    //                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
                         
-             <span onClick={this.updateStock.bind(this)}
-              className="m-r-15 text-muted"
-              data-toggle="tooltip"
-              data-placement="top"
-              title=""
-              data-original-title="tick">
-              <i className="f-24 icofont icofont-refresh text-primary"></i>  </span> 
-                        </li>
-                        </div>
+    //          <span onClick={this.updateStock.bind(this)}
+    //           className="m-r-15 text-muted"
+    //           data-toggle="tooltip"
+    //           data-placement="top"
+    //           title=""
+    //           data-original-title="tick">
+    //           <i className="f-24 icofont icofont-refresh text-primary"></i>  </span> 
+    //                     </li>
+    //                     </div>
                       
-                  ))
-              )
+    //               ))
+    //           )
 
-          }
-        }
-      },
+    //       }
+    //     }
+    //   },
   
     
    
@@ -393,6 +421,142 @@ class StockChangePage extends React.Component {
 
     //   }
     // }
+      
+    {
+      name: "barCode",
+      label: "Bar Code",
+      options: {
+        filter: true,
+        sort: true
+      }
+    },
+ 
+    {
+      name: "CombinationAttributes",
+      label: "Attribute Values",
+      options: {
+        filter: true,
+        sort: true,
+        customBodyRender: (CombinationAttributes, tableMeta) => {
+          return <div>
+            {  
+              CombinationAttributes.length>0?
+              CombinationAttributes.map(comb=>{
+                return(
+                  comb.Attribute.name_en !== "Default Attribute" ?
+                  <li>{comb.Attribute.name_en +" "+"-"+" "+ comb.AttributeValue.name_en}</li>
+                  :"-"
+                )
+              })
+ 
+              :"-"
+            
+            }
+          </div>
+        }
+      }
+    }, {
+      name: "price",
+      label: "Variant Pricing",
+      options: {
+        filter: true,
+        sort: true,
+        
+      }
+    }, {
+      name: "id",
+      label: "Action",
+      options: {
+        display:false,
+        filter: true,
+        sort: true,
+        customBodyRender: (id, tableMeta) => {
+          return <div>
+            <Link to={"/products/stock/" + this.props.match.params.product_id + "/add/" + id}
+              className="m-r-15 text-muted"
+              data-toggle="tooltip"
+              data-placement="top" title=""
+              data-original-title="Product Country Wise Price">
+              <i className="f-20 icofont icofont-ui-edit text-custom"></i>
+            </Link>
+            <Link to={"/products/price/" + id + "/" + this.props.match.params.product_id}
+              className="m-r-15 text-muted"
+              data-toggle="tooltip"
+              data-placement="top" title=""
+              data-original-title="Product Country Wise Price">
+              <i className="f-20 icofont icofont-plus text-primary"></i>
+            </Link>
+            {/* <span onClick={this.onOpenMediaModal.bind(this, id)}
+              className="m-r-15 text-muted"
+              data-toggle="tooltip"
+              data-placement="top"
+              title=""
+              data-original-title="View Gallery">
+              <i className="f-20 icofont icofont-picture text-warning"></i>  </span> */}
+
+            <span onClick={this.deleteStockDetails.bind(this, id)}
+              className="m-r-15 text-muted"
+              data-toggle="tooltip"
+              data-placement="top"
+              title=""
+              data-original-title="Delete">
+              <i className="f-20 icofont icofont-delete-alt text-danger"></i>  </span>
+          </div>
+        }
+
+      }
+    },
+   { name: "stock",
+    label: "Variant Stock",
+    options: {
+      filter: true,
+      sort: true
+    }
+  }, 
+    {
+      name: "stock",
+      label: "Update Stock",
+      options: {
+        filter: true,
+        sort: true,
+        customBodyRender:(stock,tableMeta)=>{
+            return(
+                  <div style={{paddingBottom:"5px"}}>
+                      
+                     <li >
+                         
+                      <input 
+                      style={{width:"50px",height:"30px"}}
+                      type="number" 
+                      //value={stock}
+                       onChange={this.changeStock.bind(this,tableMeta.rowData[3],tableMeta.rowData[6])}
+                     />
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                      
+           <span 
+           onClick={this.updateStock}
+            className="m-r-15 text-muted"
+            data-toggle="tooltip"
+            data-placement="top"
+            title=""
+            data-original-title="tick">
+            <i className="f-24 icofont icofont-refresh text-primary"></i>  </span> 
+                      </li>
+                      </div>
+                    
+                )
+            
+
+        }
+      }
+    },
+    {
+      name:"ProductId",
+      options:{
+        display:false,
+      }
+    }
     ];
    
     const options = {
