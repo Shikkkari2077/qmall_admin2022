@@ -207,9 +207,21 @@ class ProductWiseStockAdd extends React.Component {
 
         }
       }
+
+      var attribute=json.data
+
+      for(let i=0;i<json.data.length;i++){
+        if(json.data[i].name == "Default Attribute")
+        {   
+            console.log( json.data[i] )
+            attribute.splice(i, 1);
+          
+        }
+      }
+      console.log(attribute)
       if(json.status == true){
         that.setState({
-          attribute_list:json.data
+          attribute_list:attribute
         })
       }
       
@@ -780,6 +792,9 @@ class ProductWiseStockAdd extends React.Component {
                            > <i className="f-16 icofont icofont-plus "></i> Add 
                     </button>
                    <br/><br/>
+                   {
+                     console.log(this.state.attribute_list)
+                   }
                     {  
                     combination.attributeArray ? 
                     combination.attributeArray.map((attribute,index)=>{

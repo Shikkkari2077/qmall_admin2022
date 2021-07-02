@@ -63,7 +63,18 @@ class AttributeTypeList extends React.Component {
       return response.json();
     }).then(function (json) {
       if (json.status === true) {
-        that.setState({ attribute_type_list: json.data });
+      
+        var attribute=json.data
+        for(let i=0;i<json.data.length;i++){
+          if(json.data[i].name == "")
+          {   
+              console.log( json.data[i] )
+              attribute.splice(i, 1);
+            
+          }
+          console.log(attribute)
+        }
+        that.setState({ attribute_type_list:attribute });
         //console.log(json.data)
       } else {
         that.setState({ attribute_type_list: [] });
