@@ -7,22 +7,27 @@ import MUIDataTable from "mui-datatables";
 import "react-toggle/style.css" // for ES6 modules
 import Toggle from 'react-toggle'
 import $ from 'jquery';
+import Pagination from 'react-js-pagination';
 
 class StockChangePage extends React.Component {
   state = {
-
+   datarange:0,
+   dataLength:50,
     count:'',
     StockId:'',
     ProductId:''
   }
-  getProductWiseStockList = () => {
+  getProductWiseStockList = (range) => {
     var that = this;
     var data = new URLSearchParams();
     this.setState({ isSaving: true });
     // if (localStorage.getItem('q8_mall_ad_role') === "shop") {
     //   data.append("ShopId", localStorage.getItem('q8_mall_ad_uid'));
     // }
-    data.append("productId", that.props.match.params.product_id);
+    data.append("startRange",range);
+    data.append("dataLength", this.state.dataLength);
+
+    data.append("shopId", localStorage.getItem('q8_mall_ad_uid'));
     fetch(Constant.getAPI() + "/product/combination/list", {
       method: "post",
       headers: {
@@ -93,6 +98,8 @@ class StockChangePage extends React.Component {
     });
   }
   componentWillMount() {
+    this.getProductWiseStockList('0');
+
   }
  
 
@@ -143,284 +150,62 @@ class StockChangePage extends React.Component {
   
 
 }
+handlePageChange=()=>{
+
+}
  
+previous=(event)=>{
+ if(this.state.datarange>0)
+ var range=this.state.datarange-50
+
+ {
+   this.setState({
+     datarange:range,
+   })
+ }
+ this.getProductWiseStockList(range)
+}
+next=()=>{
+  var range=this.state.datarange+50
+  this.setState({
+    datarange:range,
+  })
+  this.getProductWiseStockList(range)
+
+
+}
  
   render() {
     const shop_columns = [
-    //   {
-    //   name: "productMedia",
-    //   label: "Image",
-    //   options: {
-    //       filter:false,
-    //       sort:false,
-      
-    //     customBodyRender: (productMedia, tableMeta) => {
-    //       return (<img src={productMedia !== undefined
-    //          && productMedia !== null 
-    //          && productMedia !== {} ? productMedia.url : localStorage.getItem("companylogo")} className="img-fluid img-40" alt="tbl" />)
-    //     }
-    //   }
-    // },
-    // {
-    //   name: "unique_identifier",
-    //   label: "Product ID",
-    //   options: {
-    //     filter: false,
-    //     sort: false
-    //   }
-    // },  {
-    //   name: "name_en",
-    //   label: "Product Name",
-    //   options: {
-    //     filter: true,
-    //     sort: true,
-    //     customBodyRender:(name_en,tableMeta)=>{
-    //         return(
-    //             name_en+" "+"/"+" "+tableMeta.rowData[3]
-    //         )
-    //     }
-        
-    //   }
-    // },
-    //  {
-    //   name: "name_ar",
-    //   label: "Product Name:Arabic",
-    //   options: {
-    //       display:false,
-    //     filter: true,
-    //     sort: true
-    //   }
-    // },
-    // {
-    //     name: "id",
-    //     label: "ProductId",
-    //     options: {
-    //         display:false,
-      
-    //     }
-    //   },
-
-    //  {
-    //   name: "stock",
-    //   label: "Product Total Stock",
-    //   options: {
-    //     filter: true,
-    //     sort: true
-    //   }
-    // },
-    //  {
-    //   name: "Attributes",
-    //   label: "Product Attributes",
-    //   options: {
-    //     filter: true,
-    //     sort: false,
-    //     customBodyRender: (Attributes, tableMeta) => {
-    //       return <div>
-    //         {/* {console.log(Attributes)} */}
-    //         {      
-
-    //           Attributes !== null && Attributes !== [] && Attributes.length > 0
-    //             ?
-    //             <ol>
-    //               { 
-    //                 Attributes.map(product_attr =>
-    //                   product_attr.name_en !== "Default Attribute"?
-    //                   <li key={product_attr.id}>{product_attr.name_en}</li>
-    //                   :null
-    //                 )
-    //               }
-    //             </ol>
-    //             :
-    //             "-"
-    //         }
-    //       </div >
-    //     }
-    //   }
-    // },
-    // {
-    //     name: "Stocks",
-    //     label: "Barcode",
-    //     options: {
-    //       filter: true,
-    //       sort: true,
-    //       customBodyRender:(Stocks)=>{
-    //           return(
-    //               Stocks.map(stock=>(
-    //                   <li >{
-    //                 stock.barNumber
-    //       }</li>
-                      
-    //               ))
-    //           )
-
-    //       }
-    //     }
-    //   },
-   
-    // {
-    //     name: "Stocks",
-    //     label: "Attribute Value Stock Wise",
-    //     options: {
-    //       filter: true,
-    //       sort: true,
-    //       customBodyRender:(Stocks)=>{
-    //           return(
-    //               Stocks.map(stock=>(
-    //                   //console.log(stock)
-    //                   <li style={{listStyle:"decimal"}}>{
-    //                   stock.AttributeValues.map(attribute=>(
-    //                     //   <li style={{ listStyle:"disc" }}>{
-    //                         attribute.name+" "+","+" "
-    //                         // }</li>
-    //                   ))
-    //       }</li>
-                      
-    //               ))
-    //           )
-
-    //       }
-    //     }
-    //   },
-    //   {
-    //     name: "Stocks",
-    //     label: "Price",
-    //     options: {
-    //       filter: true,
-    //       sort: true,
-    //       customBodyRender:(Stocks)=>{
-    //           return(
-    //               Stocks.map(stock=>(
-    //                   <li>{
-    //                    stock.Prices.map(price=>(
-    //                     price.value
-    //                  ))
-    //       }</li>
-                      
-    //               ))
-    //           )
-
-    //       }
-    //     }
-    //   },
-    //   {
-    //     name: "Stocks",
-    //     label: "Stock",
-    //     options: {
-    //       filter: true,
-    //       sort: true,
-    //       customBodyRender:(Stocks)=>{
-    //           return(
-    //               Stocks.map(stock=>(
-    //                   <li>{
-    //                  stock.count}</li>))
-    //           )}}
-    //   },
-    //   {
-    //     name: "Stocks",
-    //     label: "Update Stock",
-    //     options: {
-    //       filter: true,
-    //       sort: true,
-    //       customBodyRender:(Stocks,tableMeta)=>{
-    //           return(
-    //               Stocks.map(stock=>(
-    //                 <div style={{paddingBottom:"5px"}}>
-                        
-    //                    <li >
-                           
-    //                     <input 
-    //                     style={{width:"50px",height:"30px"}}
-    //                     type="number" 
-    //                     //value={}
-    //                     onChange={this.changeStock.bind(this,stock.id,tableMeta.rowData[4])}/>
-    //                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-                        
-    //          <span onClick={this.updateStock.bind(this)}
-    //           className="m-r-15 text-muted"
-    //           data-toggle="tooltip"
-    //           data-placement="top"
-    //           title=""
-    //           data-original-title="tick">
-    //           <i className="f-24 icofont icofont-refresh text-primary"></i>  </span> 
-    //                     </li>
-    //                     </div>
-                      
-    //               ))
-    //           )
-
-    //       }
-    //     }
-    //   },
   
-    
-   
-    //  {
-    //   name: "status",
-    //   label: "Status",
-    //   options: {
-    //     filter: true,
-    //     sort: false,
-    //     customBodyRender: (status, tableMeta) => {
-    //       return <div>
-    //         {
-    //           status
-    //             ?
-    //             <span className="badge badge-success">Approved</span>
-    //             :
-    //             <span className="badge badge-danger">Pending</span>
-    //         }
-    //       </div>
-    //     }
-    //   }
-    // },
-    //  {
-    //   name: "id",
-    //   label: "Action",
-    //   options: {
-    //     filter: true,
-    //     sort: true,
-    //     customBodyRender: (id, tableMeta) => {
-    //       return <div>
-    //         <Link to={"/products/add/" + id}
-    //           className="m-r-15 text-muted"
-    //           data-toggle="tooltip"
-    //           data-placement="top" title=""
-    //           data-original-title="Edit">
-    //           <i className="f-20 icofont icofont-ui-edit text-custom"></i>
-    //         </Link>
-    //         {/* <Link to={"/products/gallery/" + id}
-    //           className="m-r-15 text-muted"
-    //           data-toggle="tooltip"
-    //           data-placement="top" title=""
-    //           data-original-title="Product Gallery">
-    //           <i className="f-20 icofont icofont-picture text-primary"></i>
-    //         </Link> */}
-    //         {/* {
-    //           localStorage.getItem('q8_mall_ad_role') === "shop"
-    //             ?
-    //             <Link to={"/products/stock/" + id}
-    //               className="m-r-15 text-muted"
-    //               data-toggle="tooltip"
-    //               data-placement="top" title=""
-    //               data-original-title="Product Stock Details">
-    //               <i className="f-20 icofont icofont-stock-mobile text-warning"></i>
-    //             </Link>
-    //             :
-    //             null
-    //         }
-    //         <span onClick={this.deleteAttributeValue.bind(this, id)}
-    //           className="m-r-15 text-muted"
-    //           data-toggle="tooltip"
-    //           data-placement="top"
-    //           title=""
-    //           data-original-title="Delete">
-    //           <i className="f-20 icofont icofont-delete-alt text-danger"></i>  </span> */}
-    //       </div >
-    //     }
+    {
+      name: "Product",
+      label: "Product Name",
+      options: {
+        filter: false,
+        sort: false,
+        customBodyRender:(Product)=>{
+          return(
+            Product.name_en
+          )
 
-    //   }
-    // }
+        }
+      }
+    },
+     {
+      name: "Product",
+      label: "Product ID",
+      options: {
+        filter: false,
+        sort: false,
+        customBodyRender:(Product)=>{
+          return(
+            Product.unique_identifier!== undefined ? Product.unique_identifier : null
+          )
+      }
+    }
+
+    },
       
     {
       name: "barCode",
@@ -455,7 +240,8 @@ class StockChangePage extends React.Component {
           </div>
         }
       }
-    }, {
+    }, 
+    {
       name: "price",
       label: "Variant Pricing",
       options: {
@@ -479,13 +265,13 @@ class StockChangePage extends React.Component {
               data-original-title="Product Country Wise Price">
               <i className="f-20 icofont icofont-ui-edit text-custom"></i>
             </Link>
-            <Link to={"/products/price/" + id + "/" + this.props.match.params.product_id}
+            {/* <Link to={"/products/price/" + id + "/" + this.props.match.params.product_id}
               className="m-r-15 text-muted"
               data-toggle="tooltip"
               data-placement="top" title=""
               data-original-title="Product Country Wise Price">
               <i className="f-20 icofont icofont-plus text-primary"></i>
-            </Link>
+            </Link> */}
             {/* <span onClick={this.onOpenMediaModal.bind(this, id)}
               className="m-r-15 text-muted"
               data-toggle="tooltip"
@@ -494,19 +280,20 @@ class StockChangePage extends React.Component {
               data-original-title="View Gallery">
               <i className="f-20 icofont icofont-picture text-warning"></i>  </span> */}
 
-            <span onClick={this.deleteStockDetails.bind(this, id)}
+            {/* <span onClick={this.deleteStockDetails.bind(this, id)}
               className="m-r-15 text-muted"
               data-toggle="tooltip"
               data-placement="top"
               title=""
               data-original-title="Delete">
-              <i className="f-20 icofont icofont-delete-alt text-danger"></i>  </span>
+              <i className="f-20 icofont icofont-delete-alt text-danger"></i>  </span> */}
           </div>
         }
 
       }
     },
-   { name: "stock",
+   { 
+     name: "stock",
     label: "Variant Stock",
     options: {
       filter: true,
@@ -529,7 +316,7 @@ class StockChangePage extends React.Component {
                       style={{width:"50px",height:"30px"}}
                       type="number" 
                       //value={stock}
-                       onChange={this.changeStock.bind(this,tableMeta.rowData[3],tableMeta.rowData[6])}
+                       onChange={this.changeStock.bind(this,tableMeta.rowData[5],tableMeta.rowData[8])}
                      />
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
@@ -565,6 +352,8 @@ class StockChangePage extends React.Component {
       print: false,
       download: false,
       selectableRows: 'none',
+      pagination:false,
+      filter:false,
       textLabels: {
         body: {
           noMatch: this.state.isSaving ?
@@ -648,6 +437,34 @@ class StockChangePage extends React.Component {
                             //   options={options}
                             // />
                         }
+                        <nav
+													aria-label="Page navigation example "
+													className="display-flex float-right"
+												>
+													<ul class="pagination">
+														<li class="page-item mx-2 py-2">
+															Count : {this.state.datarange}-
+															{this.state.datarange + this.state.dataLength}
+														</li>
+													
+														{/* <Pagination
+															itemClass="page-item"
+															linkClass="page-link"
+															activePage={this.state.activePage}
+															itemsCountPerPage={10}
+															totalItemsCount={this.state.totalProducts}
+															pageRangeDisplayed={20}
+															onChange={this.handlePageChange.bind(this)}
+														/> */}
+                            <button onClick={this.previous}>
+                              <i className="f-26 icofont icofont-simple-left"></i>
+                           </button>&nbsp;&nbsp;
+                            <button onClick={this.next}>
+                            <i className="f-26 icofont icofont-simple-right"></i>
+                             </button>
+													</ul>
+												</nav>
+
 
                       </div>
                     </div>

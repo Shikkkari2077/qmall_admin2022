@@ -548,24 +548,34 @@ class OrderView extends React.Component {
                             this.state.order_details.OrderShops.map((OrderShops, i) =>
                               <tr>
                                 <td width={'350px'}>
-                                  {OrderShops.OrderStocks !== null && OrderShops.OrderStocks !== [] && OrderShops.OrderStocks.length > 0
+                                  {
+                                  OrderShops.OrderCombinations !== null && OrderShops.OrderCombinations[0] !== undefined &&
+                                  OrderShops.OrderCombinations[0].Combination !== undefined
                                     ?
                                     <ul>
-                                      {OrderShops.OrderStocks.map(order_stock =>
-                                        order_stock.Stock !== null ?
+                                      { 
+                                      OrderShops.OrderCombinations.map(ordercombi =>{
+                                        return(
+                                      
+                                        ordercombi.Combination.Product !== null ?
                                           <li>
-                                            <Link to={"/products/add/" + order_stock.Stock.Product.id} >
-                                              {order_stock.Stock.Product.name_en}
-                                              {
+                                            {   console.log(ordercombi.Combination) }
+                                            <Link to={"/products/add/" +  ordercombi.Combination.ProductId} >
+                                              { ordercombi.Combination.Product.name_en}
+                                             {/* {
                                                 order_stock.Stock.AttributeValues.map(attributes =>
                                                   <span className="badge badge-primary mx-1">{attributes.name_en}</span>
                                                 )
-                                              }
+                                              }  */}
                                             </Link>
                                           </li>
                                           :
-                                          null
-                                      )}
+                                           null
+                                       
+                                      
+                                      
+                                       ) })
+                                   }
                                     </ul>
                                     :
                                     null
@@ -596,10 +606,18 @@ class OrderView extends React.Component {
                                   localStorage.getItem('q8_mall_ad_role') === "shop"
                                     ?
                                     <td className="noprint">
-                                      <select name="branchAddressId" className="form-control" value={OrderShops.branchAddressId} onChange={this.handleAssignBranch.bind(this, OrderShops.id)}>
+                                      <select 
+                                                name="branchAddressId" 
+                                               className="form-control" 
+                                               value={OrderShops.branchAddressId} 
+                                               onChange={this.handleAssignBranch.bind(this, OrderShops.id)}
+                                          >
                                         <option value="">Assign Branch</option>
                                         {
-                                          this.state.branch_address_list !== undefined && this.state.branch_address_list !== null && this.state.branch_address_list !== [] && this.state.branch_address_list.length > 0
+                                          this.state.branch_address_list !== undefined && 
+                                            this.state.branch_address_list !== null && 
+                                              this.state.branch_address_list !== [] && 
+                                                this.state.branch_address_list.length > 0
                                             ?
                                             this.state.branch_address_list.map(branch =>
                                               <option value={branch.id} key={branch.id}>{branch.title}</option>

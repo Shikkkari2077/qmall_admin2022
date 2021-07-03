@@ -59,7 +59,7 @@ class ProductList extends React.Component {
   }
  
   getProductList = (count,startRange, uniqueidentifier,name) => {
-
+  console.log(count,startRange, uniqueidentifier,name)
     var that = this;
     var data ={}
     this.setState({ isSaving: true });
@@ -77,7 +77,7 @@ class ProductList extends React.Component {
         startRange,
       }
     }
-    if(name !== " ")
+    if(name !== "")
     {
       data={...data,'keyword':name}
     }
@@ -308,7 +308,7 @@ class ProductList extends React.Component {
 		console.log(pageNumber * 10 - 10);
 		const range = pageNumber * 10 - 10;
 		const dataLength = this.state.dataLength;
-   this.getProductList(dataLength,range)
+   this.getProductList(dataLength,range,this.state.byID,this.state.byname)
 	
 		this.setState({
 			datarange: range,
@@ -323,7 +323,7 @@ class ProductList extends React.Component {
       this.setState({
         byname:"",
         byID:"",
-        search:""
+        search:"",
       })
     }
    this.setState({
@@ -336,7 +336,9 @@ class ProductList extends React.Component {
     this.getProductList(10,0,this.state.search)
     this.setState({
       byID:this.state.search,
-      byname:""
+      byname:"",
+      activePage:1
+
     })
 
   }
@@ -345,6 +347,7 @@ class ProductList extends React.Component {
     this.setState({
       byname:this.state.search,
       byID:"",
+      activePage:1
 
     })
 
@@ -903,7 +906,7 @@ class ProductList extends React.Component {
 												>
 													<ul class="pagination">
 														<li class="page-item mx-2 py-2">
-															Count : {this.state.datarange+1}-
+															Count : {this.state.datarange}-
 															{this.state.datarange + this.state.dataLength}
 														</li>
 													

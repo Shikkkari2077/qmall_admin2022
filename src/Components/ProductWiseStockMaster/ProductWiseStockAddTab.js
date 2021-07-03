@@ -12,7 +12,7 @@ class ProductWiseStockAddTab extends React.Component {
        && this.props.match.params.product_id !== 0 
        && this.props.match.params.product_id !== '') {
       this.setState({ product_id: this.props.match.params.product_id })
-      //console.logog(this.props.match.params.product_id)
+      console.log(this.props.match.params.product_id,this.props.match.params.stock_id)
     }
     this.getLanguageList()
   }
@@ -56,7 +56,7 @@ class ProductWiseStockAddTab extends React.Component {
               <div className="col-lg-8">
                 <div className="page-header-title">
                   <div className="d-inline">
-                    <h4>Add Product Variant</h4>
+                    <h4> {this.props.match.params.stock_id == undefined?"Add":"Edit"} Product Variant</h4>
                   </div>
                 </div>
               </div>
@@ -76,7 +76,7 @@ class ProductWiseStockAddTab extends React.Component {
                         Product Stock</Link>
                     </li>
                     <li className="breadcrumb-item active">
-                      Add Product Variant
+                    {this.props.match.params.stock_id == undefined?"Add":"Edit"}  Product Variant
                     </li>
                   </ul>
                 </div>
@@ -104,10 +104,10 @@ class ProductWiseStockAddTab extends React.Component {
                       <div className="tab-pane  active"
                         id={"tyre_category_" + this.state.language_id} role="tabpanel" aria-labelledby="">
                         {
-                          this.state.product_id !== undefined &&
-                            this.state.product_id !== null &&
-                            this.state.product_id !== 0 &&
-                            this.state.product_id !== ''
+                          this.props.match.params.product_id !== undefined &&
+                          this.props.match.params.product_id !== null &&
+                          this.props.match.params.product_id !== 0 &&
+                          this.props.match.params.product_id !== ''
                             ?
                             <ProductWiseStockAdd language_id={this.state.language_id}
                               goBack={this.props.history.goBack}
@@ -117,6 +117,7 @@ class ProductWiseStockAddTab extends React.Component {
                             <ProductWiseStockAdd
                               language_id={this.state.language_id}
                               stock_id={this.props.match.params.stock_id}
+                              product_id={this.props.match.params.product_id}
                               goBack={this.props.history.goBack} />
                         }
 

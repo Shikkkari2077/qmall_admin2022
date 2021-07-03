@@ -68,7 +68,7 @@ class ImportData extends React.Component {
                })
                //console.log(json.errors)
                that.setState({
-                 errorArray:json.errors,
+                 errorArray:json.invalidRows,
                  show:true,
                  Sheetmessage:json.message,
                  showLoadmessage:"SHEET UPLODED SUCCESSFULLY",
@@ -234,12 +234,13 @@ class ImportData extends React.Component {
    
   render() {
     const columns = [
+
       {
-        name: "row",
+        name: "rowNumber",
         label: "Row Number",
         options: {
-          filter: true,
-          sort: true,
+          filter: false,
+          sort: false,
           customBodyRender:(row)=>{
             return (row+2)
 
@@ -247,11 +248,27 @@ class ImportData extends React.Component {
         },
       },
       {
-        name: "message",
+        name: "ProductID",
+       label: "Product ID",
+       options: {
+        filter: false,
+        sort: false
+      },
+    },
+    {
+      name: "Barcode",
+     label: "Barcode",
+     options: {
+      filter: false,
+      sort: false
+    },
+  },
+      {
+        name: "error",
        label: "Error Message",
        options: {
-        filter: true,
-        sort: true
+        filter: false,
+        sort: false
       },
     },
   ];

@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import $ from "jquery";
 import Constant from "../../Constant";
 import ReactQuill from "react-quill";
+import { EventRounded, ThreeDRotation } from "@material-ui/icons";
 // import { ContactsOutlined } from "@material-ui/icons";
 
 class ProductWiseStockAdd extends React.Component {
@@ -17,6 +18,7 @@ class ProductWiseStockAdd extends React.Component {
       {
         "stock":0,
         "price":0,
+        "specialPrice":0,
         "currency":"KWD",
         "sku":"",
         "barNumber":"",
@@ -59,7 +61,7 @@ class ProductWiseStockAdd extends React.Component {
     }
     if (prevProps.product_id !== this.props.product_id || prevProps.stock_id !== this.props.stock_id) {
       this.setState({ product_id: this.props.product_id });
-      this.getProductWiseStockList();
+      //this.getProductWiseStockList();
     }
     if (prevProps.language_id !== this.props.language_id) {
       if (this.props.product_id !== undefined) {
@@ -67,13 +69,17 @@ class ProductWiseStockAdd extends React.Component {
         this.getProductDetails();
       }
       if (this.props.stock_id !== undefined) {
-        // this.setState({ product_id: this.props.product_id });
-        this.getProductWiseStockList();
+        console.log(this.props.stock_id)
+        this.getCombinationList()
       }
     }
   }
   handleChange = (key,event) => {
-
+     if(this.props.stock_id !== undefined){
+        this.setState({
+          [event.target.name]:event.target.value
+        })
+     }
     console.log(key)
     var combinationArray=this.state.combinationArray
     
@@ -81,6 +87,7 @@ class ProductWiseStockAdd extends React.Component {
     console.log(combinationArray)
     this.setState({ combinationArray });
   };
+
   handleChangeAtt=(index,key,event)=>{
     console.log(key,index,event.target.name,event.target.value)
     this.getAttributesValue(event.target.value)
@@ -362,12 +369,8 @@ class ProductWiseStockAdd extends React.Component {
         Swal.fire({
           title: "Added Successful",
           icon: 'success',
-          // showDenyButton: true,
-          // showCancelButton: true,
-          // showCancelButton: true,
-  confirmButtonColor: '#3085d6',
-  // cancelButtonColor: '#d33',
-  confirmButtonText: 'OK'
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'OK'
         }).then((result)=>{
           console.log(result,result.value)
           if (result.value) {
@@ -416,6 +419,55 @@ class ProductWiseStockAdd extends React.Component {
       arr.push(id);
       this.setState({ selected_attributes: arr });
     }
+  }
+  getCombinationList = () => {
+    var that = this;
+    var data = new URLSearchParams();
+    data.append("productId",this.props.product_id)
+    data.append("combinationId",this.props.stock_id)
+
+    fetch(Constant.getAPI() + "/product/combination/list", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": localStorage.getItem('q8_mall_auth')
+
+      },
+      body:data
+    }).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      console.log(json.data[0])
+      if (json.success === true) {
+        var combination=json.data[0]
+        var combinationArray=that.state.combinationArray
+        console.log(combinationArray)
+        combinationArray[0].price=combination.price
+        combinationArray[0].stock=combination.stock
+        combinationArray[0].specialPrice=combination.specialPrice
+        combinationArray[0].sku=combination.sku
+        combinationArray[0].barCode=combination.barCode
+        combinationArray[0].variantId=combination.variantId
+        combinationArray[0].showInListing=combination.showInListing
+
+
+
+        console.log(combinationArray)
+        that.setState({ 
+          combinationArray
+        });
+      } else {
+        that.setState({ combination_list: [] });
+        Swal.fire({
+          title: "Something went wrong. Try again after some Time.!",
+          icon: 'error',
+          text: "",
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Ok"
+        })
+      }
+    });
   }
   getCountryList = () => {
     var that = this;
@@ -558,6 +610,7 @@ class ProductWiseStockAdd extends React.Component {
     combinationArray[combinationArray.length]=  {
       'stock':0,
       'price':0,
+      'specialPrice':0,
       'currency':"KWD",
       'sku':"",
       'barNumber':"",
@@ -594,6 +647,79 @@ class ProductWiseStockAdd extends React.Component {
       combinationArray,
       nameArray
     })
+  }
+  onUpdate=()=>{
+    var that = this;  
+    console.log(that.state)
+    this.setState({ isSaving: true });
+    var data= new URLSearchParams()
+    // var data={
+    //   productId:,
+    //   combinationId:
+    // }
+    data.append('productId',that.props.product_id)
+    data.append('combinationId',that.props.stock_id,)
+
+    if(that.state.price !== undefined){
+      data.append('price',this.state.price)
+    }
+    if(that.state.specialPrice !== undefined){
+      data.append('specialPrice',this.state.specialPrice)
+    }
+    if(that.state.stock !== undefined){
+      data.append('stock',this.state.stock)
+    }
+    if(that.state.sku !== undefined){
+      data.append('sku',this.state.sku)
+    }
+    if(that.state.barCode !== undefined){
+      data.append('barCode',this.state.barCode)
+    }
+    if(that.state.variantId !== undefined){
+      data.append('variantId',this.state.variantId)
+    }
+    if(that.state.showInListing !== undefined){
+      data.append('showInListing',this.state.showInListing)
+    }
+  
+    fetch(Constant.getAPI() + "/product/combination/update", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": localStorage.getItem('q8_mall_auth')
+      },
+      body:data
+      
+    }).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      console.log(json,json.success,json.success == true,json.success=='true',json.success === true)
+      if (json.success == true) {
+        Swal.fire({
+          title: "Updated Successful",
+          icon: 'success',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'OK'
+        }).then((result)=>{
+          console.log(result,result.value)
+          if (result.value) {
+             window.location.href=`#/products/stock/${that.props.product_id}`
+          } 
+        })
+        that.setState({ isSaving: false })
+      } else {
+        that.setState({ isSaving: false });
+        Swal.fire({
+          title: "Something went wrong. Try again after some Time.!",
+          icon: 'error',
+          text: " ",
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Ok"
+        })
+      }
+    });
+
   }
   render() {
     const style={height:"40px",opacity:"0.8",color:"black",fontWeight:"bold",borderRadius:"10px"}
@@ -735,6 +861,21 @@ class ProductWiseStockAdd extends React.Component {
                 </div>
               </div>
             </div>
+            <div className="col-md-6">
+              <div className="form-group row">
+                <label className="col-sm-3 col-form-label">Special Price</label>
+                <div className="col-sm-9">
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="specialPrice"
+                    placeholder="Special Price"
+                    onChange={this.handleChange.bind(this,key)}
+                    value={combination.specialPrice}
+                  />
+                </div>
+              </div>
+            </div>
 
             {/* <div className="col-md-6">
               <div className="row">
@@ -778,7 +919,7 @@ class ProductWiseStockAdd extends React.Component {
               
          */}
             </div> 
-
+         { this.props.stock_id == undefined?
           <div className="row">
             <div className="col-md-12">
               <div className="form-group row">
@@ -903,6 +1044,8 @@ class ProductWiseStockAdd extends React.Component {
               </div>
             </div>
           </div>
+          :null
+          }
          
             {/* <div className="col-md-6">
               <div className="form-group row">
@@ -949,7 +1092,15 @@ class ProductWiseStockAdd extends React.Component {
                   ?
                   <button className="btn btn-grd-disabled mr-2" disabled>Saving...!</button>
                   :
-                  <button onClick={this.onSaveData} className="btn btn-grd-disabled mr-2"><i className="icofont icofont-save"></i> Save</button>
+                  this.props.stock_id !==undefined ?
+                  <button onClick={this.onUpdate} className="btn btn-grd-disabled mr-2">
+                     <i className="icofont icofont-save"></i> Update
+                 </button>
+
+                  :
+                  <button onClick={this.onSaveData} className="btn btn-grd-disabled mr-2">
+                     <i className="icofont icofont-save"></i> Save
+                 </button>
               }
               <Link to={"/products/stock/" + this.props.product_id} className="btn btn-outline-dark">Cancel</Link>
             </div>

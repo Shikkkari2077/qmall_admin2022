@@ -199,36 +199,33 @@ class OrderViewPrint extends React.Component {
                                   </td>
                                 </tr>
                                 {
-                                  this.state.order_details.OrderShops.map(OrderShops =>
-                                    OrderShops.OrderStocks !== null && OrderShops.OrderStocks !== [] && OrderShops.OrderStocks.length > 0
-                                      ?
-                                      OrderShops.OrderStocks.map(order_stock =>
-                                        <tr>
-                                          <td className="invoice_table_border">
-                                            <ul>
-                                              {
-                                                order_stock.Stock !== null ?
-                                                  <p className="product_table_value">
-                                                    {order_stock.Stock.Product.name_en}
-                                                  </p>
-                                                  : null
-                                              }
-                                            </ul>
-                                            <p className="product_table_value">Product ID: <span className="invoice-print-span">QMALL1003993</span></p>
-                                          </td>
-                                          <td className="invoice_table_border">
-                                            <p className="product_table_shop_header">{OrderShops.Shop.name_en}</p>
-                                          </td>
-                                          <td className="invoice_table_border">
-                                            <p className="product_table_shop_header">{order_stock.unit}</p>
-                                          </td>
-                                          <td className="invoice_table_border">
-                                            <p className="product_table_shop_header">{order_stock.amount}KWD</p>
-                                          </td>
-                                        </tr>
-                                      )
-                                      : null
-                                  )
+                                   this.state.order_details.OrderShops.map(OrderShops =>
+                                
+                              {return(
+                                           OrderShops.OrderCombinations !== null && OrderShops.OrderCombinations[0] !== undefined &&
+                                            OrderShops.OrderCombinations[0].Combination !== undefined
+                                               ?
+                                       
+                                         
+                                           OrderShops.OrderCombinations.map(ordercombi =>{
+                                              return(
+                                               ordercombi.Combination.Product !== null ?
+                                               <tr>
+                                                <td className="invoice_table_border"><p className="product_table_value"> { ordercombi.Combination.Product.name_en}  </p>  </td> 
+                                                <td className="invoice_table_border"><p className="product_table_shop_header">{OrderShops.Shop.name_en}</p></td>
+                                                <td className="invoice_table_border"> <p className="product_table_shop_header">{ordercombi.quantity}</p>  </td>
+                                                <td className="invoice_table_border"> <p className="product_table_shop_header">{ordercombi.amount} KWD</p>  </td>
+
+                                                </tr>
+                                                : null
+                                              )
+                                             }
+                                            )
+                                          
+                                        
+                                               : null
+                              )}
+                                 )
                                 }
 
                                 <tr>

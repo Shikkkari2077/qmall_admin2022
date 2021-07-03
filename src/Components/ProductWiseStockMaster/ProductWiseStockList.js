@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom'
 import Constant from '../../Constant'
 import Swal from 'sweetalert2'
+import Toggle from 'react-toggle'
+
 import MUIDataTable from "mui-datatables";
 import ProductMediaModal from './ProductMediaModal';
 
@@ -84,6 +86,43 @@ class ProductWiseStockList extends React.Component {
   }
   componentWillMount() {
     this.getProductWiseStockList();
+
+  }
+  handleStatusChange=(combinationId,productId,c)=>{
+    const that=this
+    console.log(combinationId,productId,c.target.checked)
+    var data = new URLSearchParams();
+    this.setState({ isSaving: true });
+    data.append("showInListing", c.target.checked);
+    data.append("productId",productId);
+    data.append("combinationId", combinationId);
+   
+    fetch(Constant.getAPI() + "/product/combination/update", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": localStorage.getItem('q8_mall_auth')
+      },
+      body: data
+    }).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      if (json.success === true) {
+        that.getProductWiseStockList()
+         that.setState({ isSaving: false, count:'', StockId:'', ProductId:'' })
+      } else {
+        that.setState({ isSaving: false });
+        Swal.fire({
+          title: "Something went wrong. Try again after some Time.!",
+          icon: 'error',
+          text: "",
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Ok"
+        })
+      }
+    });
+
 
   }
   changeStock=(combinationId,productId,e)=>{
@@ -193,49 +232,16 @@ class ProductWiseStockList extends React.Component {
         sort: true,
         
       }
-    }, {
-      name: "id",
-      label: "Action",
+    }, 
+    {
+      name: "specialPrice",
+      label: "special Price",
       options: {
-        display:false,
         filter: true,
         sort: true,
-        customBodyRender: (id, tableMeta) => {
-          return <div>
-            <Link to={"/products/stock/" + this.props.match.params.product_id + "/add/" + id}
-              className="m-r-15 text-muted"
-              data-toggle="tooltip"
-              data-placement="top" title=""
-              data-original-title="Product Country Wise Price">
-              <i className="f-20 icofont icofont-ui-edit text-custom"></i>
-            </Link>
-            <Link to={"/products/price/" + id + "/" + this.props.match.params.product_id}
-              className="m-r-15 text-muted"
-              data-toggle="tooltip"
-              data-placement="top" title=""
-              data-original-title="Product Country Wise Price">
-              <i className="f-20 icofont icofont-plus text-primary"></i>
-            </Link>
-            {/* <span onClick={this.onOpenMediaModal.bind(this, id)}
-              className="m-r-15 text-muted"
-              data-toggle="tooltip"
-              data-placement="top"
-              title=""
-              data-original-title="View Gallery">
-              <i className="f-20 icofont icofont-picture text-warning"></i>  </span> */}
-
-            <span onClick={this.deleteStockDetails.bind(this, id)}
-              className="m-r-15 text-muted"
-              data-toggle="tooltip"
-              data-placement="top"
-              title=""
-              data-original-title="Delete">
-              <i className="f-20 icofont icofont-delete-alt text-danger"></i>  </span>
-          </div>
-        }
-
+        
       }
-    },
+    }, 
    { name: "stock",
     label: "Variant Stock",
     options: {
@@ -259,7 +265,7 @@ class ProductWiseStockList extends React.Component {
                       style={{width:"50px",height:"30px"}}
                       type="number" 
                       //value={stock}
-                       onChange={this.changeStock.bind(this,tableMeta.rowData[3],tableMeta.rowData[6])}
+                       onChange={this.changeStock.bind(this,tableMeta.rowData[7],tableMeta.rowData[8])}
                      />
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
@@ -282,11 +288,74 @@ class ProductWiseStockList extends React.Component {
       }
     },
     {
+      name: "showInListing",
+      label: "Listing status",
+      options: {
+        filter: true,
+        sort: false,
+        customBodyRender: (showInListing, tableMeta) => {
+          return (<div>
+            {/* * {//console.log(tableMeta.rowData)} */}
+          <Toggle
+            id={"product_status_" + tableMeta.rowData[11]}
+            checked={showInListing === true ? true : false}
+            value={showInListing}
+            onChange={this.handleStatusChange.bind(this,tableMeta.rowData[7],tableMeta.rowData[8])}
+          /></div>)
+        }
+      }
+    }, 
+    {
+      name: "id",
+      label: "Action",
+      options: {
+        filter: true,
+        sort: true,
+        customBodyRender: (id, tableMeta) => {
+          return <div>
+            <Link to={"/products/stock/" + tableMeta.rowData[8] + "/add/"+ id}
+              className="m-r-15 text-muted"
+              data-toggle="tooltip"
+              data-placement="top" title=""
+              data-original-title="Product Country Wise Price">
+              <i className="f-20 icofont icofont-ui-edit text-custom"></i>
+            </Link>
+            {/* <Link to={"/products/price/" + id + "/" + this.props.match.params.product_id}
+              className="m-r-15 text-muted"
+              data-toggle="tooltip"
+              data-placement="top" title=""
+              data-original-title="Product Country Wise Price">
+              <i className="f-20 icofont icofont-plus text-primary"></i>
+            </Link> */}
+            {/* <span onClick={this.onOpenMediaModal.bind(this, id)}
+              className="m-r-15 text-muted"
+              data-toggle="tooltip"
+              data-placement="top"
+              title=""
+              data-original-title="View Gallery">
+              <i className="f-20 icofont icofont-picture text-warning"></i>  </span> */}
+
+            {/* <span onClick={this.deleteStockDetails.bind(this, id)}
+              className="m-r-15 text-muted"
+              data-toggle="tooltip"
+              data-placement="top"
+              title=""
+              data-original-title="Delete">
+              <i className="f-20 icofont icofont-delete-alt text-danger"></i>  </span>
+              */}
+          </div> 
+        }
+
+      }
+    },
+   
+    {
       name:"ProductId",
       options:{
         display:false,
       }
-    }
+    },
+  
   ];
     const options = {
       filterType: "dropdown",
