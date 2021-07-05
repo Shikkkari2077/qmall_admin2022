@@ -14,6 +14,7 @@ class StockChangePage extends React.Component {
    datarange:0,
    dataLength:50,
     count:'',
+    product_list:[],
     StockId:'',
     ProductId:''
   }
@@ -456,10 +457,10 @@ next=()=>{
 															pageRangeDisplayed={20}
 															onChange={this.handlePageChange.bind(this)}
 														/> */}
-                            <button onClick={this.previous}>
+                            <button onClick={this.previous} disabled={this.state.datarange <50 ?true:false}>
                               <i className="f-26 icofont icofont-simple-left"></i>
                            </button>&nbsp;&nbsp;
-                            <button onClick={this.next}>
+                            <button onClick={this.next} disabled={this.state.product_list.length < 50 ?true:false}>
                             <i className="f-26 icofont icofont-simple-right"></i>
                              </button>
 													</ul>

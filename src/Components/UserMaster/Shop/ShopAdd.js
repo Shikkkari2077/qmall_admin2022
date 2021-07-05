@@ -10,11 +10,16 @@ class ShopAdd extends React.Component {
     status: "open",
     description: "",
     refundPolicy: "",
+    refundPolicy_ar:"",
     selected_category: []
   };
   onHandleRefundPolicyChange = value => {
     this.setState({ refundPolicy: value });
   };
+  onHandleRefundPolicyChangeArabic=value=>{
+    this.setState({ refundPolicy_ar: value });
+
+  }
   onHandleDescriptionChange = value => {
     this.setState({ description: value });
   };
@@ -50,6 +55,12 @@ class ShopAdd extends React.Component {
   }
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
+    if(event.target.name == 'password')
+    {
+      this.setState({
+        passwordChange:true
+      })
+    }
   };
   getShopDetails = () => {
     //console.log("shop called")
@@ -93,7 +104,7 @@ class ShopAdd extends React.Component {
               address: json.data[i].address,
               description: json.data[i].description,
               address: json.data[i].address,
-              refundPolicy: json.data[i].refundPolicy,
+              refundPolicy: json.data[i].refundPolicy_en,
               qmallCommission: json.data[i].qmallCommission,
               ibanNumber: json.data[i].ibanNumber,
               phNumber: json.data[i].phNumber,
@@ -101,7 +112,8 @@ class ShopAdd extends React.Component {
               featuredpriority:json.data[i].featuredPriority,
               selected_category: categories,
               // mobile: json.data[i].mobileNumber,
-              media_id: json.data[i].MediaId
+              media_id: json.data[i].MediaId,
+              refundPolicy_ar:json.data[i].refundPolicy_ar
             });
           }
         }
@@ -195,7 +207,7 @@ class ShopAdd extends React.Component {
     } else {
       data.append("phNumber", "");
     }
-    data.append("refundPolicy", that.state.refundPolicy);
+   // data.append("refundPolicy", that.state.refundPolicy);
     if (that.state.ibanNumber !== undefined && that.state.ibanNumber !== null && that.state.ibanNumber !== "null" && that.state.ibanNumber !== "") {
       data.append("ibanNumber", that.state.ibanNumber);
     } else {
@@ -224,6 +236,9 @@ class ShopAdd extends React.Component {
 
     data.append("LanguageId", that.props.language_id);
     data.append("CategoryId", that.state.selected_category);
+    data.append("refundPolicy_ar", that.state.refundPolicy_ar);
+    data.append("refundPolicy_en", that.state.refundPolicy);
+
     fetch(Constant.getAPI() + "/shop/register", {
       method: "post",
       headers: {
@@ -261,54 +276,42 @@ class ShopAdd extends React.Component {
     //       return false;
     //     }
     // data.append("email", that.state.email);
-    data.append("email", that.state.email);
+   // data.append("email", that.state.email);
     data.append("name", that.state.name);
     if (that.state.phNumber !== undefined && that.state.phNumber !== null && that.state.phNumber !== "null" && that.state.phNumber !== "") {
       data.append("phNumber", that.state.phNumber);
-    } else {
-      data.append("phNumber", "");
-    }
-    if (that.state.refundPolicy !== undefined && that.state.refundPolicy !== null) {
-      data.append("refundPolicy", that.state.refundPolicy);
-    } else {
-      data.append("refundPolicy", "");
-    }
-    // data.append("deliveryCharges", that.state.deliveryCharges);
-    // data.append("approxDeliveryTime", that.state.approxDeliveryTime);
+    } 
+    if (that.state.passwordChange == true) {
+      data.append("password", that.state.password);
+    } 
+
     data.append("status", that.state.status);
-    //console.log(this.state.qmallCommission)
     if (that.state.qmallCommission !== undefined && that.state.qmallCommission !== null && that.state.qmallCommission !== "") {
       data.append("qmallCommission", that.state.qmallCommission);
-    } else {
-      data.append("qmallCommission", 0);
-    }
+    } 
     if (that.state.ibanNumber !== undefined && that.state.ibanNumber !== null && that.state.ibanNumber !== "null" && that.state.ibanNumber !== "") {
       data.append("ibanNumber", that.state.ibanNumber);
-    } else {
-      data.append("ibanNumber", "");
     }
     data.append("openTime", that.state.openTime);
     data.append("closeTime", that.state.closeTime);
     if (that.state.description !== undefined && that.state.description !== null) {
       data.append("description", that.state.description);
-    } else {
-      data.append("description", that.state.description);
-    }
+    } 
     if (that.state.address !== undefined && that.state.address !== null && that.state.address !== "") {
       data.append("address", that.state.address);
-    } else {
-      data.append("address", "");
-    }
+    } 
     if (media_id !== undefined && media_id !== null) {
       data.append("MediaId", media_id);
-      // } else {
-      //   data.append("MediaId", "");
+     
     }
     data.append("LanguageId", that.props.language_id);
     data.append("ShopId", that.props.shop_id);
     data.append("CategoryId", that.state.selected_category);
     data.append("priority", that.state.priority);
     data.append("featuredPriority", that.state.featuredpriority);
+    data.append("refundPolicy_ar", that.state.refundPolicy_ar);
+    data.append("refundPolicy_en", that.state.refundPolicy);
+ 
 
     fetch(Constant.getAPI() + "/shop/update", {
       method: "post",
@@ -697,11 +700,25 @@ class ShopAdd extends React.Component {
           <div className="row">
             <div className="col-md-12">
               <div className="form-group row">
-                <label className="col-sm-2 col-form-label">Refund Policy</label>
+                <label className="col-sm-2 col-form-label">Refund Policy (English)</label>
                 <div className="col-sm-10">
                   <ReactQuill
                     value={this.state.refundPolicy}
                     onChange={this.onHandleRefundPolicyChange}
+                    style={{ height: "200px", marginBottom: '5%' }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-12">
+              <div className="form-group row">
+                <label className="col-sm-2 col-form-label">Refund Policy (Arabic)</label>
+                <div className="col-sm-10">
+                  <ReactQuill
+                    value={this.state.refundPolicy_ar}
+                    onChange={this.onHandleRefundPolicyChangeArabic}
                     style={{ height: "200px", marginBottom: '5%' }}
                   />
                 </div>
