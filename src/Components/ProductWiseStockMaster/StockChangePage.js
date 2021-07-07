@@ -187,7 +187,7 @@ next=()=>{
         sort: false,
         customBodyRender:(Product)=>{
           return(
-            Product.name_en
+            Product!==null && Product.name_en !== null ? Product.name_en :"-"
           )
 
         }
@@ -201,7 +201,7 @@ next=()=>{
         sort: false,
         customBodyRender:(Product)=>{
           return(
-            Product.unique_identifier!== undefined ? Product.unique_identifier : null
+            Product!==null && Product.unique_identifier!== undefined ? Product.unique_identifier : null
           )
       }
     }
