@@ -133,7 +133,7 @@ class StockChangePage extends React.Component {
       return response.json();
     }).then(function (json) {
       if (json.success === true) {
-        that.getProductWiseStockList()
+        that.getProductWiseStockList(that.state.datarange)
          that.setState({ isSaving: false, count:'', StockId:'', ProductId:'' })
       } else {
         that.setState({ isSaving: false });
@@ -156,15 +156,13 @@ handlePageChange=()=>{
 }
  
 previous=(event)=>{
- if(this.state.datarange>0)
- var range=this.state.datarange-50
+  var range=this.state.datarange-50
 
- {
-   this.setState({
-     datarange:range,
-   })
- }
- this.getProductWiseStockList(range)
+  if(this.state.datarange>0)
+    {
+       this.setState({ datarange:range, })
+    }
+  this.getProductWiseStockList(range)
 }
 next=()=>{
   var range=this.state.datarange+50
@@ -204,6 +202,17 @@ next=()=>{
             Product!==null && Product.unique_identifier!== undefined ? Product.unique_identifier : null
           )
       }
+    }
+
+    },
+    {
+      name: "variantId",
+      label: "variant ID",
+      options: {
+        filter: false,
+        sort: false,
+       
+      
     }
 
     },
@@ -317,7 +326,7 @@ next=()=>{
                       style={{width:"50px",height:"30px"}}
                       type="number" 
                       //value={stock}
-                       onChange={this.changeStock.bind(this,tableMeta.rowData[5],tableMeta.rowData[8])}
+                       onChange={this.changeStock.bind(this,tableMeta.rowData[6],tableMeta.rowData[9])}
                      />
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 

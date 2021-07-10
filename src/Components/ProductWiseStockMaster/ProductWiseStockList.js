@@ -188,8 +188,31 @@ class ProductWiseStockList extends React.Component {
  
   render() {
     const columns = [
-
-     
+      {
+        name: "Product",
+        label: "Product Name",
+        options: {
+          filter: false,
+          sort: false,
+          customBodyRender:(Product)=>{
+            return(
+              Product!==null && Product.name_en !== null ? Product.name_en :"-"
+            )
+  
+          }
+        }
+      },
+       {
+        name: "variantId",
+        label: "variant ID",
+        options: {
+          filter: false,
+          sort: false,
+         
+        
+      }
+  
+      },
     
     {
       name: "barCode",
@@ -265,7 +288,7 @@ class ProductWiseStockList extends React.Component {
                       style={{width:"50px",height:"30px"}}
                       type="number" 
                       //value={stock}
-                       onChange={this.changeStock.bind(this,tableMeta.rowData[7],tableMeta.rowData[8])}
+                       onChange={this.changeStock.bind(this,tableMeta.rowData[9],tableMeta.rowData[10])}
                      />
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
@@ -300,7 +323,7 @@ class ProductWiseStockList extends React.Component {
             id={"product_status_" + tableMeta.rowData[11]}
             checked={showInListing === true ? true : false}
             value={showInListing}
-            onChange={this.handleStatusChange.bind(this,tableMeta.rowData[7],tableMeta.rowData[8])}
+            onChange={this.handleStatusChange.bind(this,tableMeta.rowData[9],tableMeta.rowData[10])}
           /></div>)
         }
       }
@@ -313,7 +336,7 @@ class ProductWiseStockList extends React.Component {
         sort: true,
         customBodyRender: (id, tableMeta) => {
           return <div>
-            <Link to={"/products/stock/" + tableMeta.rowData[8] + "/add/"+ id}
+            <Link to={"/products/stock/" + tableMeta.rowData[10] + "/add/"+ id}
               className="m-r-15 text-muted"
               data-toggle="tooltip"
               data-placement="top" title=""

@@ -186,7 +186,7 @@ class CouponWiseShopModal extends React.Component {
                           <span className="cr">
                             <i className="cr-icon icofont icofont-ui-check txt-primary"></i>
                           </span>
-                          <span>{tyre_collection.name}</span>
+                          <span>{tyre_collection.name_en}</span>
                         </label>
                       </div>
                     </div>

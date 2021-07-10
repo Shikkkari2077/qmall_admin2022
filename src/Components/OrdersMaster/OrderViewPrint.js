@@ -214,7 +214,7 @@ class OrderViewPrint extends React.Component {
                                                 <td className="invoice_table_border"><p className="product_table_value"> { ordercombi.Combination.Product.name_en}  </p>  </td> 
                                                 <td className="invoice_table_border"><p className="product_table_shop_header">{OrderShops.Shop.name_en}</p></td>
                                                 <td className="invoice_table_border"> <p className="product_table_shop_header">{ordercombi.quantity}</p>  </td>
-                                                <td className="invoice_table_border"> <p className="product_table_shop_header">{ordercombi.amount} KWD</p>  </td>
+                                                <td className="invoice_table_border"> <p className="product_table_shop_header">{ordercombi.amount *ordercombi.quantity} KWD</p>  </td>
 
                                                 </tr>
                                                 : null

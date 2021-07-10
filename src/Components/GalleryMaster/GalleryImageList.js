@@ -167,11 +167,12 @@ class GalleryImageList extends React.Component {
                                 ?
                                 this.state.gallery.map(gallery_img =>
                                   <div class="col-2 default-grid-item">
+                                    {console.log("media",gallery_img)}
                                     <div class="masonry-media">
                                       <img class="img-fluid img-100" src={gallery_img.url !== undefined && gallery_img.url !== null
                                          && gallery_img.url !== "" ? gallery_img.url : "./assets/images/icon.png"} alt="" />
                                       <br />
-                                      <span onClick={this.deleteMediaImage.bind(this, gallery_img.id)}><i class="icofont icofont-trash m-r-5 icofont-2x text-danger"></i></span>
+                                      <span onClick={this.deleteMediaImage.bind(this, gallery_img.ProductMedia.MediumId)}><i class="icofont icofont-trash m-r-5 icofont-2x text-danger"></i></span>
                                     </div>
                                   </div>
                                 )

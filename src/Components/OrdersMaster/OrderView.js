@@ -534,6 +534,7 @@ class OrderView extends React.Component {
                             {
                               localStorage.getItem('q8_mall_ad_role') === "shop"
                                 ? null : <th className="noprint">Deliver To</th>}
+                                <th>Qty.</th>
                             <th>Total</th>
                             <th>Qmall Commission</th>
                             <th>Seller Amount</th>
@@ -706,27 +707,37 @@ class OrderView extends React.Component {
                                       </select>
                                     </td>
                                 }
+                                <td>  {
+                                  OrderShops.OrderCombinations !== null && OrderShops.OrderCombinations[0] !== undefined &&
+                                  OrderShops.OrderCombinations[0].Combination !== undefined
+                                    ?
+                                     OrderShops.OrderCombinations.map(ordercombi =>{
+                                        return(ordercombi.quantity)
+                                       })
+                                    : null
+                                  }</td>
                                 <td>{parseFloat(OrderShops.amount).toFixed(3)} {this.state.order_details.CurrencyId}</td>
                                 <td>{parseFloat((OrderShops.amount * OrderShops.qmallCommission) / 100).toFixed(3)} {this.state.order_details.CurrencyId}</td>
                                 <td>{parseFloat(OrderShops.amount - ((OrderShops.amount * OrderShops.qmallCommission) / 100)).toFixed(3)} {this.state.order_details.CurrencyId}</td>
+                                <td> 
+
                                 {
                                   OrderShops.OrderStocks !== undefined ?
                                   
-                                    <td> 
-                                      <ul>
-                                      {
+                                      
+                                      
                                         OrderShops.OrderStocks.map(order=>(
-                                          ////console.log(order)
-                                         <li>{order.productNote ?order.productNote:"--"}</li> 
+                                         <li>{order.productNote ?order.productNote:null}</li> 
                                         ))
-                                      }
-                                      </ul>
-                                    </td>
+                                      
+                                      
                                 :null
                                 }
+                               </td>
+
                                 {
                                   localStorage.getItem('q8_mall_ad_role') === "shop"
-                                    ? null
+                                    ? <td></td>
                                     :
                                     <td className="noprint">
                                       <button className="btn btn-icon btn-xlg btn-outline-secondary" onClick={this.sendOrderNotification.bind(this, OrderShops.ShopId)}>
@@ -749,27 +760,46 @@ class OrderView extends React.Component {
               <div className="col-sm-12">
                 <table className="table table-responsive invoice-table invoice-total">
                   <tbody>
+                  {localStorage.getItem('q8_mall_ad_role')=='admin'?
                     <tr>
+
                       <th>Total Amount :</th>
                       <td>{parseFloat(this.state.order_details.totalAmount).toFixed(3)} {this.state.order_details.CurrencyId}</td>
-                    </tr>
+                      
+                   </tr>
+                 :
+                    <tr  className="text-info">
+
+                       <th><h5>Grand Total :</h5></th>
+                       {
+                         this.state.order_details.OrderShops !==undefined ?
+                         this.state.order_details.OrderShops.map(order=>{
+                           return(
+                            <td><h5>{parseFloat(order.amount).toFixed(3)} {this.state.order_details.CurrencyId}</h5></td>
+                           )
+                         })
+                         :null
+                       }
+                       {/* <td><h5>{parseFloat(this.state.order_details.totalAmount).toFixed(3)} {this.state.order_details.CurrencyId}</h5></td> */}
+                 
+                   </tr>
+                 }
+
                     <tr>{localStorage.getItem('q8_mall_ad_role')=='admin'?<>
                       <th>Delivery Charges :</th>
                       <td>{parseFloat(this.state.order_details.totalDeliveryCharge).toFixed(3)} {this.state.order_details.CurrencyId}</td>
                       </>
                     :null}
                     </tr>
-
+                    {localStorage.getItem('q8_mall_ad_role')=='admin'?
                     <tr className="text-info">
-                      <td>
-                        <hr />
-                        <h5 >Grand Total :</h5>
+
+                      <td><hr/><h5 >Grand Total :</h5>
                       </td>
-                      <td>
-                        <hr />
-                        <h5 >{parseFloat(this.state.order_details.totalwithdelivery).toFixed(3)} {this.state.order_details.CurrencyId}</h5>
+                      <td><hr /><h5 >{parseFloat(this.state.order_details.totalwithdelivery).toFixed(3)} {this.state.order_details.CurrencyId}</h5>
                       </td>
                     </tr>
+                    :null }
                   </tbody>
                 </table>
               </div>

@@ -494,7 +494,7 @@ class ProductList extends React.Component {
       name: "id",
       label: "Action",
       options: {
-        filter: true,
+        filter: false,
         sort: true,
         customBodyRender: (id, tableMeta) => {
           return <div>
@@ -691,6 +691,8 @@ class ProductList extends React.Component {
       name: "status",
       label: "Status",
       options: {
+        display:false,
+
         filter: true,
         sort: false,
         customBodyRender: (status, tableMeta) => {
@@ -794,7 +796,6 @@ class ProductList extends React.Component {
       print: false,
       download: false,
       selectableRows: 'none',
-      filter:false,
       // pagination:false,
       textLabels: {
         body: {

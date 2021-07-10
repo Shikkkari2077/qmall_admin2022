@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import Constant from "../../Constant";
 import MUIDataTable from "mui-datatables";
 // import { Height } from "@material-ui/icons";
-
+import moment from 'moment'
 class OrderList extends React.Component {
   state = {
     
@@ -182,29 +182,15 @@ class OrderList extends React.Component {
         //   }
       },
       {
-        name: "create_date",
+        name: "createdAt",
         label: "Date",
         options: {
           filter: true,
           sort: true,
-          customBodyRender: (create_date, tableMeta) => {
-            // var order_date = new Date(create_date);
-            // var order_day, order_month, order_year;
-            // if (order_date.getDate() > 9) {
-            //   order_day = order_date.getDate();
-            // } else {
-            //   order_day = "0" + order_date.getDate();
-            // }
-            // if ((order_date.getMonth() + 1) > 9) {
-            //   order_month = (order_date.getMonth() + 1);
-            // } else {
-            //   order_month = "0" + (order_date.getMonth() + 1);
-            // }
-            // order_year = order_date.getFullYear();
+          customBodyRender: (createdAt, tableMeta) => {
+            
 
-            // var created_at = order_day + "-" + order_month + "-" + order_year
-
-            return <div>{create_date}</div>;
+            return <div>{moment(createdAt).format(" DD-MM-YY , hh:mm A ")}</div>;
           },
         },
       },
