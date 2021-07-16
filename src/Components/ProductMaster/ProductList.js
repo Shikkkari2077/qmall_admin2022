@@ -164,9 +164,10 @@ class ProductList extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      if (json.status === true) {
+      if (json.status === 200) {
         Swal.fire("Product Activation!", "Product activation has been updated.", "success");
-        that.getProductList();
+        console.log(this.state.byname)
+        that.getProductList(0,10,this.state.byID,this.state.byname,this.state.lang);
       } else {
         Swal.fire({
           title: "Something went wrong. Try again after some Time.!",
@@ -204,9 +205,9 @@ class ProductList extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      if (json.status === true) {
+      if (json.status == true) {
         //Swal.fire("Update Status!", "Status has been updated.", "success");
-        that.getProductList(that.state.dataLength,that.state.datarange);
+        that.getProductList(that.state.dataLength,that.state.datarange,that.state.byID,that.state.byname,that.state.lang);
       } else {
         Swal.fire({
           title: "Something went wrong. Try again after some Time.!",
@@ -353,6 +354,7 @@ class ProductList extends React.Component {
   byID=()=>{
     this.getProductList(10,0,this.state.search)
     this.setState({
+      startRange:0,
       byID:this.state.search,
       byname:"",
       activePage:1
@@ -362,6 +364,8 @@ class ProductList extends React.Component {
   byName=()=>{
     this.getProductList(10,0,"",this.state.search,this.state.lang)
     this.setState({
+      startRange:0,
+
       byname:this.state.search,
       byID:"",
       activePage:1
@@ -694,6 +698,7 @@ class ProductList extends React.Component {
       options: {
         filter: true,
         sort: false,
+        display:false,
         customBodyRender: (isActive, tableMeta) => {
           return <Toggle
             id={"product_isActive_" + tableMeta.rowData[11]}
@@ -706,9 +711,9 @@ class ProductList extends React.Component {
       }
     }, {
       name: "status",
-      label: "Status",
+      label: "Active",
       options: {
-        display:false,
+        display:true,
 
         filter: true,
         sort: false,
