@@ -6,6 +6,7 @@ import Constant from "../../Constant";
 import GalleryImageList from "../GalleryMaster/GalleryImageList";
 import ReactQuill from "react-quill";
 import ProductWiseStockAdd from "../ProductWiseStockMaster/ProductWiseStockAdd";
+import { Category } from "@material-ui/icons";
 class ProductAdd extends React.Component {
   state = {
     isSaving:false,
@@ -128,7 +129,24 @@ class ProductAdd extends React.Component {
   }
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
+    if(event.target.name == "SectionId"){
+      console.log(event.target.value)
+    }
   };
+  selectedSection=(event)=>{
+    this.setState({ [event.target.name]: event.target.value,sectionChanged:true });
+      console.log(event.target.value)
+      var category=this.state.category_list
+      for(let i=0;i<category.length;i++){
+        if(category[i].id == event.target.value){
+          this.setState({
+            
+            categoryId:category[i].CategoryId
+          })
+        }
+      }
+    
+  }
   getCategoryListAdmin2(id){
     var that = this;
     this.setState({ isSaving: true });
@@ -285,13 +303,16 @@ class ProductAdd extends React.Component {
           priority:product.priority,
           description:product.description_en,
           description_ar:product.description_ar,
-         SectionId:product.SectionId,
+          SectionId:product.SectionId,
           image:product.productMedia.url
 
           
         })
+        // if(product.CategoryId == null){
+        //   that.setCategory(product.SectionId)
+        // }
       }
-
+     
       if (json.status === true) {
       
       } else {
@@ -300,6 +321,9 @@ class ProductAdd extends React.Component {
       }
     });
   }
+ 
+
+   
   onNext(){
     this.setState({
       activePage:"gallery"
@@ -399,7 +423,11 @@ class ProductAdd extends React.Component {
       data.append("MediaId", media_id);
 
     }
+   if(this.state.sectionChanged == true){
     data.append("SectionId", that.state.SectionId);
+    data.append("CategoryId", that.state.categoryId);
+   }
+
     // data.append("ShopId", that.state.ShopId);
     data.append("ProductId", that.props.product_id);
     if(that.state.selected_attributes.length != 0)
@@ -417,6 +445,7 @@ class ProductAdd extends React.Component {
     }).then(function (json) {
       if (json.status === true) {
         Swal.fire("Updated !", "Product has been Updated", "success");
+        that.getProductDetails()
         that.setState({ isSaving: false })
       } else {
         that.setState({ isSaving: false });
@@ -438,11 +467,12 @@ class ProductAdd extends React.Component {
     var that = this;
     var data = new URLSearchParams();
     this.setState({ isSaving: true });
-    if (that.state.SectionId === undefined || that.state.SectionId === null || that.state.SectionId === "" || that.state.SectionId === "0") {
+    if (that.state.SectionId === undefined || that.state.SectionId === null || that.state.SectionId === "" || that.state.SectionId === " ") {
       Swal.fire("Warning !", "Please Select Product Section First. !", "warning");
       that.setState({ isSaving: false });
       return false;
     }
+    else{
     data.append("name_en", that.state.product_name);
     data.append("name_ar", that.state.product_name_ar);
 
@@ -458,6 +488,8 @@ class ProductAdd extends React.Component {
     else
     {data.append("MediaId",[])}
     data.append("SectionId", that.state.SectionId);
+    data.append("CategoryId", that.state.categoryId);
+
     // data.append("ShopId", that.state.ShopId);
     data.append("LanguageId", that.props.language_id);
     data.append("unique_identifier", that.state.Product_unique_id);
@@ -512,7 +544,7 @@ class ProductAdd extends React.Component {
         })
       }
     });
-    
+  }
 
   };
   componentWillMount() {
@@ -691,17 +723,27 @@ class ProductAdd extends React.Component {
               </div>
             </div> */}
 
+{
+  console.log(this.state.categoryId)
+}
             <div className="col-md-6">
               <div className="form-group row">
                 <label className="col-sm-3 col-form-label">Section</label>
                 <div className="col-sm-9">
-                  <select name="SectionId" className="form-control" value={this.state.SectionId} onChange={this.handleChange}>
+                  <select name="SectionId"
+                   className="form-control"
+                   value={this.state.SectionId} 
+                   onChange={this.selectedSection}>
                     <option value="0">Select Product Section</option>
                     {
-                      this.state.category_list !== undefined && this.state.category_list !== null && this.state.category_list !== [] && this.state.category_list.length > 0
+                      this.state.category_list !== undefined && 
+                        this.state.category_list !== null && 
+                          this.state.category_list !== [] && 
+                           this.state.category_list.length > 0
                         ?
                         this.state.category_list.map(category =>
-                          <option key={category.id} value={category.id}>{category.name_en + " / " + category.name_ar}</option>
+                          <option key={category.id} value={category.id} >
+                             {category.name_en + " / " + category.name_ar}</option>
                         
                         )
                         :

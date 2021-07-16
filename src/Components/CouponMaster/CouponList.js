@@ -123,7 +123,39 @@ class CouponList extends React.Component {
           )
         }
       }
-    }, {
+    },  {
+      name: "start_date",
+      label: "Coupon Start Date",
+      options: {
+        filter: true,
+        sort: true,
+        
+        customBodyRender: (start_date, tableMeta) => {
+
+          var coupon_expiery = new Date(start_date);
+          var exp_day, exp_month, exp_year;
+          if (coupon_expiery.getDate() > 9) {
+            exp_day = coupon_expiery.getDate();
+          } else {
+            exp_day = "0" + coupon_expiery.getDate();
+          }
+          if ((coupon_expiery.getMonth() + 1) > 9) {
+            exp_month = (coupon_expiery.getMonth() + 1);
+          } else {
+            exp_month = "0" + (coupon_expiery.getMonth() + 1);
+          }
+          exp_year = coupon_expiery.getFullYear();
+
+          var exp_date = exp_day + "-" + exp_month + "-" + exp_year
+
+          return (<div>
+            {exp_date}
+          </div>
+          )
+        }
+        
+      }
+    },{
       name: "expiry",
       label: "Coupon Expiery Date",
       options: {

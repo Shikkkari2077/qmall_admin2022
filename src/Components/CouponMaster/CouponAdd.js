@@ -64,6 +64,8 @@ class CouponAdd extends React.Component {
           percentage: json.data[0].percentage,
           status: json.data[0].status,
           expiry: moment(new Date(json.data[0].expiry), "DD-MM-YYYY"),
+          start_date: moment(new Date(json.data[0].start_date), "DD-MM-YYYY"),
+
           description: json.data[0].description,
           minAmount: json.data[0].minAmount,
           discount_type: disc_type
@@ -91,6 +93,8 @@ class CouponAdd extends React.Component {
     data.append("description", that.state.description);
     data.append("status", that.state.status);
     data.append("expiry", that.state.expiry);
+    data.append("start_date", that.state.start_date);
+
     data.append("CurrencyId", that.state.CurrencyId);
     data.append("minAmount", that.state.minAmount);
     if (that.state.discount_type === "amount") {
@@ -133,6 +137,8 @@ class CouponAdd extends React.Component {
     data.append("code", that.state.code);
     data.append("description", that.state.description);
     data.append("status", that.state.status);
+    data.append("start_date", that.state.start_date);
+
     data.append("expiry", that.state.expiry);
     data.append("CurrencyId", that.state.CurrencyId);
     data.append("minAmount", that.state.minAmount);
@@ -196,6 +202,40 @@ class CouponAdd extends React.Component {
         })
       }
     });
+  }
+  onStartChange=(value)=>{
+    var date = new Date(value);
+    var exp_day, exp_month, exp_year, exp_hour, exp_min, exp_sec;
+    if (date.getDate() > 9) {
+      exp_day = date.getDate();
+    } else {
+      exp_day = "0" + date.getDate();
+    }
+    if ((date.getMonth() + 1) > 9) {
+      exp_month = (date.getMonth() + 1);
+    } else {
+      exp_month = "0" + (date.getMonth() + 1);
+    }
+    if (date.getHours() > 9) {
+      exp_hour = date.getHours();
+    } else {
+      exp_hour = "0" + date.getHours();
+    }
+    if (date.getMinutes() > 9) {
+      exp_min = date.getMinutes();
+    } else {
+      exp_min = "0" + date.getMinutes();
+    }
+    if (date.getSeconds() > 9) {
+      exp_sec = date.getSeconds();
+    } else {
+      exp_sec = "0" + date.getSeconds();
+    }
+    exp_year = date.getFullYear();
+
+    var exp_date = exp_year + "-" + exp_month + "-" + exp_day + " " + exp_hour + ":" + exp_min + ":" + exp_sec
+
+    this.setState({ start_date: moment(new Date(value), "DD-MM-YYYY"), expiry_date: exp_date })
   }
   onExpireChange = (value) => {
     var date = new Date(value);
@@ -346,15 +386,7 @@ class CouponAdd extends React.Component {
                   </div>
                 </div>
             }
-            <div className="col-md-6">
-              <div className="form-group row">
-                <label className="col-sm-3 col-form-label">Coupon Expirey Date</label>
-                <div className="col-sm-9">
-                  <Datetime dateFormat={"DD-MM-YYYY"} timeFormat closeOnSelect={true} inputProps={{ placeholder: 'Coupon Expirey Date' }} value={this.state.expiry} onChange={this.onExpireChange.bind(this)} />
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6">
+             <div className="col-md-6">
               <div className="form-group row">
                 <label className="col-sm-3 col-form-label">Status</label>
                 <div className="col-sm-9">
@@ -365,6 +397,30 @@ class CouponAdd extends React.Component {
                 </div>
               </div>
             </div>
+               <div className="col-md-6">
+              <div className="form-group row">
+                <label className="col-sm-3 col-form-label">Coupon Start Date</label>
+                <div className="col-sm-9">
+                  <Datetime dateFormat={"DD-MM-YYYY"}
+                            timeFormat 
+                            closeOnSelect={true} 
+                            inputProps={{ placeholder: 'Coupon Start Date' }} 
+                            value={this.state.start_date} 
+                            onChange={this.onStartChange.bind(this)} />
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="form-group row">
+                <label className="col-sm-3 col-form-label">Coupon Expirey Date</label>
+                <div className="col-sm-9">
+                  <Datetime dateFormat={"DD-MM-YYYY"} timeFormat closeOnSelect={true}
+                   inputProps={{ placeholder: 'Coupon Expirey Date' }}
+                    value={this.state.expiry} onChange={this.onExpireChange.bind(this)} />
+                </div>
+              </div>
+            </div>
+           
           </div>
 
           <div className="row">

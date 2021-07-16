@@ -7,7 +7,12 @@ import Barcode from 'react-barcode' // Generate Barcode
 import './barcode-print.css';
 
 class BarcodeList extends React.Component {
-  state = {}
+  state = {
+           startRange:0,
+           count:50,
+           keyword:"",
+           barcode_list:[]
+          }
 
   deleteBarcode = (id) => {
     Swal.fire({
@@ -50,13 +55,24 @@ class BarcodeList extends React.Component {
       }
     });
   }
-  getBarcodeList = () => {
+  getBarcodeList = (startRange) => {
+    
     var that = this;
+    that.setState({
+      barcode_list:[]
+    })
     var data = new URLSearchParams();
     this.setState({ isSaving: true });
     // data.append("BranchId", that.props.match.params.branch_id);
+    if(this.state.keyword !== ""){
+      data.append("keyword", this.state.keyword);
+
+    }
     data.append("CurrencyId", Constant.getDefaultCurrrency());
-    fetch(Constant.getAPI() + "/product/stock/getPrints", {
+    data.append("startRange", startRange);
+    data.append("count", this.state.count);
+
+    fetch(Constant.getAPI() + "/product/combination/getPrints", {
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -84,27 +100,23 @@ class BarcodeList extends React.Component {
     });
   }
   componentWillMount() {
-    this.getBarcodeList();
+    this.getBarcodeList(0,this.state.count);
   }
   onPrint = () => {
     var that = this;
     window.onbeforeprint = function (event) {
-      //   // alert("beforePrint")
       if (localStorage.getItem('q8_mall_ad_role') !== "shop") {
         document.getElementById('admin_menu').classList.remove('pcoded-navbar');
         document.getElementById('admin_content').classList.remove('pcoded-content');
       }
       document.getElementById('print-barcode-html').classList.remove('hide');
       for (var i = 0; i < that.state.barcode_list.length; i++) {
-        //console.log(that.state.barcode_list[i].barNumber)
-        document.getElementById('barcode_print_' + that.state.barcode_list[i].barNumber).classList.remove('noprint');
+        document.getElementById('barcode_print_' + that.state.barcode_list[i].barCode).classList.remove('noprint');
       }
-      //   // return (<RetailerPrintInvoice />)
       document.title = "barcode_list";
     };
     window.onafterprint = function (event) {
-      // alert("Printing completed...");
-      // document.getElementById('invoice_detail').innerHTML = hidePrint
+      
       if (localStorage.getItem('q8_mall_ad_role') !== "shop") {
         document.getElementById('admin_menu').classList.add('pcoded-navbar');
         document.getElementById('admin_content').classList.add('pcoded-content');
@@ -112,7 +124,7 @@ class BarcodeList extends React.Component {
       document.getElementById('print-barcode-html').classList.add('hide');
       for (var i = 0; i < that.state.barcode_list.length; i++) {
         
-        document.getElementById('barcode_print_' + that.state.barcode_list[i].barNumber).classList.add('noprint');
+        document.getElementById('barcode_print_' + that.state.barcode_list[i].barCode).classList.add('noprint');
       }
       document.title = "QMall";
     };
@@ -120,25 +132,33 @@ class BarcodeList extends React.Component {
   }
   handleChange = (event) => {
     if(event.target.value.length == 0)
-    {this.getBarcodeList() ;
-      //console.log("yy")
-  }
-  else{
-   this.onSearch(event.target.value)
-  }
-    this.setState({ keyword: event.target.value });
+    {
+      this.getBarcodeList(0) ;
+      this.setState({
+        keyword:""
+      })
+    }
+    else{
+
+      this.setState({ 
+        keyword: event.target.value 
+      });
+    }
 }
 
   onSearch = (val) => {
-    // this.setState({backButton:"true"})
     
     var that = this;
+    that.setState({
+      barcode_list:[]
+    })
     var data = new URLSearchParams();
     this.setState({ isSaving: true });
-    // data.append("BranchId", that.props.match.params.branch_id);
     data.append("CurrencyId", Constant.getDefaultCurrrency());
-    data.append("keyword", val);
-    fetch(Constant.getAPI() + "/product/stock/getPrints", {
+    data.append("keyword", this.state.keyword);
+    data.append("startRange", this.state.startRange);
+    data.append("count", this.state.count);
+    fetch(Constant.getAPI() + "/product/combination/getPrints", {
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -166,21 +186,18 @@ class BarcodeList extends React.Component {
   onPrint = () => {
     var that = this;
     window.onbeforeprint = function (event) {
-      //   // alert("beforePrint")
       if (localStorage.getItem('q8_mall_ad_role') !== "shop") {
         document.getElementById('admin_menu').classList.remove('pcoded-navbar');
         document.getElementById('admin_content').classList.remove('pcoded-content');
       }
       document.getElementById('print-barcode-html').classList.remove('hide');
       for (var i = 0; i < that.state.barcode_list.length; i++) {
-        document.getElementById('barcode_print_' + that.state.barcode_list[i].barNumber).classList.remove('noprint');
+        document.getElementById('barcode_print_' + that.state.barcode_list[i].barCode).classList.remove('noprint');
       }
-      //   // return (<RetailerPrintInvoice />)
       document.title = "barcode_list";
     };
     window.onafterprint = function (event) {
-      // alert("Printing completed...");
-      // document.getElementById('invoice_detail').innerHTML = hidePrint
+     
       if (localStorage.getItem('q8_mall_ad_role') !== "shop") {
         document.getElementById('admin_menu').classList.add('pcoded-navbar');
         document.getElementById('admin_content').classList.add('pcoded-content');
@@ -188,51 +205,61 @@ class BarcodeList extends React.Component {
       document.getElementById('print-barcode-html').classList.add('hide');
       for (var i = 0; i < that.state.barcode_list.length; i++) {
         
-        document.getElementById('barcode_print_' + that.state.barcode_list[i].barNumber).classList.add('noprint');
+        document.getElementById('barcode_print_' + that.state.barcode_list[i].barCode).classList.add('noprint');
       }
       document.title = "QMall";
     };
     window.print();
   }
   
-  printBarcode = (barNumber) => {
-    this.setState( {barcheck:barNumber})
-    //alert("barNumber : " + barNumber);
+  printBarcode = (barCode) => {
+    this.setState( {barcheck:barCode})
+    //alert("barCode : " + barCode);
     window.onbeforeprint = function (event) {
-      //   // alert("beforePrint")
-      ////console.log(barNumber)
+  
       if (localStorage.getItem('q8_mall_ad_role') !== "shop") {
         document.getElementById('admin_menu').classList.remove('pcoded-navbar');
         document.getElementById('admin_content').classList.remove('pcoded-content');
       }
-      //console.log('barcode_print_' + barNumber)
 
       document.getElementById('print-barcode-html').classList.remove('hide');
-      document.getElementById('barcode_print_' + barNumber).classList.remove('noprint');
-      //   // return (<RetailerPrintInvoice />)
+      document.getElementById('barcode_print_' + barCode).classList.remove('noprint');
       document.title = "barcode_list";
 
     };
     window.onafterprint = function (event) {
-      // alert("Printing completed...");
-      // document.getElementById('invoice_detail').innerHTML = hidePrint
+     
       if (localStorage.getItem('q8_mall_ad_role') !== "shop") {
         document.getElementById('admin_menu').classList.add('pcoded-navbar');
         document.getElementById('admin_content').classList.add('pcoded-content');
       }
       document.getElementById('print-barcode-html').classList.add('hide');
-      //console.log('barcode_print_' + barNumber)
-      document.getElementById('barcode_print_' + barNumber).classList.add('noprint');
+      document.getElementById('barcode_print_' + barCode).classList.add('noprint');
       document.title = "QMall";
-      // document.title = 'barcode_print_' + barNumber;
+      
     };
     window.print();
   }
-  // sample=(bar)=>{
-  //   this.setState({
-  //     barcheck:bar
-  //   })
-  //}
+
+  onprevious=()=>{
+    if(this.state.startRange >=50){
+    var range= this.state.startRange -50
+    console.log(range)
+    this.getBarcodeList(range)
+    this.setState({
+      startRange:range
+    })
+  }
+
+  }
+  onnext=()=>{
+    var range= this.state.startRange +50
+    console.log(range)
+    this.getBarcodeList(range)
+    this.setState({
+      startRange:range
+    })
+  }
   render() {
     return (
       <div className="pcoded-inner-content" >
@@ -258,25 +285,28 @@ class BarcodeList extends React.Component {
                           id="keyword"
                           placeholder="Search"
                           onChange={this.handleChange}
-                          value={this.state.keyword}
+                          //value={this.state.keyword}
                         />
                         <button className="btn btn-outline-dark btn-sm" onClick={this.onSearch}><i className="feather icon-search"></i></button>
-                        {/* <div className="col-lg-5">
-                        { this.state.backButton ?
-                        <div>  <button className="btn btn-sm btn-print-invoice btn-inverse waves-effect waves-light f-right d-inline-block md-trigger"
-                        // onClick={}
-                        >
-                          <i className="icofont icofont-print m-r-5"></i> Barcode List </button> </div>
-                        :null
-                          }
-                          </div> */}
+                     
                       </div>
+                    </div><br/>
+                    &nbsp;
+               
+                    <div className="col-lg-8">
+                    <button className="f-18 btn btn-sm   waves-light f-right "
+                       onClick={this.onprevious}
+                       disabled={this.state.startRange < 50}>
+                      <i className=" icofont icofont-rounded-left m-r-5"></i>  PREVIOUS   </button>
                     </div>
-                    <div className="col-lg-2">
-                      {/* <button className="btn btn-sm btn-print-invoice btn-inverse waves-effect waves-light f-right d-inline-block md-trigger"
-                       onClick={this.onPrint}>
-                         <i className="icofont icofont-print m-r-5"></i> Print </button> */}
-                    </div>
+                        <div className="col-lg-2">
+
+                      <button className="f-18 btn btn-sm "
+                       disabled={this.state.barcode_list.length <50}
+                       onClick={this.onnext}>
+                        NEXT   <i className="icofont icofont-rounded-right m-r-5"></i></button>
+                        </div>
+                
                   </div>
                 </div>
                 <div className="col-lg-4">
@@ -299,17 +329,16 @@ class BarcodeList extends React.Component {
                   this.state.barcode_list !== undefined && this.state.barcode_list !== null && this.state.barcode_list !== [] && this.state.barcode_list.length > 0
                     ?
                     this.state.barcode_list.map(barcode =>
-                      barcode.barNumber === this.state.barcheck
+                      barcode.barCode === this.state.barcheck
                       ?
                      <div>
-                       {/* {console.log("3")} */}
-                      <div className="row" key={barcode.barNumber} id={"barcode_print_" + barcode.barNumber}>
+                      <div className="row" key={barcode.barCode} id={"barcode_print_" + barcode.barCode}>
                         <page size="">
                           <div class="mainDiv">
-                            <div class="rowC">{barcode.name}</div>
+                            <div class="rowC">{barcode.Product.name_en}</div>
                             <div class="rowD"><strong>Price : {barcode.price ? barcode.price : '0'} {Constant.getDefaultCurrrency()}</strong></div>
-                            <div class="rowA"><Barcode value={barcode.barNumber} /*format="EAN13" */ height="55" width="2" displayValue={false} /></div>
-                            <div class="rowB">{barcode.barNumber}</div>
+                            <div class="rowA"><Barcode value={barcode.barCode} height="55" width="2" displayValue={false} /></div>
+                            <div class="rowB">{barcode.barCode}</div>
                             
                           </div>
                         </page>
@@ -323,34 +352,31 @@ class BarcodeList extends React.Component {
                 }
               </div>
              
-
+{
+  console.log(this.state.barcode_list)
+}
               <div className="row noprint" id="print-barcode">
                 {
                   this.state.barcode_list !== undefined && this.state.barcode_list !== null && this.state.barcoplde_list !== [] && this.state.barcode_list.length > 0
                     ?
                     this.state.barcode_list.map(barcode =>
-                      <div className="col-4 noprint" key={barcode.barNumber}>
-                        <div id={"barcode_" + barcode.barNumber}>
+                      <div className="col-4 noprint" key={barcode.barCode}>
+                        <div id={"barcode_" + barcode.barCode}>
                         <div className={barcode.isPrimary ? "card bg-light text-center" : "card text-center"}>
                           <div className="card-header noprint">
                             <div className="card-header-right">
                               <ul className="list-unstyled card-option">
-                                {/* <Link to={"/barcode/print/" +barcode.barNumber}><i className="feather icon-printer" ></i></Link> */}
-                                <Link to={"/barcode/print/" +barcode.barNumber}><i className="feather icon-printer " style={{color:"grey"}} ></i></Link>
-                                {/* <Link to={"/barcode/print2/" +barcode.barNumber}><i className="feather icon-printer" ></i></Link>
-                                <Link to={"/barcode/print3/" +barcode.barNumber}><i className="feather icon-printer" ></i></Link>
-                                <Link to={"/barcode/print3/" +barcode.barNumber}><i className="feather icon-printer" ></i></Link> */}
-
-                                {/* <li><i className="feather icon-printer" onClick={this.printBarcode.bind(this, barcode.barNumber)} ></i></li> */}
+                                <Link to={"/barcode/print/" +barcode.barCode}><i className="feather icon-printer " style={{color:"grey"}} ></i></Link>
+                             
                               </ul>
                             </div>
                           </div>
                           <page size="">
                             <div class="mainDiv">
-                              <div class="rowC">{barcode.name}</div>
+                              <div class="rowC">{barcode.Product.name_en}</div>
                               <div class="rowD"><strong>Price : {barcode.price ? barcode.price : '0'} {Constant.getDefaultCurrrency()}</strong></div>
-                              <div class="rowA"><Barcode value={barcode.barNumber} /*format="EAN13" */ height="55" width="2" displayValue={true} /></div>
-                              {/* <div class="rowB">{barcode.barNumber}</div> */}
+                              <div class="rowA"><Barcode value={barcode.barCode} /*format="EAN13" */ height="55" width="2" displayValue={true} /></div>
+                              {/* <div class="rowB">{barcode.barCode}</div> */}
                             </div>
                           </page>
                           <div class="page-divide" />
@@ -361,10 +387,7 @@ class BarcodeList extends React.Component {
                     )
                     : null
                 }
-              </div>
-       
-              
-              
+              </div>              
             </div>
           </div>
         </div>

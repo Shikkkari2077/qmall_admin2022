@@ -54,7 +54,6 @@ class ProductWiseStockAdd extends React.Component {
     this.setState({ description: value });
   };
   componentDidUpdate(prevProps, prevState) {
-    //console.log(prevProps)
     if (prevProps.product_id !== this.props.product_id) { 
       this.setState({ product_id: this.props.product_id });
       this.getProductDetails();
@@ -69,7 +68,6 @@ class ProductWiseStockAdd extends React.Component {
         this.getProductDetails();
       }
       if (this.props.stock_id !== undefined) {
-        console.log(this.props.stock_id)
         this.getCombinationList()
       }
     }
@@ -80,16 +78,13 @@ class ProductWiseStockAdd extends React.Component {
           [event.target.name]:event.target.value
         })
      }
-    console.log(key)
     var combinationArray=this.state.combinationArray
     
     combinationArray[key][event.target.name] = event.target.value
-    console.log(combinationArray)
     this.setState({ combinationArray });
   };
 
   handleChangeAtt=(index,key,event)=>{
-    console.log(key,index,event.target.name,event.target.value)
     this.getAttributesValue(event.target.value)
     var combinationArray=this.state.combinationArray
     combinationArray[key].attributeArray[index][event.target.name]=event.target.value
@@ -100,7 +95,6 @@ class ProductWiseStockAdd extends React.Component {
 
   }
   reset(index,key){
-    console.log("vsd")
     var nameArray=this.state.nameArray
     nameArray[key].attributeArray[index].name=""
 
@@ -127,7 +121,6 @@ class ProductWiseStockAdd extends React.Component {
          nameArray[key].attributeArray[index].name= arr[i].name_en
       }
     }
-    console.log(nameArray)
     // var nameArray=this.state.nameArray
     // nameArray[key].attributeArray[index].name= event.target.name
     this.setState({
@@ -353,6 +346,24 @@ class ProductWiseStockAdd extends React.Component {
       combinationArray:that.state.combinationArray
       
     }
+    var error=data.combinationArray
+    console.log(data.combinationArray)
+    for(let i=0;i<error.length;i++){
+      if(error[i].barCode == ""){
+        Swal.fire("Warning !", `Please Add Barcode To Variant No. ${i+1} !`, "warning");
+        that.setState({ isSaving: false });
+        return false;
+        
+      }
+      else if(error[i].variantId == ""){
+        Swal.fire("Warning !", `Please Add Variant ID To Variant No. ${i+1} !`, "warning");
+        that.setState({ isSaving: false });
+        return false;
+      }
+     
+      
+    }
+    console.log("done")
     fetch(Constant.getAPI() + "/product/combination/add", {
       method: "post",
       headers: {
@@ -437,11 +448,11 @@ class ProductWiseStockAdd extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      console.log(json.data[0])
+      // console.log(json.data[0])
       if (json.success === true) {
         var combination=json.data[0]
         var combinationArray=that.state.combinationArray
-        console.log(combinationArray)
+        // console.log(combinationArray)
         combinationArray[0].price=combination.price
         combinationArray[0].stock=combination.stock
         combinationArray[0].specialPrice=combination.specialPrice
@@ -452,7 +463,7 @@ class ProductWiseStockAdd extends React.Component {
 
 
 
-        console.log(combinationArray)
+        // console.log(combinationArray)
         that.setState({ 
           combinationArray
         });
@@ -642,7 +653,6 @@ class ProductWiseStockAdd extends React.Component {
     var nameArray=this.state.nameArray
     var length=this.state.nameArray[key].attributeArray.length
     nameArray[key].attributeArray[length]={name:""}
-    console.log(nameArray)
     this.setState({
       combinationArray,
       nameArray
@@ -650,7 +660,6 @@ class ProductWiseStockAdd extends React.Component {
   }
   onUpdate=()=>{
     var that = this;  
-    console.log(that.state)
     this.setState({ isSaving: true });
     var data= new URLSearchParams()
     // var data={
@@ -693,7 +702,6 @@ class ProductWiseStockAdd extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      console.log(json,json.success,json.success == true,json.success=='true',json.success === true)
       if (json.success == true) {
         Swal.fire({
           title: "Updated Successful",
@@ -701,7 +709,6 @@ class ProductWiseStockAdd extends React.Component {
           confirmButtonColor: '#3085d6',
           confirmButtonText: 'OK'
         }).then((result)=>{
-          console.log(result,result.value)
           if (result.value) {
              window.location.href=`#/products/stock/${that.props.product_id}`
           } 
@@ -736,7 +743,6 @@ class ProductWiseStockAdd extends React.Component {
           :null}
           
         </div>
-        {/* {console.log(this.state.combinationArray[0].stock)} */}
         <div className="card-body" style={{margin:"20px"}}>
           {this.state.combinationArray.map((combination,key)=>{
      return(
@@ -933,9 +939,7 @@ class ProductWiseStockAdd extends React.Component {
                            > <i className="f-16 icofont icofont-plus "></i> Add 
                     </button>
                    <br/><br/>
-                   {
-                     console.log(this.state.attribute_list)
-                   }
+                  
                     {  
                     combination.attributeArray ? 
                     combination.attributeArray.map((attribute,index)=>{

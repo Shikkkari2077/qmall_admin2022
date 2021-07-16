@@ -106,6 +106,29 @@ class GalleryImageList extends React.Component {
     this.getProductList();
 
   }
+  mainImage=(e)=>{
+    var that=this
+  console.log(e.ProductMedia)
+  var data={
+    productId:e.ProductMedia.ProductId,
+    mainMediaId:e.ProductMedia.MediumId
+  }
+  fetch(Constant.getAPI() + "/product/media/update", {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": localStorage.getItem('q8_mall_auth')
+    },
+    body: JSON.stringify(data)
+  }).then(function (response) {
+    return response.json();
+  }).then(function (json) {
+    console.log(json)
+    if (json.success === true) {
+      that.reload()
+    } 
+  });
+  }
   render() {
     return (
       <div className="pcoded-inner-content" >
@@ -120,21 +143,7 @@ class GalleryImageList extends React.Component {
                     </div>
                   </div>
                 </div>
-                {/* <div className="col-lg-4">
-                  <div className="page-header-breadcrumb">
-                    <ul className="breadcrumb-title">
-                      <li className="breadcrumb-item">
-                        <Link to="/">
-                          <i className="feather icon-home"></i> </Link>
-                      </li>
-                      <li className="breadcrumb-item">
-                        <Link to="/products">Product List</Link>
-                      </li>
-                      <li className="breadcrumb-item active">Product Media Gallery</li>
-                    </ul>
-                  </div>
-                </div>
-               */}
+                
               </div>
             </div>
             <div className="page-body">
@@ -167,12 +176,13 @@ class GalleryImageList extends React.Component {
                                 ?
                                 this.state.gallery.map(gallery_img =>
                                   <div class="col-2 default-grid-item">
-                                    {console.log("media",gallery_img)}
                                     <div class="masonry-media">
+                                      <input type="checkbox" onChange={this.mainImage.bind(this,gallery_img)} checked={gallery_img.ProductMedia.main}/>
                                       <img class="img-fluid img-100" src={gallery_img.url !== undefined && gallery_img.url !== null
                                          && gallery_img.url !== "" ? gallery_img.url : "./assets/images/icon.png"} alt="" />
-                                      <br />
-                                      <span onClick={this.deleteMediaImage.bind(this, gallery_img.ProductMedia.MediumId)}><i class="icofont icofont-trash m-r-5 icofont-2x text-danger"></i></span>
+                                      <br/>
+                                      <span onClick={this.deleteMediaImage.bind(this, gallery_img.ProductMedia.MediumId)}>
+                                        <i class="f-20 icofont icofont-trash m-r-5 icofont-2x text-danger"></i></span>
                                     </div>
                                   </div>
                                 )

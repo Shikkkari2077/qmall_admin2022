@@ -13,8 +13,10 @@ import $ from 'jquery';
 class ProductList extends React.Component {
   state = {
     datarange:0,
+    checkedLang:false,
     dataLength:10,
-    activePage:1
+    activePage:1,
+    lang:""
   }
   deleteAttributeValue = (id) => {
     Swal.fire({
@@ -58,7 +60,7 @@ class ProductList extends React.Component {
     });
   }
  
-  getProductList = (count,startRange, uniqueidentifier,name) => {
+  getProductList = (count,startRange, uniqueidentifier,name,lang) => {
   console.log(count,startRange, uniqueidentifier,name)
     var that = this;
     var data ={}
@@ -77,9 +79,9 @@ class ProductList extends React.Component {
         startRange,
       }
     }
-    if(name !== "")
+    if(name !== "" )
     {
-      data={...data,'keyword':name}
+      data={...data,'keyword':name,'lang':lang}
     }
     if(uniqueidentifier !== "")
     {
@@ -332,18 +334,33 @@ class ProductList extends React.Component {
   
 
   }
+  checkedbox=(event)=>{
+    if(event.target.checked == true){
+      this.setState({
+        checkedLang:event.target.checked,
+        lang:"ar"
+      })
+      
+    }else{
+      this.setState({
+        checkedLang:event.target.checked,
+        lang:""
+      })
+    }
+   
+    console.log(event.target.checked)
+  }
   byID=()=>{
     this.getProductList(10,0,this.state.search)
     this.setState({
       byID:this.state.search,
       byname:"",
       activePage:1
-
-    })
+})
 
   }
   byName=()=>{
-    this.getProductList(10,0,"",this.state.search)
+    this.getProductList(10,0,"",this.state.search,this.state.lang)
     this.setState({
       byname:this.state.search,
       byID:"",
@@ -857,6 +874,15 @@ class ProductList extends React.Component {
                   <div className="card">
                     <div className="card-block">
                       <div className="d-flex justify-content-center ">
+                      {/* <div className="col-sm-1">
+                          <select
+                          className="form-control">
+                            <option>En</option>
+                            <option>Ar</option>
+
+                          </select>
+                        </div> */}
+                        
                         <div className="col-sm-3">
                         <input 
                         className="form-control"
@@ -867,17 +893,26 @@ class ProductList extends React.Component {
                         />
 
                         </div>
+                        <span className="col-sm-0.5" >
+                        <input  type="checkbox" id="ar"
+                                checked={this.state.checkedLang}
+                                 onChange={this.checkedbox}/><h6>Ar</h6>
+                      
+                        </span>
+                      
                         <div className="col-sm-3">
+                          <span>
                        <button className="btn btn-outline-primary"
                         style={{borderRadius:"20px",height:'35px',width:"130px",padding:"8px"}}
                         onClick={this.byName}>
                          <h6>By Name <i className="icofont icofont-search " /> </h6>
-                       </button>&nbsp;
+                       </button> 
+                       </span>&nbsp;
                        <button className="btn btn-outline-primary"
                         style={{borderRadius:"20px",height:'35px',width:"120px",padding:"8px"}}
                         onClick={this.byID}>
                          <h6 className="font-dark">By ID <i className="icofont icofont-search " /> </h6>
-                       </button>
+                       </button>&nbsp;&nbsp;
 
                         </div>
                       </div>

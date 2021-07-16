@@ -16,7 +16,7 @@ body 			{}
 
 .rowA			{/*margin-bottom: .5rem; font-size: 1.5rem; font-weight: bold;*/height:70px;}
 .rowB			{margin-bottom: .1rem; font-size: .9375rem;}
-.rowC			{font-size: .900rem;}
+.rowC			{font-size: .900rem;word-break: keep-all}
 .rowD			{font-size: .900rem;}
 .page-divide    {margin-top:15rem;}
 

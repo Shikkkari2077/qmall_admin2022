@@ -10,8 +10,11 @@ class ShopAdd extends React.Component {
     status: "open",
     description: "",
     refundPolicy: "",
+    email:"",
+    password:"",
     refundPolicy_ar:"",
-    selected_category: []
+    selected_category: [],
+    isFeatured:false,
   };
   onHandleRefundPolicyChange = value => {
     this.setState({ refundPolicy: value });
@@ -24,14 +27,16 @@ class ShopAdd extends React.Component {
     this.setState({ description: value });
   };
   componentWillMount(){
-    this.getCategoryList();
+    if(this.props.shop_id == undefined){
+      this.getCategoryList();
+
+    }
 
   }
 
   componentDidUpdate(prevProps) {
     //console.log(prevProps)
-    if (this.props.language_id !== undefined) {
-      //console.log("Called")
+    if (this.props.language_id !== undefined && this.props.shop_id !== undefined) {
 
       if (prevProps.shop_id !== this.props.shop_id) {
         this.setState({ shop_id: this.props.shop_id });
@@ -113,10 +118,12 @@ class ShopAdd extends React.Component {
               selected_category: categories,
               // mobile: json.data[i].mobileNumber,
               media_id: json.data[i].MediaId,
-              refundPolicy_ar:json.data[i].refundPolicy_ar
+              refundPolicy_ar:json.data[i].refundPolicy_ar,
+              isFeatured:json.data[i].isFeatured
             });
           }
         }
+        that.getCategoryList()
       } else {
         that.setState({ users_data: {} });
         // Swal.fire({
@@ -176,29 +183,32 @@ class ShopAdd extends React.Component {
     this.setState({ isSaving: true });
     if (media_id === undefined || media_id === null || media_id === "") {
       that.setState({ isSaving: false });
-      Swal.fire("Add Shop Logo First.!");
+      Swal.fire("Add Shop Logo First !");
       return false;
     }
-    if (that.state.email === undefined || that.state.email === null || that.state.email === "") {
+   else if (that.state.email === undefined || that.state.email === null || that.state.email === "") {
       that.setState({ isSaving: false });
-      Swal.fire("Enter Email Id");
+      Swal.fire("Enter Email Id !");
       return false;
     }
-    if (that.state.password === undefined || that.state.password === null || that.state.password === "") {
+   else if (that.state.password === undefined || that.state.password === null || that.state.password === "") {
       that.setState({ isSaving: false });
-      Swal.fire("Enter Password");
+      Swal.fire("Enter Password !");
       return false;
     }
-    if (that.state.name === undefined || that.state.name === null || that.state.name === "") {
+  else  if (that.state.name === undefined || that.state.name === null || that.state.name === "") {
       that.setState({ isSaving: false });
-      Swal.fire("Enter Shop Name");
+      Swal.fire("Enter Shop Name !");
       return false;
     }
-    // if (that.state.mobile === undefined || that.state.mobile === null || that.state.mobile === "") {
-    //   that.setState({ isSaving: false });
-    //   Swal.fire("Enter Mobile Number");
-    //   return false;
-    // }
+   else if (that.state.selected_category === undefined || that.state.selected_category === null || that.state.selected_category === "") {
+      that.setState({ isSaving: false });
+      Swal.fire("Select Category !");
+      return false;
+    }
+    data.append("CategoryId", that.state.selected_category);
+
+    
     data.append("email", that.state.email);
     data.append("password", that.state.password);
     data.append("name", that.state.name);
@@ -235,9 +245,10 @@ class ShopAdd extends React.Component {
     data.append("featuredPriority", that.state.featuredpriority);
 
     data.append("LanguageId", that.props.language_id);
-    data.append("CategoryId", that.state.selected_category);
+
     data.append("refundPolicy_ar", that.state.refundPolicy_ar);
     data.append("refundPolicy_en", that.state.refundPolicy);
+    data.append("isFeatured", that.state.isFeatured);
 
     fetch(Constant.getAPI() + "/shop/register", {
       method: "post",
@@ -270,13 +281,7 @@ class ShopAdd extends React.Component {
     var that = this;
     var data = new URLSearchParams();
     this.setState({ isSaving: true });
-    // if (media_id === undefined || media_id === null || media_id === "") {
-    //       that.setState({ isSaving: false });
-    //       Swal.fire("Add Shop Logo First.!");
-    //       return false;
-    //     }
-    // data.append("email", that.state.email);
-   // data.append("email", that.state.email);
+
     data.append("name", that.state.name);
     if (that.state.phNumber !== undefined && that.state.phNumber !== null && that.state.phNumber !== "null" && that.state.phNumber !== "") {
       data.append("phNumber", that.state.phNumber);
@@ -311,7 +316,8 @@ class ShopAdd extends React.Component {
     data.append("featuredPriority", that.state.featuredpriority);
     data.append("refundPolicy_ar", that.state.refundPolicy_ar);
     data.append("refundPolicy_en", that.state.refundPolicy);
- 
+    data.append("isFeatured", that.state.isFeatured);
+
 
     fetch(Constant.getAPI() + "/shop/update", {
       method: "post",
@@ -475,13 +481,15 @@ class ShopAdd extends React.Component {
                 <label className="col-sm-3 col-form-label">Password</label>
                 <div className="col-sm-9">
                   <input
-                    type="password"
+                    type="passsword"
                     className="form-control"
                     name="password"
                     id="shop_password"
                     placeholder="Password"
                     onChange={this.handleChange}
                     value={this.state.password}
+                    autoComplete="false"
+                    
                   />
                 </div>
               </div>
@@ -667,6 +675,22 @@ class ShopAdd extends React.Component {
                     onChange={this.handleChange}
                     value={this.state.featuredpriority}
                   />
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="form-group row">
+                <label className="col-sm-3 col-form-label">Featured Status</label>
+                <div className="col-sm-9">
+                <select name="isFeatured" 
+                className="form-control"
+                 value={this.state.isFeatured} 
+                 onChange={this.handleChange}
+                 placeholder="Featured Status">
+                <option value="false" name="no">Hide</option>
+
+                    <option value="true" name="yes">Show</option>
+                  </select>
                 </div>
               </div>
             </div>

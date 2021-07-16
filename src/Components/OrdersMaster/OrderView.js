@@ -646,7 +646,7 @@ class OrderView extends React.Component {
                                         : */}
                                      { localStorage.getItem('q8_mall_ad_role') === "shop"?<div>
                                      <select name="status" className="form-control" value={OrderShops.status} onChange={this.handleChange.bind(this, OrderShops.id)}>
-                                     <option value="pending" name="in progress">Pending</option>
+                                     <option value={null} name="">Order status</option>
          
                                       <option value='Ready for dispatch'>Ready for dispatch</option>
                                     

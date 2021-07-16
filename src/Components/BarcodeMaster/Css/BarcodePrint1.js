@@ -18,7 +18,7 @@ class BarcodePrint1 extends React.Component {
     this.setState({ isSaving: true });
     // data.append("BranchId", that.props.match.params.branch_id);
     data.append("CurrencyId", Constant.getDefaultCurrrency());
-    fetch(Constant.getAPI() + "/product/stock/getPrints", {
+    fetch(Constant.getAPI() + "/product/combination/getPrints", {
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
