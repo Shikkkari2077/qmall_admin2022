@@ -629,14 +629,14 @@ class ProductWiseStockAdd extends React.Component {
       'variantId':"",
       'deliveryOptions':"",
       'showInListing':"false",
-      'MediaId':"",
+      'MediaId':localStorage.getItem('shop_media'),
       'attributeArray':
             [
               {  'AttributeId':"",
                  'AttributeValueId':""
               },
             ],
-      'mediaArray':[]
+      'mediaArray':[localStorage.getItem('shop_media')]
      }
      this.setState({
        combinationArray,

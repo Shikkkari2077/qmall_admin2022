@@ -199,7 +199,7 @@ class SectionAdd extends React.Component {
       })
       .then(function (response) {
         if (response.status === 200) {
-          Swal.fire("Updated !", "category has been Updated", "success");
+          Swal.fire("Updated !", "Section has been Updated", "success");
           window.location.href = "#/section";
           that.setState({ isSaving: false });
         } else {
@@ -503,7 +503,7 @@ class SectionAdd extends React.Component {
                     <i className="icofont icofont-save"></i> Save
                   </button>
                 )}
-                <Link to={"/category"} className="btn btn-outline-dark">
+                <Link to={"/section"} className="btn btn-outline-dark">
                   Cancel
                 </Link>
               </div>

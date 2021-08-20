@@ -149,6 +149,7 @@ class OrderView extends React.Component {
   getDriversList = () => {
     var that = this;
     var data = new URLSearchParams();
+    data.append('status',true)
     fetch(Constant.getAPI() + "/driver/get", {
       method: "post",
       headers: {

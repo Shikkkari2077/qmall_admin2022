@@ -82,7 +82,7 @@ class ShopAdminDashboard extends React.Component {
                     <div className="card-block">
                       <div className="row align-items-center">
                         <div className="col-8">
-                          <h4 className="text-c-yellow f-w-600">{this.state.itemsSold}</h4>
+                          <h4 className="text-c-yellow f-w-600">{this.state.itemsSold !== null ? this.state.itemsSold :"0"}</h4>
                           <h6 className="text-muted m-b-0">Items Sold Today</h6>
                         </div>
                         <div className="col-4 text-right">

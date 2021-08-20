@@ -16,12 +16,14 @@ class DriverList extends React.Component {
     this.getDriversList();
 
   }
-  handleStatusChange = (sid) => {
+  handleStatusChange = (sid,status) => {
     var that = this;
     var data = new URLSearchParams();
     this.setState({ isSaving: true });
  
     data.append("DriverId", sid);
+    data.append("status", !status);
+
    
     fetch(Constant.getAPI() + "/driver/update", {
       method: "post",
@@ -35,8 +37,9 @@ class DriverList extends React.Component {
     }).then(function (json) {
       if (json.status === true) {
         Swal.fire("Updated !", "Driver has been Updated", "success");
-        window.location.href = "#/driver";
+        that.getDriversList()
         that.setState({ isSaving: false });
+
       } else {
         that.setState({ isSaving: false });
         Swal.fire({
@@ -123,7 +126,7 @@ class DriverList extends React.Component {
                             <th>Email</th>
                             {/* <th>Civl ID</th> */}
                             {/* <th>Total Post</th> */}
-                            {/* <th>Status </th> */}
+                            <th>Status </th>
                             <th>Action </th>
                           </tr>
                         </thead>
@@ -143,14 +146,14 @@ class DriverList extends React.Component {
                                   <td>{driver.mobileNumber}</td>
                                   <td>{driver.email}</td>
                                   {/* <td>{driver.post}</td> */}
-                                  {/* <td>
+                                  <td>
                                     <Toggle
                                       id={"cattogBtn_" + driver.id}
-                                      checked={driver.status === 'inactive' ? false : true}
+                                      checked={driver.status == true ? true : false}
                                       value={driver.status}
-                                      onChange={this.handleStatusChange.bind(this, driver.id)}
+                                      onChange={this.handleStatusChange.bind(this, driver.id,driver.status)}
                                     />
-                                  </td> */}
+                                  </td>
                                   <td className="action-icon ">
                                     <Link to={"/driver/add/" + driver.id} className="m-r-15 text-muted" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit">
                                       <i className="f-20 icofont icofont-ui-edit text-custom"></i>
@@ -174,7 +177,7 @@ class DriverList extends React.Component {
                             <th>Email</th>
                             {/* <th>Civl ID</th> */}
                             {/* <th>Total Post</th> */}
-                            {/* <th>Status </th> */}
+                            <th>Status </th>
                             <th>Action </th>
                           </tr>
                         </tfoot>

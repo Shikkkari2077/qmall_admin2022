@@ -373,7 +373,12 @@ next=()=>{
           columnHeaderTooltip: column => `Sort for ${column.label}`
           
         },
-      }
+      },
+      customSearch: (searchQuery:string) => {
+        console.log('customSearch', searchQuery);
+        return true;
+    },
+      
     };
     return (
       <div className="pcoded-inner-content" >

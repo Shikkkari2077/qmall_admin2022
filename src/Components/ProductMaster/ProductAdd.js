@@ -76,7 +76,7 @@ class ProductAdd extends React.Component {
     this.setState({ acceptedgallery: element });
   
 
-        var arrayImage=[]
+    var arrayImage=[]
     for (var i = 0; i < element.files.length; i++) {
       arrayImage[i]=URL.createObjectURL(event.target.files[i]) 
     }
@@ -907,7 +907,10 @@ class ProductAdd extends React.Component {
                       <input accept="image/*" 
                       onChange={this.handleGalleryImageUpload}
                        id="gallery_media" type="file" 
-                       className="form-control" autoComplete="off" name="media" multiple
+                       className="form-control" 
+                       autoComplete="off" 
+                       name="media" 
+                       multiple
                         data-toggle="tooltip" title="Click To Upload Media Image"
                       />
                     </div>
