@@ -1,10 +1,13 @@
 module.exports = {
     getAPI: function () {
-        // return "http://109.228.53.69";
         // return "http://www.qmallapp.com/api";
-        return "https://qmallapp.com/api";
-        // return "http://qmall.infoware.xyz";
-        // return "http://204.48.26.50:9000";
+
+
+        //Production
+        // return "https://qmallapp.com/api";
+       
+        //Test-Server
+       return 'http://qmall.infoware.xyz'   
     },
     getDefaultCurrrency: function () {
         return "KWD";
