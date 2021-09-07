@@ -107,7 +107,7 @@ class Header extends React.Component {
     this.setState({ isLoading: true });
 
     data.append('viewedByShop', false);
-    fetch(Constant.getAPI() + "/notification/getAll", {
+    fetch(Constant.getAPI() + "/notification/shop/getAll", {
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",

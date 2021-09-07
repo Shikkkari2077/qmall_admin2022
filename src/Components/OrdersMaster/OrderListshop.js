@@ -166,13 +166,18 @@ class OrderListShop extends React.Component {
       //   },
       // },
       {
-        name: "totalAmount",
+        name: "OrderShops",
         label: "Amount",
         options: {
           filter: true,
           sort: true,
-          customBodyRender: (totalAmount, tableMeta) => {
-            return parseFloat(totalAmount).toFixed(3);
+          customBodyRender: (OrderShops, tableMeta) => {
+            return(
+            OrderShops !== null && OrderShops !== undefined && OrderShops[0] !==undefined?
+
+             parseFloat(OrderShops[0].amount).toFixed(3)
+            :null
+            )
           },
         },
       },

@@ -27,7 +27,8 @@ class AdminDashboard extends React.Component {
           sales: json.data.sales,
           products: json.data.products,
           users: json.data.users,
-          shops: json.data.shops
+          shops: json.data.shops,
+          salestoday :json.data.todaySales,
         });
       } else {
         //console.log(json);
@@ -158,7 +159,7 @@ class AdminDashboard extends React.Component {
                       <div className="row align-items-center">
                         <div className="col-8">
                           <h4 className="text-c-green f-w-600">{
-                          this.state.totalAmount ? this.state.totalAmount : "0"
+                          this.state.salestoday ? this.state.salestoday : "0"
                           } KWD</h4>
                           <h6 className="text-muted m-b-0">Total Sales Today</h6>
                         </div>

@@ -166,18 +166,18 @@ class ShopList extends React.Component {
       //     sort: true
       //   }
     }, {
-      name: "qmallCommission",
-      label: "Qmall Commission (in %)",
+      name: "priority",
+      label: "Priority",
       options: {
         filter: true,
         sort: true
       }
     }, {
-      name: "ibanNumber",
-      label: "IBAN Number",
+      name: "featuredPriority",
+      label: "Featured Priority",
       options: {
         filter: true,
-        sort: true
+        sort: true,
       }
     },
     {
