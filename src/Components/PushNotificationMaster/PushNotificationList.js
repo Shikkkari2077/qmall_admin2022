@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import Constant from '../../Constant'
 import Swal from 'sweetalert2'
 import MUIDataTable from "mui-datatables";
+import moment from 'moment';
 
 class PushNotificationList extends React.Component {
   state = {}
@@ -58,7 +59,7 @@ class PushNotificationList extends React.Component {
     var that = this;
     var data = new URLSearchParams();
     this.setState({ isSaving: true });
-    fetch(Constant.getAPI() + "/notification/getAll", {
+    fetch(Constant.getAPI() + "/notification/list", {
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -68,8 +69,9 @@ class PushNotificationList extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
+      console.log(json)
       if (json.status === true) {
-        that.setState({ notification_list: json.result, isSaving: false });
+        that.setState({ notification_list: json.data, isSaving: false });
       } else {
         that.setState({ notification_list: [], isSaving: false });
         Swal.fire({
@@ -91,20 +93,67 @@ class PushNotificationList extends React.Component {
   }
   render() {
     const columns = [{
-      name: "title",
-      label: "Notification Title",
-      options: {
-        filter: true,
-        sort: true
+      name:"Medium",
+      label:"Image",
+      options:{
+        customBodyRender:(Medium)=>{
+          return(
+            <img src={Medium.url} alt="Image" />
+          )
+        }
       }
-    }, {
-      name: "text",
-      label: "Notification Text",
+
+    },
+      {
+
+      name: "title_en",
+      label: "Title (English)",
       options: {
-        filter: true,
-        sort: true
+        filter: false,
+        sort: false,
+        
+        
       }
-    }];
+    }, 
+    {
+
+      name: "title_ar",
+      label: "Title (Arabic)",
+      options: {
+        filter: false,
+        sort: false,
+        
+        
+      }
+    },
+    {
+      name: "text_en",
+      label: "Text (English)",
+      options: {
+        filter: false,
+        sort: false,
+      }
+    },
+    {
+      name: "text_ar",
+      label: "Text (Arabic)",
+      options: {
+        filter: false,
+        sort: false,
+      }
+    },
+    {
+      name:"createdAt",
+      label:"Sended At",
+      options:{
+        customBodyRender:(createdAt)=>{
+          return(
+            moment(createdAt).format("DD-MM-YYYY hh:mm A")
+          )
+        }
+      }
+    }
+  ];
     const options = {
       filterType: "dropdown",
       viewColumns: false,
@@ -133,8 +182,9 @@ class PushNotificationList extends React.Component {
                       <h4>PushNotification List</h4>
                     </div>
                   </div>
-                  <Link to="/notifications/add"
-                    className="btn btn-sm btn-inverse waves-effect waves-light f-right d-inline-block md-trigger" data-modal="modal-13"> <i className="icofont icofont-plus m-r-5"></i> Add PushNotification
+                  <Link to="/notification/add"
+                    className="btn btn-sm btn-inverse waves-effect waves-light f-right d-inline-block md-trigger" 
+                    data-modal="modal-13"> <i className="icofont icofont-plus m-r-5"></i> Send PushNotification
                        </Link>
                 </div>
                 <div className="col-lg-4">
@@ -158,7 +208,6 @@ class PushNotificationList extends React.Component {
                       <div className="dt-responsive table-responsive">
 
                         <MUIDataTable
-                          title={"PushNotification List"}
                           className="table-responsive"
                           data={this.state.notification_list}
                           columns={columns}

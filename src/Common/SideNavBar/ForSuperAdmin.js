@@ -157,7 +157,7 @@ class SideNavBar extends React.Component {
           <div className="pcoded-navigatio-lavel">Settings</div>
           <ul className="pcoded-item pcoded-left-item">
             <li className="">
-              <Link to="/notifications">
+              <Link to="/notifications/list">
                 <span className="pcoded-micon"><i className="icofont icofont-notification"></i></span>
                 <span className="pcoded-mtext">Push Notification</span>
               </Link>

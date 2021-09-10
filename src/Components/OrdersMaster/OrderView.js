@@ -74,6 +74,7 @@ class OrderView extends React.Component {
             order_data.order_date=order_date;
           }
         }
+        console.log(order_data)
         that.setState({ 
           orders_list: json.data, 
           order_details: order_data });
@@ -348,7 +349,7 @@ class OrderView extends React.Component {
     data.append("title", "New Order Request");
     data.append("text", "You have received new order request to deliver.!");
     data.append("type", "WEB");
-    fetch(Constant.getAPI() + "/notification/add", {
+    fetch(Constant.getAPI() + "/notification/shop/add", {
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -500,9 +501,9 @@ class OrderView extends React.Component {
                 <h6 className="text-uppercase text-primary">
                   Payment Method : <span>{this.state.order_details.payment.title_en}</span>
                 </h6>
-                {/* <h6 >
+                <h6 >
               <span className="text-uppercase text-primary" >Notes:</span>  <span>{this.state.order_details.notes}</span>
-                </h6> */}
+                </h6>
                
               </div>
             </div>
@@ -723,11 +724,11 @@ class OrderView extends React.Component {
                                 <td> 
 
                                 {
-                                  OrderShops.OrderStocks !== undefined ?
+                                  OrderShops.OrderCombinations !== undefined ?
                                   
                                       
                                       
-                                        OrderShops.OrderStocks.map(order=>(
+                                        OrderShops.OrderCombinations.map(order=>(
                                          <li>{order.productNote ?order.productNote:null}</li> 
                                         ))
                                       

@@ -140,8 +140,8 @@ class Routes extends Component {
               <Route exact path={"/section/add"} exact component={SectionAddTab} />
 
 
-              {/* <Route exact path={"/notifications"} component={PushNotificationList} /> */}
-              <Route exact path={"/notifications"} component={PushNotificationAddTab} />
+              <Route exact path={"/notifications/list"} component={PushNotificationList} />
+              <Route exact path={"/notification/add"} component={PushNotificationAddTab} />
               {/* <Route exact path={"/notifications/add"} component={PushNotificationAddTab} /> */}
 
               <Route exact path={"/banner"} component={BannerList} />
