@@ -242,7 +242,7 @@ class ImportData extends React.Component {
           filter: false,
           sort: false,
           customBodyRender:(row)=>{
-            return (row+2)
+            return (row)
 
           }
         },

@@ -4,10 +4,10 @@ module.exports = {
 
 
         //Production
-        // return "https://qmallapp.com/api";
+        return "https://qmallapp.com/api";
        
         //Test-Server
-       return 'http://qmall.infoware.xyz'   
+    //    return 'http://qmall.infoware.xyz'   
     },
     getDefaultCurrrency: function () {
         return "KWD";
