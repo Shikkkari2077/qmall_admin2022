@@ -98,11 +98,12 @@ class PushNotificationList extends React.Component {
       options:{
         customBodyRender:(Medium)=>{
           return(
-            <img src={Medium.url} alt="Image" />
+            Medium !== null && Medium.url !== undefined ?
+            <img className="img-fluid img-thumbnail" src={Medium.url} alt="Image" style={{maxHeight:"100px",maxWidth:"150px"}}/>
+            :<img className="img-fluid img-thumbnail" src="./assets/images/icon.png" alt="Image" style={{maxHeight:"100px",maxWidth:"150px"}}/>
           )
         }
       }
-
     },
       {
 

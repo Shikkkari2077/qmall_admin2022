@@ -288,10 +288,11 @@ class PushNotificationAdd extends React.Component {
               <div className="form-group row">
                 <label className="col-sm-3 col-form-label">Notification Text</label>
                 <div className="col-sm-9">
-                  <ReactQuill
+                  <textarea
                     //value={this.state.text_en}
-                    onChange={(e)=>{this.setState({text_en:e}) }}
-                    style={{ height: "200px", marginBottom: '5%' }}
+                    className="form-control"
+                    onChange={(e)=>{this.setState({text_en:e.target.value}) }}
+                    style={{ height: "100px", marginBottom: '5%' }}
                   />
                 </div>
               </div>
@@ -300,10 +301,11 @@ class PushNotificationAdd extends React.Component {
               <div className="form-group row">
                 <label className="col-sm-3 col-form-label">Notification Text</label>
                 <div className="col-sm-9">
-                  <ReactQuill
+                  <textarea
+                   className="form-control"
                     //value={this.state.text_ar}
-                    onChange={(e)=>{this.setState({text_ar:e})}}
-                    style={{ height: "200px", marginBottom: '5%' }}
+                    onChange={(e)=>{this.setState({text_ar:e.target.value})}}
+                    style={{ height: "100px", marginBottom: '5%' }}
                   />
                 </div>
               </div>
@@ -311,6 +313,40 @@ class PushNotificationAdd extends React.Component {
             
           </div>
           <br/>
+          <div className="row">
+
+          <div className="col-md-6">
+                <div className="form-group row">
+                  <label className="col-sm-3 col-form-label">Select Users</label>
+                  <div className="col-sm-9">
+                    <Select
+                      styles={customStyles}
+                      isMulti={true}
+                      isDisabled={this.state.disabled}
+                      value={this.state.UserArray}
+                      getOptionLabel={(option) => `${option.firstName +" "+option.lastName}`}
+                      getOptionValue={(option) => `${option.id}`}
+                     onChange={this.handleUsers}
+                      options={this.state.customers_data}
+                    />
+                  </div>
+                  
+                </div>
+              </div>
+              <div className="col-md-5"> 
+              <div className="col-sm-6">
+              <input type="checkbox" style={{width:"20px",height:"20px"}} 
+              className="form-control" 
+              onClick={(e)=>{this.selectAll(e.target.checked)}}
+              checked={this.state.checked}
+                  />
+              </div>
+                <label className="col-sm-4 col-form-label">Select All Users</label>
+                
+              </div>
+
+           </div>
+
           <div className="row">
               <div className="col-md-6">
                 <div className="form-group row">
@@ -369,39 +405,7 @@ class PushNotificationAdd extends React.Component {
                 </div>
               </div>
 
-          <div className="row">
-
-          <div className="col-md-6">
-                <div className="form-group row">
-                  <label className="col-sm-3 col-form-label">Select Users</label>
-                  <div className="col-sm-9">
-                    <Select
-                      styles={customStyles}
-                      isMulti={true}
-                      isDisabled={this.state.disabled}
-                      value={this.state.UserArray}
-                      getOptionLabel={(option) => `${option.firstName +" "+option.lastName}`}
-                      getOptionValue={(option) => `${option.id}`}
-                     onChange={this.handleUsers}
-                      options={this.state.customers_data}
-                    />
-                  </div>
-                  
-                </div>
-              </div>
-              <div className="col-md-5"> 
-              <div className="col-sm-6">
-              <input type="checkbox" style={{width:"20px",height:"20px"}} 
-              className="form-control" 
-              onClick={(e)=>{this.selectAll(e.target.checked)}}
-              checked={this.state.checked}
-                  />
-              </div>
-                <label className="col-sm-4 col-form-label">Select All Users</label>
-                
-              </div>
-
-           </div>
+          
 
          
 
