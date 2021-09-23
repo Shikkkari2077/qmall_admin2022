@@ -95,6 +95,7 @@ class ProductAdd extends React.Component {
   };
 
   componentDidMount() {
+    localStorage.setItem('Productaction',true)
     if (this.props.language_id !== undefined) {
       if (this.props.product_id !== undefined) {
         // this.setState({ product_id: this.props.product_id });
@@ -228,7 +229,9 @@ class ProductAdd extends React.Component {
   }
   componentWillUnmount() {
     this._isMounted = false;
+    
   }
+  
   getAttributeList = () => {
     
     console.log("attribute")

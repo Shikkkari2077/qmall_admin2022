@@ -17,6 +17,8 @@ class PushNotificationAdd extends React.Component {
     text_en:"",
     title_ar:"",
     title_en:"",
+    mediaID:'',
+    imageToUpload:false
     
   };
   onHandleNotificationTextChange = value => {
@@ -59,23 +61,35 @@ class PushNotificationAdd extends React.Component {
     })
   }
   addPushNotification = (media_id) => {
-    console.log(media_id)
+    
     if(this.state.text_en ==''){
       Swal.fire("Error !", "Add Notification Text in English", "warning");
+      this.setState({
+        isSaving:false
+      })
       return false
     }
     else if(this.state.text_ar == '')
     {
       Swal.fire("Error !", "Add Notification Text in Arabic", "warning");
+      this.setState({
+        isSaving:false
+      })
       return false
     }
     else if(this.state.title_ar == '')
     {
       Swal.fire("Error !", "Add Notification Title in Arabic", "warning");
+      this.setState({
+        isSaving:false
+      })
       return false
     }  else if(this.state.title_en == '')
     {
       Swal.fire("Error !", "Add Notification Text in English", "warning");
+      this.setState({
+        isSaving:false
+      })
       return false
     }
    else if(this.state.UserArray.length>0){
@@ -89,15 +103,7 @@ class PushNotificationAdd extends React.Component {
 
 
       var that = this;
-      // var data = new URLSearchParams();
-      // this.setState({ isSaving: true });
-      // data.append("title_en", that.state.title_en);
-      // data.append("title_ar", that.state.title_ar);
-      // data.append("userArray", JSON.stringify(userArray));
-
-      // data.append("text_en", that.state.text_en);
-      // data.append("text_ar", that.state.text_ar);
-      // data.append("mediaId", media_id);
+    
       var aa={
       title_en: that.state.title_en,
       title_ar: that.state.title_ar,
@@ -156,8 +162,13 @@ class PushNotificationAdd extends React.Component {
   onSaveData = () => {
     var that = this;
     that.setState({ isSaving: true });
+    if(this.state.imageToUpload){
+       this.uploadMedia()
+    }
+    else{
+      this.addPushNotification(this.state.mediaID)
 
-   this.uploadMedia()
+    }
 
     
   }
@@ -177,6 +188,10 @@ class PushNotificationAdd extends React.Component {
         if (json.status === true) {
           if(json.data[0]!== undefined && json.data[0].id !== undefined){
             that.addPushNotification(json.data[0].id);
+            this.setState({
+              mediaID:json.data[0].id,
+              imageToUpload:false,
+            })
 
           }
           else{
@@ -195,7 +210,6 @@ class PushNotificationAdd extends React.Component {
     if(e == true){
       this.setState({
         checked:e,
-        //disabled:true,
         UserArray:this.state.customers_data
       })
 
@@ -218,7 +232,7 @@ class PushNotificationAdd extends React.Component {
     var proof_img = [];
     let obj = {};
     //console.log(element.files);
-    this.setState({ category_image: element.files });
+    this.setState({ category_image: element.files,imageToUpload:true });
     for (var i = 0; i < element.files.length; i++) {
       var file1 = element.files[i];
       var img = document.createElement("img");

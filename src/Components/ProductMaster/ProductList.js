@@ -9,6 +9,7 @@ import Toggle from 'react-toggle'
 import Pagination from 'react-js-pagination';
 
 import $ from 'jquery';
+import { ContactSupportOutlined } from '@material-ui/icons';
 
 class ProductList extends React.Component {
   state = {
@@ -61,7 +62,6 @@ class ProductList extends React.Component {
   }
  
   getProductList = (count,startRange, uniqueidentifier,name,lang) => {
-  console.log(count,startRange, uniqueidentifier,name)
     var that = this;
     var data ={}
     this.setState({ isSaving: true });
@@ -96,11 +96,9 @@ class ProductList extends React.Component {
       },
       body:JSON.stringify(data)
     }).then(function (response) {
-      console.log(response)
       return response.json();
 
     }).then(function (json) {
-       console.log(json)
 
       if (json.status == true) {
         var products = []
@@ -137,8 +135,29 @@ class ProductList extends React.Component {
       }
     });
   }
-  componentWillMount() {
-    this.getProductList(this.state.dataLength,this.state.datarange);
+  componentDidMount() {
+    if(localStorage.getItem('Productaction') == 'true'){
+      console.log(activePage,localStorage.getItem('ProductPage'))
+
+      localStorage.setItem('Productaction',false)
+      this.getProductList(this.state.dataLength,JSON.parse(localStorage.getItem('ProductPage')))
+
+       var activePage 
+       if(localStorage.getItem('ProductPage') === 0)
+        activePage=1
+       else
+        activePage=localStorage.getItem('ProductPage')/this.state.dataLength + 1
+
+      console.log(activePage,localStorage.getItem('ProductPage'))
+
+      this.setState({
+        activePage
+      })
+    }
+    else{
+    this.getProductList(this.state.dataLength,this.state.datarange)
+    }
+
   }
   handleIsActiveChange = (sid) => {
     var isChecked = $('#product_isActive_' + sid);
@@ -166,7 +185,6 @@ class ProductList extends React.Component {
     }).then(function (json) {
       if (json.status === 200) {
         Swal.fire("Product Activation!", "Product activation has been updated.", "success");
-        console.log(this.state.byname)
         that.getProductList(0,10,this.state.byID,this.state.byname,this.state.lang);
       } else {
         Swal.fire({
@@ -183,7 +201,6 @@ class ProductList extends React.Component {
   handleStatusChange = (sid) => {
     var isChecked = $('#product_status_' + sid);
     isChecked.prop("checked", !isChecked.prop("checked"));
-    //console.log(isChecked.prop('checked'), !isChecked.prop("checked"));
     if (!isChecked.prop("checked") === true) {
       var status = true
     } else {
@@ -247,10 +264,11 @@ class ProductList extends React.Component {
       return response.json();
       
     }).then(function (json) {
+      console.log(json)
       if (json.status === true) {
-        //console.log(json)
-        Swal.fire("Update Status!", "Status has been updated.", "success");
-        that.getProductList();
+        that.getProductList(that.state.dataLength,that.state.datarange,that.state.byID,that.state.byname,that.state.lang);
+
+        
       } else {
         Swal.fire({
           title: "Something went wrong. Try again after some Time.!",
@@ -290,9 +308,8 @@ class ProductList extends React.Component {
       
     }).then(function (json) {
       if (json.status === true) {
-        //console.log(json)
-        Swal.fire("Update Status!", "Status has been updated.", "success");
-        that.getProductList();
+        that.getProductList(that.state.dataLength,that.state.datarange,that.state.byID,that.state.byname,that.state.lang);
+        ;
       } else {
         Swal.fire({
           title: "Something went wrong. Try again after some Time.!",
@@ -307,18 +324,15 @@ class ProductList extends React.Component {
   }
  
   handlePageChange(pageNumber) {
-		console.log('active page is', pageNumber);
-		console.log(pageNumber * 10 - 10);
+
 		const range = pageNumber * 10 - 10;
 		const dataLength = this.state.dataLength;
    this.getProductList(dataLength,range,this.state.byID,this.state.byname)
 	
 		this.setState({
 			datarange: range,
-			dataLength: dataLength,
+      activePage: pageNumber 
 		});
-		this.setState({ activePage: pageNumber });
-		console.log(range, dataLength);
 	}
   search=(e)=>{
     if(e.target.value.length == 0)
@@ -349,7 +363,6 @@ class ProductList extends React.Component {
       })
     }
    
-    console.log(event.target.checked)
   }
   byID=()=>{
     this.getProductList(10,0,this.state.search)
@@ -523,8 +536,14 @@ class ProductList extends React.Component {
               className="m-r-15 text-muted"
               data-toggle="tooltip"
               data-placement="top" title=""
-              data-original-title="Edit">
-              <i className="f-20 icofont icofont-ui-edit text-custom"></i>
+              data-original-title="Edit"
+              onClick={()=>{
+                    
+                localStorage.setItem('ProductPage',this.state.datarange)
+                
+              }}>
+              <i className="f-20 icofont icofont-ui-edit text-custom"
+              ></i>
             </Link>
             {/* <Link to={"/products/gallery/" + id}
               className="m-r-15 text-muted"
@@ -540,7 +559,12 @@ class ProductList extends React.Component {
                   className="m-r-15 text-muted"
                   data-toggle="tooltip"
                   data-placement="top" title=""
-                  data-original-title="Product Stock Details">
+                  data-original-title="Product Stock Details"
+                  onClick={()=>{
+                    
+                    localStorage.setItem('ProductPage',this.state.datarange)
+                    
+                  }}>
                   <i className="f-20 icofont icofont-stock-mobile text-warning"></i>
                 </Link>
                 :
@@ -596,7 +620,8 @@ class ProductList extends React.Component {
       label: "Product Total Stock",
       options: {
         filter: true,
-        sort: true
+        sort: true,
+        display:false,
       }
     }, {
       name: "Shop",
@@ -774,29 +799,28 @@ class ProductList extends React.Component {
               className="m-r-15 text-muted"
               data-toggle="tooltip"
               data-placement="top" title=""
-              data-original-title="Edit">
+              data-original-title="Edit"
+              onClick={()=>{
+                localStorage.setItem('ProductPage',this.state.datarange)
+              }}>
               <i className="f-20 icofont icofont-ui-edit text-custom"></i>
+              
             </Link>
-            {/* <Link to={"/products/gallery/" + id}
-              className="m-r-15 text-muted"
-              data-toggle="tooltip"
-              data-placement="top" title=""
-              data-original-title="Product Gallery">
-              <i className="f-20 icofont icofont-picture text-primary"></i>
-            </Link> */}
-            {
-              localStorage.getItem('q8_mall_ad_role') === "shop"
-                ?
-                <Link to={"/products/stock/" + id}
+           
+             <Link to={"/products/stock/" + id}
                   className="m-r-15 text-muted"
                   data-toggle="tooltip"
                   data-placement="top" title=""
-                  data-original-title="Product Stock Details">
+                  data-original-title="Product Stock Details"
+                  onClick={()=>{
+                    
+                    localStorage.setItem('ProductPage',this.state.datarange)
+                    
+                  }}>
+                  
                   <i className="f-20 icofont icofont-stock-mobile text-warning"></i>
-                </Link>
-                :
-                null
-            }
+             </Link>
+             
             <span onClick={this.deleteAttributeValue.bind(this, id)}
               className="m-r-15 text-muted"
               data-toggle="tooltip"
@@ -832,6 +856,7 @@ class ProductList extends React.Component {
     };
     return (
       <div className="pcoded-inner-content" >
+       
         <div className="main-body">
           <div className="page-wrapper">
             <div className="page-header">

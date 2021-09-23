@@ -85,6 +85,8 @@ class ProductWiseStockList extends React.Component {
     });
   }
   componentWillMount() {
+
+    localStorage.setItem('Productaction',true)
     this.getProductWiseStockList();
 
   }

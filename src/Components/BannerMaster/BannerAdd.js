@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import $ from "jquery";
 import Constant from "../../Constant";
 import Loader from "../../Loader";
-
+import Select from 'react-select'
 class BannerAdd extends React.Component {
   state = {
     status: true
@@ -29,8 +29,18 @@ class BannerAdd extends React.Component {
     }
   }
   handleChange = event => {
+   
     this.setState({ [event.target.name]: event.target.value });
   };
+  handleChangeProduct = event=>{
+    console.log(event)
+    if( parseInt(this.state.type) === 2){
+      this.setState({
+        ProductId:event.id
+      })
+    }
+    
+  }
   getBannerDetails = () => {
     var that = this;
     var data = new URLSearchParams();
@@ -309,7 +319,7 @@ class BannerAdd extends React.Component {
       data.append("ShopId", that.state.ShopId);
     }
     data.append("LanguageId", that.props.language_id);
-    fetch(Constant.getAPI() + "/product/get", {
+    fetch(Constant.getAPI() + "/product/getByAdmin", {
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -341,6 +351,21 @@ class BannerAdd extends React.Component {
     });
   }
   render() {
+
+    const customStyles = {
+      option: (provided, state) => ({
+        ...provided,
+        borderBottom: "1px dotted grey",
+        color: state.isSelected ? "red" : "black",
+        padding: 8,
+      }),
+      input: (provided) => ({
+        ...provided,
+        display: "flex",
+        height: "30px",
+      }),
+    };
+
     return (
       <div className="">
         {
@@ -424,7 +449,7 @@ class BannerAdd extends React.Component {
                               this.state.Shop_list !== undefined && this.state.Shop_list !== null && this.state.Shop_list !== [] && this.state.Shop_list.length > 0
                                 ?
                                 this.state.Shop_list.map(shops =>
-                                  <option value={shops.id}>{shops.name}</option>
+                                  <option value={shops.id}>{shops.name_en +"/"+shops.name_ar}</option>
                                 )
                                 :
                                 null
@@ -440,18 +465,34 @@ class BannerAdd extends React.Component {
                         <div className="form-group row">
                           <label className="col-sm-3 col-form-label">Product</label>
                           <div className="col-sm-9">
-                            <select name="ProductId" className="form-control" value={this.state.ProductId} onChange={this.handleChange}>
+                            {/* <select 
+                            name="ProductId" 
+                            className="form-control" 
+                            value={this.state.ProductId} onChange={this.handleChange}>
                               <option value="">Select Product</option>
                               {
                                 this.state.product_list !== undefined && this.state.product_list !== null && this.state.product_list !== [] && this.state.product_list.length > 0
                                   ?
                                   this.state.product_list.map(product =>
-                                    <option value={product.id}>{product.name}</option>
+                                    
+                                    
+                                    <option value={product.id}>{product.name_en}</option>
                                   )
                                   :
                                   null
                               }
-                            </select>
+                            </select> */}
+                            <Select
+                            name="ProductId"
+                            styles={customStyles}
+                            
+                            //value={}
+                            getOptionLabel={(option) => `${option.name_en}`}
+                            getOptionValue={(option) => `${option.id}`}
+                            onChange={this.handleChangeProduct}
+                            options={this.state.product_list}
+                      
+                    />
                           </div>
                         </div>
                       </div>

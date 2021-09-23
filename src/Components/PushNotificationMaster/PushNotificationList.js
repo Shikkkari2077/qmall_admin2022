@@ -100,7 +100,7 @@ class PushNotificationList extends React.Component {
           return(
             Medium !== null && Medium.url !== undefined ?
             <img className="img-fluid img-thumbnail" src={Medium.url} alt="Image" style={{maxHeight:"100px",maxWidth:"150px"}}/>
-            :<img className="img-fluid img-thumbnail" src="./assets/images/icon.png" alt="Image" style={{maxHeight:"100px",maxWidth:"150px"}}/>
+            :<img className="img-fluid img-thumbnail" src="" alt="No Image" style={{maxHeight:"100px",maxWidth:"150px"}}/>
           )
         }
       }
