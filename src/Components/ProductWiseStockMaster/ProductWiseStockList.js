@@ -9,7 +9,8 @@ import ProductMediaModal from './ProductMediaModal';
 
 class ProductWiseStockList extends React.Component {
   state = {}
-  deleteStockDetails = (id) => {
+  deleteStockDetails = (combinationId,productId,shopId)    => {
+    console.log(combinationId,productId,shopId)
     Swal.fire({
       title: "Are you sure?",
       text: "You will not be able to recover this !",
@@ -22,8 +23,11 @@ class ProductWiseStockList extends React.Component {
         var that = this;
         var data = new URLSearchParams();
         // this.setState({ isSaving: true });
-        data.append("StockId", id);
-        fetch(Constant.getAPI() + "/product/stock/delete", {
+        data.append("combinationId", combinationId);
+        data.append("productId", productId);
+        data.append("shopId", shopId);
+
+        fetch(Constant.getAPI() + "/product/combination/delete", {
           method: "post",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -34,7 +38,7 @@ class ProductWiseStockList extends React.Component {
           return response.json();
         }).then(function (json) {
           if (json.status === true) {
-            Swal.fire("Deleted!", "Product Stock deleted.", "success");
+            Swal.fire("Deleted!", "Product Variant Deleted", "success");
             that.getProductWiseStockList();
           } else {
             Swal.fire({
@@ -360,14 +364,14 @@ class ProductWiseStockList extends React.Component {
               data-original-title="View Gallery">
               <i className="f-20 icofont icofont-picture text-warning"></i>  </span> */}
 
-            {/* <span onClick={this.deleteStockDetails.bind(this, id)}
+            <span onClick={this.deleteStockDetails.bind(this, id,tableMeta.rowData[10],tableMeta.rowData[11])}
               className="m-r-15 text-muted"
               data-toggle="tooltip"
               data-placement="top"
               title=""
               data-original-title="Delete">
               <i className="f-20 icofont icofont-delete-alt text-danger"></i>  </span>
-              */}
+             
           </div> 
         }
 
@@ -376,6 +380,12 @@ class ProductWiseStockList extends React.Component {
    
     {
       name:"ProductId",
+      options:{
+        display:false,
+      }
+    },
+    {
+      name:"ShopId",
       options:{
         display:false,
       }

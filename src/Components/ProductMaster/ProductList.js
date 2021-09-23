@@ -19,7 +19,7 @@ class ProductList extends React.Component {
     activePage:1,
     lang:""
   }
-  deleteAttributeValue = (id) => {
+  deleteAttributeValue = (id,ShopId) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You will not be able to recover this !",
@@ -32,7 +32,8 @@ class ProductList extends React.Component {
         var that = this;
         var data = new URLSearchParams();
         // this.setState({ isSaving: true });
-        data.append("ProductId", id);
+        data.append("productId", id);
+        data.append("ShopId",ShopId);
         fetch(Constant.getAPI() + "/product/delete", {
           method: "post",
           headers: {
@@ -821,7 +822,7 @@ class ProductList extends React.Component {
                   <i className="f-20 icofont icofont-stock-mobile text-warning"></i>
              </Link>
              
-            <span onClick={this.deleteAttributeValue.bind(this, id)}
+            <span onClick={this.deleteAttributeValue.bind(this, id,tableMeta.rowData[12])}
               className="m-r-15 text-muted"
               data-toggle="tooltip"
               data-placement="top"
@@ -832,6 +833,12 @@ class ProductList extends React.Component {
         }
 
       }
+    },
+    {  name:"Shop.id",
+       options:{
+         display:"false"
+       }
+
     }
     ];
     const options = {
