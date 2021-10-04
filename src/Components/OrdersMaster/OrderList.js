@@ -4,10 +4,15 @@ import $ from "jquery";
 import Swal from "sweetalert2";
 import Constant from "../../Constant";
 import MUIDataTable from "mui-datatables";
+import Pagination from 'react-js-pagination';
+
 // import { Height } from "@material-ui/icons";
 import moment from 'moment'
 class OrderList extends React.Component {
   state = {
+    activePage:1,
+    dataLength:10,
+    datarange:0,
     
   };
   update=(id)=>{
@@ -46,25 +51,36 @@ class OrderList extends React.Component {
     });
     
   }
+  handlePageChange(pageNumber) {
+
+		const range = pageNumber * 10 - 10;
+		const dataLength = this.state.dataLength;
+   this.getOrdersList(dataLength,range)
+	
+		this.setState({
+			datarange: range,
+      activePage: pageNumber 
+		});
+	}
   componentDidMount(){
-    setInterval(this.getOrdersList, 60000)
+    setInterval(this.getOrdersList(this.state.dataLength,this.state.datarange), 60000)
 
   }
   handleFetch=(event)=>{
    this.setState({value: event.target.value})
    //console.log(event.target.value)
-   this.getOrdersList(event.target.value)
+   this.getOrdersList(this.state.dataLength,0,event.target.value)
   }
   componentWillMount() {
     //clearInterval(this.interval);
     
-    this.getOrdersList();
+    this.getOrdersList(this.state.dataLength,this.state.datarange);
     this.setState({
       role:localStorage.getItem("q8_mall_ad_role")
     })
     //console.log(localStorage.getItem("q8_mall_ad_role"))
   }
-  getOrdersList = (fetchvalue) => {
+  getOrdersList = (count,startRange,fetchvalue) => {
     //console.log("here")
     var that = this;
     var data = new URLSearchParams();
@@ -76,6 +92,9 @@ class OrderList extends React.Component {
     }
     else if(fetchvalue == 'all')
     {}
+    data.append("startRange",startRange)
+    data.append("count",count)
+
     fetch(Constant.getAPI() + "/product/order/get", {
       method: "post",
       headers: {
@@ -366,6 +385,7 @@ class OrderList extends React.Component {
       filterType: "dropdown",
       viewColumns: false,
       print: false,
+      pagination:false,
       download: true,
       selectableRows: "none",
       setRowProps: (row,dataIndex, rowIndex) => {
@@ -479,6 +499,27 @@ class OrderList extends React.Component {
                           columns={columns}
                           options={options}
                         />
+                        	<nav
+													aria-label="Page navigation example "
+													className="display-flex float-right"
+												>
+													<ul class="pagination">
+														<li class="page-item mx-2 py-2">
+															Count : {this.state.datarange}-
+															{this.state.datarange + this.state.dataLength}
+														</li>
+													
+														<Pagination
+															itemClass="page-item"
+															linkClass="page-link"
+															activePage={this.state.activePage}
+															itemsCountPerPage={10}
+															totalItemsCount={this.state.totalProducts}
+															pageRangeDisplayed={20}
+															onChange={this.handlePageChange.bind(this)}
+														/>
+													</ul>
+												</nav>
                       </div>
                     </div>
                   </div>

@@ -219,10 +219,10 @@ class CategoryList extends React.Component {
             return (<div> 
               {/* {console.log(tableMeta.rowData)} */}
               <Toggle
-                id={"category_status_" + tableMeta.rowData[5]}
+                id={"category_status_" + tableMeta.rowData[4]}
                 checked={status === true ? true : false}
                 value={status}
-                onChange={this.handleStatusChange.bind(this,tableMeta.rowData[5])}
+                onChange={this.handleStatusChange.bind(this,tableMeta.rowData[4])}
               />
               </div>
             );

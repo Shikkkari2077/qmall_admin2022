@@ -6,6 +6,9 @@ module.exports = {
         //Production
         return "https://qmallapp.com/api";
        
+        //New Server
+        // return "http://qmallprod.infoware.xyz/api"
+        
         //Test-Server
     //    return 'http://qmall.infoware.xyz'   
     },
