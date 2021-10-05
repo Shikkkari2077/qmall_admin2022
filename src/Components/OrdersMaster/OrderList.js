@@ -16,8 +16,7 @@ class OrderList extends React.Component {
     
   };
   update=(id)=>{
-    //console.log(id)
-    ////console.log(id)
+    
     var that = this;
     var data = new URLSearchParams();
     data.append("clicked", true);
@@ -32,30 +31,17 @@ class OrderList extends React.Component {
     }).then(function (response) {
       return response.json();
     }).then(function (json) {
-      if (json.status === true) {
-        //console.log(json)
-        
-       // Swal.fire("Update Status!", "Status has been updated.", "success");
-        //that.getProductList();
-      } else {
-        //console.log("fail")
-        // Swal.fire({
-        //   title: "Something went wrong. Try again after some Time.!",
-        //   icon: 'error',
-        //   text: "",
-        //   confirmButtonColor: "#3085d6",
-        //   cancelButtonColor: "#d33",
-        //   confirmButtonText: "Ok"
-        // });
-      }
+      
     });
     
   }
   handlePageChange(pageNumber) {
-
+   this.setState({
+     orders_list:[]
+   })
 		const range = pageNumber * 10 - 10;
 		const dataLength = this.state.dataLength;
-   this.getOrdersList(dataLength,range)
+   this.getOrdersList(dataLength,range,this.state.value)
 	
 		this.setState({
 			datarange: range,
@@ -67,7 +53,7 @@ class OrderList extends React.Component {
 
   }
   handleFetch=(event)=>{
-   this.setState({value: event.target.value})
+   this.setState({value: event.target.value,orders_list:[]})
    //console.log(event.target.value)
    this.getOrdersList(this.state.dataLength,0,event.target.value)
   }
@@ -149,7 +135,7 @@ class OrderList extends React.Component {
           //   order_obj.create_date = created_at;
           //   orders.push(order_obj);
           // }
-          that.setState({ orders_list: json.data, isSaving: false });
+          that.setState({ orders_list: json.data,countFilterWise:json.countFilterWise, isSaving: false });
         } else {
           that.setState({ orders_list: [], isSaving: false });
           Swal.fire({
@@ -514,7 +500,7 @@ class OrderList extends React.Component {
 															linkClass="page-link"
 															activePage={this.state.activePage}
 															itemsCountPerPage={10}
-															totalItemsCount={this.state.totalProducts}
+															totalItemsCount={this.state.countFilterWise}
 															pageRangeDisplayed={20}
 															onChange={this.handlePageChange.bind(this)}
 														/>

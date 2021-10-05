@@ -4,25 +4,47 @@ import $ from "jquery";
 import Swal from "sweetalert2";
 import Constant from "../../Constant";
 import MUIDataTable from "mui-datatables";
+import Pagination from 'react-js-pagination';
 
 class OrderListShop extends React.Component {
-  state = {};
+  state = {
+    activePage:1,
+    dataLength:10,
+    datarange:0,
+  };
   componentWillMount() {
     clearInterval(this.interval);
 
-    this.getOrdersList();
+    this.getOrdersList(10,0);
     this.setState({
       role:localStorage.getItem("q8_mall_ad_role")
     })
     //console.log(localStorage.getItem("q8_mall_ad_role"))
   }
+  handlePageChange(pageNumber) {
+    this.setState({
+      orders_list:[]
+    })
+     const range = pageNumber * 10 - 10;
+     const dataLength = this.state.dataLength;
+    this.getOrdersList(dataLength,range)
+   
+     this.setState({
+       datarange: range,
+       activePage: pageNumber 
+     });
+   }
+
   componentDidMount(){
-    //setInterval(this.getOrdersList, 60000)
+    setInterval(this.getOrdersList(this.state.dataLength,this.state.datarange), 60000)
 
   }
-  getOrdersList = () => {
+  getOrdersList = (count,startRange) => {
     var that = this;
+
     var data = new URLSearchParams();
+    data.append("startRange",startRange)
+    data.append("count",count)
     this.setState({ isSaving: true });
     //console.log(localStorage.getItem("q8_mall_auth")  )
     fetch(Constant.getAPI() + "/product/order/get", {
@@ -206,42 +228,7 @@ class OrderListShop extends React.Component {
           },
         },
       },
-    //   { 
-        
-    //     name: "complete_status",
-    //     label: "Delivery Completed Status",
-    //     options: {
-    //       filter: true,
-    //       width: "100px",
-    //       sort: true,
-          
-    //     }
-
-    //   },
-      
-      // {
-      //   name: "deliveredToWarehouse",
-      //   label: " ",
-      //   options: {
-      //     filter: true,
-      //     sort: true,
-      //     download: false,
-      //     customBodyRender: (deliveredToWarehouse, tableMeta) => {
-      //       return (
-      //         <div
-      //           className={
-      //             deliveredToWarehouse
-      //               ? "warehouse-delivery-blue"
-      //               : "warehouse-delivery-yellow"
-      //           }
-      //         >
-      //           {" "}
-      //           &nbsp;
-      //         </div>
-      //       );
-      //     },
-      //   },
-      // },
+  
       {
         name: "viewedByAdmin",
         label: "Viewed By Admin",
@@ -321,6 +308,7 @@ class OrderListShop extends React.Component {
       filterType: "dropdown",
       viewColumns: false,
       print: false,
+      pagination:false,
       download: true,
       selectableRows: "none",
       setRowProps: (row, dataIndex, rowIndex) => {
@@ -409,6 +397,27 @@ class OrderListShop extends React.Component {
                           columns={columns}
                           options={options}
                         />
+                        	<nav
+													aria-label="Page navigation example "
+													className="display-flex float-right"
+												>
+													<ul class="pagination">
+														<li class="page-item mx-2 py-2">
+															Count : {this.state.datarange}-
+															{this.state.datarange + this.state.dataLength}
+														</li>
+													
+														<Pagination
+															itemClass="page-item"
+															linkClass="page-link"
+															activePage={this.state.activePage}
+															itemsCountPerPage={10}
+															totalItemsCount={this.state.countFilterWise}
+															pageRangeDisplayed={20}
+															onChange={this.handlePageChange.bind(this)}
+														/>
+													</ul>
+												</nav>
                       </div>
                     </div>
                   </div>
