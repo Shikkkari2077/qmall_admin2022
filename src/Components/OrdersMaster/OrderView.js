@@ -48,6 +48,9 @@ class OrderView extends React.Component {
       console.log(json.data)
       if (json.status === true) {
         var order_data;
+        if(json.data[0] !== undefined && json.data[0].Address !== undefined){
+        that.getAreaList(json.data[0].Address.AreaId)
+        }
         for (var i = 0; i < json.data.length; i++) {
           if (json.data[i].id === that.props.order_id) {
             order_data = json.data[i];
@@ -374,6 +377,51 @@ class OrderView extends React.Component {
       }
     });
   }
+  getAreaList = (AreaId) => {
+    var that = this;
+    var data = new URLSearchParams();
+    data.append("AreaId", AreaId);
+
+    this.setState({ isSaving: true });
+    fetch(Constant.getAPI() + "/area/get", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: data
+    }).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      if (json.status === true && json.data[0]!==undefined) {
+        console.log(json.data)
+        if(json.data[0].name_en !== undefined){
+          that.getGovernorateList(json.data[0].StateId)
+        }
+        that.setState({ area_data: json.data[0].name_en, isSaving: false });
+      } 
+    })
+  }
+  getGovernorateList = (StateId) => {
+    var that = this;
+    var data = new URLSearchParams();
+    this.setState({ isSaving: true });
+    data.append("StateId",StateId)
+    fetch(Constant.getAPI() + "/state/get", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        // "Authorization": localStorage.getItem('q8_mall_auth')
+      },
+      body: data
+    }).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      if (json.status === true && json.data[0] !== undefined) {
+        that.setState({ governorate_data: json.data[0].name_en, isSaving: false });
+      }
+      
+    })
+  }
   render() {
     return (
       <div className="">
@@ -438,12 +486,21 @@ class OrderView extends React.Component {
                     ?
                     this.state.order_details.Address !== null
                       ?
-                      <p className="m-0 m-t-10">
-                        {this.state.order_details.Address.title}
-                        {this.state.order_details.Address.houseNo} , {this.state.order_details.Address.floorNo} ,
-                    {this.state.order_details.Address.block} , {this.state.order_details.Address.street} ,
-                    {this.state.order_details.Address.avenue} , {this.state.order_details.Address.direction}
-                      </p>
+                      // <p className="m-0 m-t-10">
+                      <ul>
+                        <li><b>Title : </b>{this.state.order_details.Address.title?this.state.order_details.Address.title:""}</li>
+                        <li><b>House No : </b>{this.state.order_details.Address.houseNo?this.state.order_details.Address.houseNo:""} </li>
+                        <li><b>Floor No : </b>{this.state.order_details.Address.floorNo?this.state.order_details.Address.floorNo:""}</li>
+                        <li><b>Block : </b>{this.state.order_details.Address.block?this.state.order_details.Address.block:""}</li>
+                        <li><b>Street : </b>{this.state.order_details.Address.street?this.state.order_details.Address.street:""}</li>
+                        <li><b>Avenue : </b>{this.state.order_details.Address.avenue?this.state.order_details.Address.avenue:""}</li>
+                        <li><b>Direction : </b>{this.state.order_details.Address.direction!==null?this.state.order_details.Address.direction:""}</li>
+                        <li><b>Area : </b>{this.state.area_data!==null?this.state.area_data:""}</li>
+                        <li><b>Governorate : </b>{this.state.governorate_data !== null ? this.state.governorate_data:""}</li>
+
+
+                      </ul>
+
                       :
                       null
                     :
@@ -455,7 +512,7 @@ class OrderView extends React.Component {
                     this.state.order_details.User.mobileNumber !== undefined && this.state.order_details.User.mobileNumber !== null && this.state.order_details.User.mobileNumber !== ""
                       ?
                       <p className="m-0">
-                        Contact Number : {this.state.order_details.User.mobileNumber}
+                        <b>Contact Number : </b>{this.state.order_details.User.mobileNumber}
                       </p>
                       :
                       null
@@ -557,20 +614,40 @@ class OrderView extends React.Component {
                                     ?
                                     <ul>
                                       { 
-                                      OrderShops.OrderCombinations.map(ordercombi =>{
+                                      OrderShops.OrderCombinations.map((ordercombi,key) =>{
                                         return(
                                       
                                         ordercombi.Combination.Product !== null ?
                                           <li>
-                                            {   console.log(ordercombi.Combination) }
+                                            {
+                                              key >= 1 ?
+                                              <hr/>
+                                              :null
+                                            }
                                             <Link to={"/products/add/" +  ordercombi.Combination.ProductId} >
-                                              { ordercombi.Combination.Product.name_en}
+                                              <h6 style={{fontSize:"1vw"}}><b>{ ordercombi.Combination.Product.name_en}</b></h6>
+                                               <li>
+                                                 <b>{"Variant :"}</b> { ordercombi.Combination.variantId}
+                                               </li>
+                                                <li> 
+                                                <b>{"Barcode :"}</b> {ordercombi.Combination.barCode}
+                                               </li>
+                                               {
+                                                 ordercombi.Combination.CombinationAttributes.map(att=>{
+                                                   return(
+                                                    att.Attribute.name_en !== "Default Attribute" ?
+                                                     <li>{att.Attribute.name_en} : {att.AttributeValue.name_en} </li>
+                                                     :null
+                                                   )
+                                                 })
+                                               }
                                              {/* {
                                                 order_stock.Stock.AttributeValues.map(attributes =>
                                                   <span className="badge badge-primary mx-1">{attributes.name_en}</span>
                                                 )
                                               }  */}
                                             </Link>
+                                           
                                           </li>
                                           :
                                            null
@@ -714,7 +791,7 @@ class OrderView extends React.Component {
                                   OrderShops.OrderCombinations[0].Combination !== undefined
                                     ?
                                      OrderShops.OrderCombinations.map(ordercombi =>{
-                                        return(ordercombi.quantity)
+                                        return <li>{ordercombi.quantity}</li>
                                        })
                                     : null
                                   }</td>

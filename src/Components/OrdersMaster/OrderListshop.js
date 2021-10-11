@@ -102,7 +102,7 @@ class OrderListShop extends React.Component {
           //   order_obj.create_date = created_at;
           //   orders.push(order_obj);
           // }
-          that.setState({ orders_list: json.data, isSaving: false });
+          that.setState({ orders_list: json.data,countFilterWise:json.countFilterWise, isSaving: false });
         } else {
           that.setState({ orders_list: [], isSaving: false });
           Swal.fire({
