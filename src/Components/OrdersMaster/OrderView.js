@@ -559,7 +559,7 @@ class OrderView extends React.Component {
                   Payment Method : <span>{this.state.order_details.payment.title_en}</span>
                 </h6>
                 <h6 >
-              <span className="text-uppercase text-primary" >Notes:</span>  <span>{this.state.order_details.notes}</span>
+              <span className="text-uppercase text-primary" >Notes:</span>  <span>{this.state.order_details?this.state.order_details.notes:null}</span>
                 </h6>
                
               </div>
@@ -625,18 +625,18 @@ class OrderView extends React.Component {
                                               :null
                                             }
                                             <Link to={"/products/add/" +  ordercombi.Combination.ProductId} >
-                                              <h6 style={{fontSize:"1vw"}}><b>{ ordercombi.Combination.Product.name_en}</b></h6>
+                                              <h6 style={{fontSize:"1vw"}}><b>{ordercombi.Combination.Product? ordercombi.Combination.Product.name_en:null}</b></h6>
                                                <li>
-                                                 <b>{"Variant :"}</b> { ordercombi.Combination.variantId}
+                                                 <b>{"Variant :"}</b> {ordercombi.Combination? ordercombi.Combination.variantId :null}
                                                </li>
                                                 <li> 
-                                                <b>{"Barcode :"}</b> {ordercombi.Combination.barCode}
+                                                <b>{"Barcode :"}</b> {ordercombi.Combination ?ordercombi.Combination.barCode :null}
                                                </li>
                                                {
                                                  ordercombi.Combination.CombinationAttributes.map(att=>{
                                                    return(
                                                     att.Attribute.name_en !== "Default Attribute" ?
-                                                     <li>{att.Attribute.name_en} : {att.AttributeValue.name_en} </li>
+                                                     <li>{att.Attribute ?att.Attribute.name_en :null} : {att.AttributeValue ?att.AttributeValue.name_en : null} </li>
                                                      :null
                                                    )
                                                  })
