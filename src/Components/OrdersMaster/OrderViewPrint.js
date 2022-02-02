@@ -77,17 +77,14 @@ class OrderViewPrint extends React.Component {
   onPrint = () => {
     var that = this;
     window.onbeforeprint = function (event) {
-      // alert("beforePrint")
       if (localStorage.getItem('q8_mall_ad_role') === "admin") {
         document.getElementById('admin_menu').classList.remove('pcoded-navbar');
         document.getElementById('admin_content').classList.remove('pcoded-content');
       }
-      // return (<RetailerPrintInvoice />)
       document.title = `invoice - #${that.props.match.params.order_id}`;
     };
     window.onafterprint = function (event) {
-      // alert("Printing completed...");
-      // document.getElementById('invoice_detail').innerHTML = hidePrint
+    
       if (localStorage.getItem('q8_mall_ad_role') === "admin") {
         document.getElementById('admin_menu').classList.add('pcoded-navbar');
         document.getElementById('admin_content').classList.add('pcoded-content');
@@ -97,22 +94,41 @@ class OrderViewPrint extends React.Component {
       }
       document.title = "QMall";
     };
-    window.print();
+    var css = '@page { size: portrait; }',
+    head = document.head || document.getElementsByTagName('head')[0],
+    style = document.createElement('style');
+
+style.type = 'text/css';
+style.media = 'print';
+
+if (style.styleSheet){
+  style.styleSheet.cssText = css;
+} else {
+  style.appendChild(document.createTextNode(css));
+}
+
+head.appendChild(style);
+
+
+   window.print();
   }
   render() {
     return (
-      <div className="invoice-print">
+      <div className="invoice-print"  >
         {
-          this.state.order_details.OrderShops !== undefined && this.state.order_details.OrderShops !== null && this.state.order_details.OrderShops !== [] && this.state.order_details.OrderShops.length > 0
+          this.state.order_details.OrderShops !== undefined && 
+          this.state.order_details.OrderShops !== null && 
+          this.state.order_details.OrderShops !== [] && 
+          this.state.order_details.OrderShops.length > 0
             ?
-            <table width="800" border="0" align="center" cellPadding="15" cellspacing="0" bgColor="#FFFFFF" >
+            <table  border="0" align="center" cellPadding="15" cellspacing="0" bgColor="#FFFFFF">
               <tbody>
                 <tr>
                   <td>
-                    <table width="100%" border="0" cellspacing="0" cellPadding="0">
+                    <table width="100%" border="0" cellspacing="0" cellPadding="0" style={{marginTop:"-50px"}}>
                       <tbody>
-                        <tr>
-                          <td><img src="./assets/images/invoice-banner.jpg" style={{ 'display': 'block', 'width': '100%' }} /></td>
+                        <tr >
+                          <td ><img src="./assets/images/qmall_invoice.jpg" style={{ height:"120px", width:"100%" }}/></td>
                         </tr>
                         <br />
                         <tr>

@@ -4,7 +4,7 @@ import Constant from "../../Constant.js";
 import Swal from 'sweetalert2';
 import OrderViewPrint from "./OrderViewPrint.js";
 // import './print-order.css';
-
+// import invoice from '../../../public/assets/images/qmall_invoice.jpg'
 
 class OrderView extends React.Component {
   state = {
@@ -426,23 +426,13 @@ class OrderView extends React.Component {
     return (
       <div className="">
         {/* <div className="card-body"> */}
-        <div id="print-area">
-          <div className="row">
-            <div className="col-md-3">
-              <div className="invoice-box row">
-                <div className="col-sm-12">
-                  <table className="table table-responsive invoice-table table-borderless">
-                    <tbody>
-                      <tr>
-                        <td>
-                          <img src="./assets/images/Qmall_logo.png" className="m-b-10 img-100" alt="" /></td>
-                      </tr>
-
-                    </tbody>
-                  </table>
-                </div>
+        <div id="" >
+          <div className="row" >
+            <div className="col-sm-12">
+              <div style={{padding:"10px"}}>
+              <img src="./assets/images/qmall_invoice.jpg"  style={{width:"100%",height:"80%"}} />
               </div>
-            </div>
+              </div>
             {
               this.state.order_details.deliveredToWarehouse
                 ?

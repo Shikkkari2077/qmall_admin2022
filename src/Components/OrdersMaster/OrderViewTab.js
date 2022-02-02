@@ -76,9 +76,9 @@ class OrderViewTab extends React.Component {
               </div>
             </div>
           </div>
-          <div className="page-body">
+          <div className="page-body" style={{width:"793px"}}>
             <div className="row">
-              <div className="col-sm-12">
+              <div className="col-sm-12" >
                 <div className="card card-border-default">
                   {/* <div className="card-block"> */}
                   {/* <ul className="nav nav-tabs  tabs" role="tablist">
