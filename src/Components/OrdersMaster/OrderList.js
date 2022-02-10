@@ -11,9 +11,9 @@ import moment from 'moment'
 class OrderList extends React.Component {
   state = {
     activePage:1,
-    dataLength:10,
+    dataLength:1,
     datarange:0,
-    
+    value:'all'
   };
   update=(id)=>{
     
@@ -50,13 +50,20 @@ class OrderList extends React.Component {
 	}
   componentDidMount(){
     setInterval(this.getOrdersList(this.state.dataLength,this.state.datarange), 60000)
-
   }
   handleFetch=(event)=>{
    this.setState({value: event.target.value,orders_list:[]})
    //console.log(event.target.value)
-   this.getOrdersList(this.state.dataLength,0,event.target.value)
+   this.getOrdersList(this.state.dataLength,1,event.target.value)
   }
+  handleFetch2=(event)=>{
+    this.setState({value2: event.target.value})
+   }
+
+   handleFetch3=(event)=>{
+    this.setState({filterValue: event.target.value})
+   }
+
   componentWillMount() {
     //clearInterval(this.interval);
     
@@ -77,11 +84,14 @@ class OrderList extends React.Component {
       data.append("fetch",fetchvalue)
     }
     else if(fetchvalue == 'all')
-    {}
-    data.append("startRange",startRange)
-    data.append("count",count)
+    {
+      
+    }
 
-    fetch(Constant.getAPI() + "/product/order/get", {
+    data.append("startRange",startRange)
+    data.append("count",20)
+
+    fetch(Constant.getAPI() + "/product/order/get2", {
       method: "post",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -149,7 +159,79 @@ class OrderList extends React.Component {
         }
       });
   };
+
+  getOrdersList2 = () => {
+    var that = this;
+    var filter = this.state.value2
+    var filterValue = this.state.filterValue
+    var data = new URLSearchParams();
+    this.setState({ isSaving: true });
+
+    if(filter=='invoice'){
+      data.append("invoice",filterValue)
+      if(this.state.value =='daily' ||this.state.value =='monthly'||this.state.value =='weekly')
+      {
+        data.append("fetch",this.state.value)
+      }
+      else if(this.state.value == 'all'){}
+      
+    }else if(filter=='date'){
+      data.append("date",filterValue)
+      if(this.state.value =='daily' ||this.state.value =='monthly'||this.state.value =='weekly')
+      {
+        data.append("fetch",this.state.value)
+        data.append("startRange",this.state.dataLength)
+      }
+      else if(this.state.value == 'all'){}
+   
+    }else if(filter=='paymentMethod'){
+      data.append("paymentMethod",filterValue)
+      if(this.state.value =='daily' ||this.state.value =='monthly'||this.state.value =='weekly')
+      {
+        data.append("fetch",this.state.value)
+        // data.append("startRange",this.state.dataLength)
+      }
+      else if(this.state.value == 'all'){}
+    }
+
+  
+   
+   
+    data.append("count",20)
+
+    fetch(Constant.getAPI() + "/product/order/get2", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: localStorage.getItem("q8_mall_auth"),
+      },
+      body: data,
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (json) {
+
+        if (json.status === true) {
+          
+          that.setState({ orders_list: json.data,countFilterWise:json.countFilterWise, isSaving: false });
+        } else {
+          that.setState({ orders_list: [], isSaving: false });
+          Swal.fire({
+            title: "Something went wrong. Try again after some Time.!",
+            icon: "error",
+            text: "",
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ok",
+          });
+        }
+      });
+  };
+
+
   render() {
+    console.log('filterValue',this.state.filterValue);
     const columns = [
       {
         name: "invoice",
@@ -219,22 +301,22 @@ class OrderList extends React.Component {
         },
       },
       {
-        name: "payment",
+        name: "paymentMethod",
         label: "Payment Type",
         options: {
           filter: true,
           sort: true,
           download: false,
-          customBodyRender: (payment, tableMeta) => {
+          customBodyRender: (paymentMethod, tableMeta) => {
             return (
               <div>
-                {payment.type === "cod" || payment.type === "COD" ? (
+                {paymentMethod === "cod"? (
                   <label className="badge badge-primary text-uppercase">
-                    {payment.title_en}
+                    {paymentMethod}
                   </label>
                 ) : (
                   <label className="badge badge-secondary text-uppercase">
-                    {payment.title_en}
+                    {paymentMethod}
                   </label>
                 )}
               </div>
@@ -367,13 +449,16 @@ class OrderList extends React.Component {
       },
     ];
     const options = {
-      
+ 
       filterType: "dropdown",
+      search:false,
+      filter:false,
       viewColumns: false,
       print: false,
       pagination:false,
       download: true,
       selectableRows: "none",
+     
       setRowProps: (row,dataIndex, rowIndex) => {
         ////console.log(row)
         ////console.log(this.state.orders_list)
@@ -432,22 +517,6 @@ class OrderList extends React.Component {
                     </div>
 
                   </div>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  &nbsp;
-
-                  <select name="fetch" onChange={this.handleFetch} value={this.state.value} style={{
-                    width:"100px",
-                    height:"38px",
-                    position:"relative",
-                  }}>
-                    <option value="all">All</option>
-                    <option value="daily" >Daily</option>
-                    <option value="weekly">Weekly</option>
-                    <option value="monthly">Monthly</option>
-                   </select>
-                 
                   <Link
                     to="/"
                     className="btn btn-sm btn-outline-dark waves-effect waves-light f-right d-inline-block md-trigger"
@@ -476,10 +545,58 @@ class OrderList extends React.Component {
                 <div className="col-sm-12">
                   <div className="card">
                     <div className="card-block">
+                    <div className="SpcialToolbar">
+                          <div className="SLECTDIV">
+                            {/* <h5>Filters</h5> */}
+                            <select name="fetch" onChange={this.handleFetch} value={this.state.value} >
+                                        <option value="all">All</option>
+                                        <option value="daily" >Daily</option>
+                                        <option value="weekly">Weekly</option>
+                                        <option value="monthly">Monthly</option>
+                            </select>
+                            <select name="fetch" onChange={this.handleFetch2} value={this.state.value2} >
+                                        <option value="select">- Select -</option>
+                                        <option value="invoice">Invoice ID</option>
+                                        <option value="date">Date</option>
+                                        <option value="paymentMethod">Payment Method</option>
+                            </select>
+                          </div>
+                          <div className="SLECTDIV_1">
+                              {this.state.value2=='invoice'?(<div>
+                                {/* <h5>Invoce No.</h5> */}
+                                <input value={this.state.filterValue} onChange={this.handleFetch3} type="number" placeholder="Enter Invoice ID"/>
+                              </div>):null}
+                              
+                              {this.state.value2=='date'?<div>
+                                {/* <h5>Date</h5> */}
+                                <input value={this.state.filterValue} onChange={this.handleFetch3} type="date" placeholder="Enter Date"/>
+                              </div>:null}
+                              
+                              {this.state.value2=='paymentMethod'?<div>
+                                {/* <h5>Payment Method</h5> */}
+                                {/* <input value={this.state.filterValue}  type="text" placeholder="Enter Method here"/> */}
+                                <select onChange={this.handleFetch3} value={this.state.filterValue} id="">
+                                  <option value=""> -Select- </option>
+                                  <option value="cod">CASH</option>
+                                  <option value="online">KNET</option>
+                                </select>
+                              </div>:null}
+                          </div>
+                          <div className="SLECTDIV_2">
+                            {this.state.value2=='invoice'||this.state.value2=='date'||this.state.value2=='paymentMethod'?<button onClick={this.getOrdersList2}>GO</button>:null}          
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-sm-12">
+                  <div className="card">
+                    <div className="card-block">
                       <div className="dt-responsive table-responsive">
+                      
                         <MUIDataTable
                         
-                          title={"Order List"}
+                          // title={"Order List"}
                           className="table-responsive"
                           data={this.state.orders_list}
                           columns={columns}

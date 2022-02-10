@@ -15,9 +15,12 @@ class ProductList extends React.Component {
   state = {
     datarange:0,
     checkedLang:false,
-    dataLength:10,
+    dataLength:20,
     activePage:1,
-    lang:""
+    lang:"",
+    value2:'productID',
+    filterValue2:'selectSection',
+    filterValue:''
   }
   deleteAttributeValue = (id,ShopId) => {
     Swal.fire({
@@ -66,30 +69,48 @@ class ProductList extends React.Component {
     var that = this;
     var data ={}
     this.setState({ isSaving: true });
-    if (localStorage.getItem('q8_mall_ad_role') === "shop") {
+    // if (localStorage.getItem('q8_mall_ad_role') === "shop") {
      
-      data={
-      count,
-      startRange,
-      ShopId:localStorage.getItem('q8_mall_ad_uid')
-      } 
+    //   data={
+    //   count,
+    //   startRange,
+    //   ShopId:localStorage.getItem('q8_mall_ad_uid')
+    //   } 
+    // }
+    // else{
+    //   data={
+    //     count,
+    //     startRange,
+    //   }
+    // }
+    // if(name !== "" )
+    // {
+    //   data={...data,'keyword':name,'lang':lang}
+    // }
+    // if(uniqueidentifier !== "")
+    // {
+    //   data={...data,'unique_identifier':uniqueidentifier}
+    // }
+
+
+    data = {
+      count:this.state.dataLength,
+      startRange:this.state.datarange,
     }
-    else{
-      data={
-        count,
-        startRange,
-      }
+    if(this.state.value2=='productID' && this.state.filterValue){
+      data = {ProductId:parseInt(this.state.filterValue)}
+    }else{
+      if(this.state.value2='shopName'){
+        data = {...data,ShopId:this.state.filterValue}
+      }else{}
     }
-    if(name !== "" )
-    {
-      data={...data,'keyword':name,'lang':lang}
-    }
-    if(uniqueidentifier !== "")
-    {
-      data={...data,'unique_identifier':uniqueidentifier}
-    }
-    //console.log(localStorage.getItem('q8_mall_auth'))
-    fetch(Constant.getAPI() + "/product/getByAdmin", {
+
+    if(this.state.filterValue2!='selectSection'){
+      data = {...data,SectionId:this.state.filterValue2}
+    }else{}
+
+
+    fetch(Constant.getAPI() + "/product/getByAdmin2", {
       method: "post",
       headers: {
         "Content-Type": "application/json",
@@ -135,6 +156,62 @@ class ProductList extends React.Component {
         })
       }
     });
+    
+    fetch(Constant.getAPI() + "/shop/get", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": localStorage.getItem('q8_mall_auth')
+      },
+      body: data
+    }).then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      //console.log(json)
+      if (json.status === true) {
+        that.setState({ users_data: json.data, isSaving: false });
+      } else {
+        that.setState({ users_data: [], isSaving: false });
+        Swal.fire({
+          title: "Something went wrong. Try again after some Time.!",
+          icon: 'error',
+          text: "",
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Ok"
+        })
+      }
+    })
+
+    fetch(Constant.getAPI() + "/shop/section/get-all", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: localStorage.getItem("q8_mall_auth"),
+
+      },
+
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (json) {
+       console.log(json.data)
+        if (json.success === true) {
+          that.setState({ category_data: json.data, isSaving: false });
+        } else {
+          that.setState({ category_data: [], isSaving: false });
+
+          Swal.fire({
+            title: "Something went wrong. Try again after some Time.!",
+            icon: "error",
+            text: "",
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Ok",
+          });
+        }
+      });
   }
   componentDidMount() {
     if(localStorage.getItem('Productaction') == 'true'){
@@ -387,6 +464,19 @@ class ProductList extends React.Component {
     })
 
   }
+  handleFetch2=(event)=>{
+    this.setState({value2: event.target.value})
+   }
+
+   handleFetch3=(event)=>{
+    this.setState({filterValue: event.target.value})
+   }
+   handleFetch4=(event)=>{
+    this.setState({filterValue2: event.target.value})
+   }
+
+
+
   render() {
     const shop_columns = [{
       name: "productMedia",
@@ -845,6 +935,7 @@ class ProductList extends React.Component {
       search:false,
       pagination:false,
       filterType: "dropdown",
+      filter:false,
       viewColumns: false,
       print: false,
       download: false,
@@ -910,50 +1001,53 @@ class ProductList extends React.Component {
                 <div className="col-sm-12">
                   <div className="card">
                     <div className="card-block">
-                      <div className="d-flex justify-content-center ">
-                      {/* <div className="col-sm-1">
-                          <select
-                          className="form-control">
-                            <option>En</option>
-                            <option>Ar</option>
-
-                          </select>
-                        </div> */}
-                        
-                        <div className="col-sm-3">
-                        <input 
-                        className="form-control"
-                        placeholder={"Search..."}
-                        style={{borderRadius:"20px",height:"35px"}}
-                        onChange={this.search} 
-                        value={this.state.search} 
-                        />
-
-                        </div>
-                        <span className="col-sm-0.5" >
-                        <input  type="checkbox" id="ar"
-                                checked={this.state.checkedLang}
-                                 onChange={this.checkedbox}/><h6>Ar</h6>
-                      
-                        </span>
-                      
-                        <div className="col-sm-3">
-                          <span>
-                       <button className="btn btn-outline-primary"
-                        style={{borderRadius:"20px",height:'35px',width:"130px",padding:"8px"}}
-                        onClick={this.byName}>
-                         <h6>By Name <i className="icofont icofont-search " /> </h6>
-                       </button> 
-                       </span>&nbsp;
-                       <button className="btn btn-outline-primary"
-                        style={{borderRadius:"20px",height:'35px',width:"120px",padding:"8px"}}
-                        onClick={this.byID}>
-                         <h6 className="font-dark">By ID <i className="icofont icofont-search " /> </h6>
-                       </button>&nbsp;&nbsp;
-
-                        </div>
+                    <div className="SpcialToolbar" style={{
+                      gridTemplateColumns:'2fr 2fr 2fr 3fr',
+                      gap:'0'
+                    }}>
+                      <div className="SLECTDIV">
+                        {/* <h5>Filters</h5> */}
+                        <select name="fetch" onChange={this.handleFetch2} value={this.state.value2} style={{width:'90%'}}>
+                                    <option value="productID">Product ID</option>
+                                    <option value="shopName">Shop Name</option>
+                                    {/* <option value="sectionName">Section Name</option> */}
+                        </select>
                       </div>
-                      <br/>
+                      <div className="SLECTDIV_1">
+                          {this.state.value2=='productID'?<div>
+                            {/* <h5>Product ID</h5> */}
+                            <input style={{width:'90%', marginLeft:'0rem'}} value={this.state.filterValue} onChange={this.handleFetch3} type="number" placeholder="Enter Product ID"/>
+                          </div>:null}
+
+                          {this.state.value2=='shopName'?(<div>
+                            <select style={{width:'90%', marginLeft:'0rem'}} value={this.state.filterValue} onChange={this.handleFetch3}>
+                                <option value="">- Select Shop -</option>
+                                {this.state.users_data!=undefined?this.state.users_data.map(shop=>(
+                                  <option value={shop.id}>{shop.name_en}</option>
+                                  )):<option value='shop'>Shop Name</option>}
+                            </select>
+                          </div>):null}
+                      </div>
+
+                        <div className="SLECTDIV3">
+                          <select style={{width:'90%', marginLeft:'-1rem'}} value={this.state.filterValue2} onChange={this.handleFetch4}>
+                              <option value="">- Select Section -</option>
+                              {this.state.category_data!=undefined?this.state.category_data.map(section=>(
+                                <option value={section.id}>{section.name_en}</option>
+                                )):<option value='section'>Section Name</option>}
+                          </select>
+                        </div>
+                     
+                      <div className="SLECTDIV_2">
+                        {this.state.value2=='shopName'||this.state.value2=='productID'||this.state.value2=='sectionName'?<button onClick={this.getProductList}>GO</button>:null}          
+                      </div>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-sm-12">
+                  <div className="card">
+                    <div className="card-block">
                       <div className="dt-responsive table-responsive">
 
                         {

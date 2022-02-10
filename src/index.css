@@ -11,3 +11,79 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.SpcialToolbar{
+  /* width: 700px; */
+  display: grid;
+  grid-template-columns: 3fr 2fr 1fr;
+  height: 30px;
+  margin-bottom: 1rem;
+  /* padding: 10px 0; */
+  gap: 2rem;
+  /* border: 1px solid red; */
+}
+.SpcialToolbar h5{
+  font-size: 1.1rem;
+}
+.SLECTDIV{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.SLECTDIV select{
+  height: 100%;
+  width: 60%;
+  margin-left: 1rem;
+  border: 1px solid grey;
+  border-radius: 4px;
+  padding: 0 10px;
+  color: grey;
+}
+.SLECTDIV_1 div{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.SLECTDIV_1 div input{
+  height: 30px;
+  border: 1px solid grey;
+  border-radius: 4px;
+  width: 70%;
+  margin-left: -1rem;
+  padding: 0 10px;
+  color: grey;
+}
+.SLECTDIV_1 select{
+  height: 30px;
+  margin-left: 1rem;
+  border: 1px solid grey;
+  color: grey;
+  border-radius: 4px;
+  width: 70%;
+  margin-left: -1rem;
+  padding: 0 10px;
+}
+.SLECTDIV3 select{
+  height: 30px;
+  border: 1px solid grey;
+  color: grey;
+  border-radius: 4px;
+  width: 70%;
+  padding: 0 10px;
+}
+.SLECTDIV_2{
+  display: flex;
+  justify-content: right;
+}
+.SLECTDIV_2 button{
+  border: none;
+  outline: none;
+  border-radius: 4px;
+  padding: 0 20px;
+  height: 30px;
+  color: white;
+  background: rgb(41, 40, 40);
+  font-weight: 500;
+}
+.SLECTDIV_2 button:hover{
+  background: rgb(49, 48, 48);
+}
